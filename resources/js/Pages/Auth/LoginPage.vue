@@ -15,6 +15,7 @@ import DfInputText from '@/Components/Inputs/DfInputText.vue'
 import DfPassword from '@/Components/Inputs/DfPassword.vue'
 import { ErrorCode, type SharedPage } from '@/Types/shared-page.ts'
 import { ChannelName } from '@/Types/broadcast-channel.ts'
+import { applyTheme } from '@/Utils/theme.ts'
 
 const props = defineProps({
   registerUrl: {
@@ -34,6 +35,10 @@ const props = defineProps({
     required: true,
   },
   resumeBuilderUrl: {
+    type: String,
+    required: true,
+  },
+  forgotPasswordUrl: {
     type: String,
     required: true,
   },
@@ -66,7 +71,7 @@ const showRateLimitToast = function () {
   toast.add({
     severity: 'warn',
     summary: 'Login',
-    detail: page.props.errors.TOO_MANY_REQUESTS,
+    detail: 'Too many attempts. Please try again in 1 minute.',
     life: 4000,
   })
 }
@@ -92,8 +97,8 @@ const submit = function () {
 }
 
 const bgColorClass = computed(() => {
-  if (page.props.errors[ErrorCode.TOO_MANY_REQUESTS]) return 'bg-amber-700 dark:bg-amber-900'
-  else if (page.props.errors[ErrorCode.INVALID_CREDENTIALS]) return 'bg-red-700 dark:bg-red-900'
+  if (page.props.errors[ErrorCode.TOO_MANY_REQUESTS]) return 'bg-amber-700 dark:bg-amber-800'
+  else if (page.props.errors[ErrorCode.INVALID_CREDENTIALS]) return 'bg-red-700 dark:bg-red-800'
   else return 'bg-primary/90 dark:bg-primary'
 })
 
@@ -105,6 +110,8 @@ watch(data, function () {
     close()
   }
 })
+
+applyTheme()
 </script>
 
 <template>
@@ -113,10 +120,34 @@ watch(data, function () {
     <Toast />
     <AppAnimatedFloaters />
     <Message
+      v-if="!!page.props.flash.CMS_SUCCESS"
+      severity="success"
+      icon="pi pi-check-circle"
+      class="mb-4 w-full md:w-[55%] lg:w-[35%] dark:!bg-surface-900"
+    >
+      {{ page.props.flash.CMS_SUCCESS }}
+    </Message>
+    <Message
+      v-if="!!page.props.flash.CMS_EMAIL_VERIFIED"
+      severity="success"
+      icon="pi pi-check-circle"
+      class="mb-4 w-full md:w-[55%] lg:w-[35%] dark:!bg-surface-900"
+    >
+      Your email address has been verified. Please login to continue.
+    </Message>
+    <Message
+      v-if="!!page.props.flash.CMS_EMAIL_UPDATE_CONFIRMED"
+      severity="success"
+      icon="pi pi-check-circle"
+      class="mb-4 w-full md:w-[55%] lg:w-[35%] dark:!bg-surface-900"
+    >
+      You've confirmed your email update request. Please login to continue.
+    </Message>
+    <Message
       v-if="!!page.props.errors[ErrorCode.INVALID_CREDENTIALS]"
       severity="error"
       icon="pi pi-exclamation-triangle"
-      class="mb-4 w-full animate-shake md:w-[55%] lg:w-[35%] dark:!bg-surface-950"
+      class="mb-4 w-full animate-shake md:w-[55%] lg:w-[35%] dark:!bg-surface-900"
     >
       {{ page.props.errors[ErrorCode.INVALID_CREDENTIALS] }}
     </Message>
@@ -124,9 +155,17 @@ watch(data, function () {
       v-if="!!page.props.errors[ErrorCode.EXTERNAL_ACCOUNT_EMAIL_CONFLICT]"
       severity="error"
       icon="pi pi-exclamation-triangle"
-      class="mb-4 w-full animate-shake md:w-[55%] lg:w-[35%] dark:!bg-surface-950"
+      class="mb-4 w-full animate-shake md:w-[55%] lg:w-[35%] dark:!bg-surface-900"
     >
       {{ page.props.errors[ErrorCode.EXTERNAL_ACCOUNT_EMAIL_CONFLICT] }}
+    </Message>
+    <Message
+      v-if="!!page.props.errors[ErrorCode.ACCOUNT_DEACTIVATED]"
+      severity="error"
+      icon="pi pi-ban"
+      class="mb-4 w-full animate-shake md:w-[55%] lg:w-[35%] dark:!bg-surface-900"
+    >
+      {{ page.props.errors[ErrorCode.ACCOUNT_DEACTIVATED] }}
     </Message>
     <Card class="z-10 w-full md:w-[55%] lg:w-[35%]">
       <template #title>
@@ -180,7 +219,9 @@ watch(data, function () {
               <Checkbox v-model="form.remember" binary input-id="rememberMe" />
               <label for="rememberMe" class="ml-2 text-sm"> Remember me </label>
             </div>
-            <span class="text-sm">Forgot password?</span>
+            <Link :href="props.forgotPasswordUrl" class="transform text-sm hover:underline hover:underline-offset-4"
+              >Forgot password?
+            </Link>
           </div>
           <!-- End Remember Me & Forgot Password -->
           <!-- Start Sign in Buttons -->

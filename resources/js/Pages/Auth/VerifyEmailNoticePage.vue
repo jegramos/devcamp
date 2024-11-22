@@ -2,7 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import { usePage, router, Head } from '@inertiajs/vue3'
 import { Link } from '@inertiajs/vue3'
-import { useIntervalFn } from '@vueuse/core'
+import { useBroadcastChannel, useIntervalFn } from '@vueuse/core'
 import Button from 'primevue/button'
 import { useToast } from 'primevue/usetoast'
 import Toast from 'primevue/toast'
@@ -10,6 +10,8 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faEnvelopeOpenText, faPaperPlane, faClock, faSignOutAlt, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons'
 import AppAnimatedFloaters from '@/Components/AppAnimatedFloaters.vue'
 import { ErrorCode, type SharedPage } from '@/Types/shared-page.ts'
+import { ChannelName } from '@/Types/broadcast-channel.ts'
+import { applyTheme } from '@/Utils/theme.ts'
 
 const page = usePage<SharedPage>()
 const props = defineProps({
@@ -18,6 +20,10 @@ const props = defineProps({
     required: true,
   },
   emailVerificationExpiration: {
+    type: String,
+    required: true,
+  },
+  resumeBuilderUrl: {
     type: String,
     required: true,
   },
@@ -75,7 +81,7 @@ watch(
 )
 
 const bgColorClass = computed(function () {
-  if (page.props.errors[ErrorCode.TOO_MANY_REQUESTS]) return 'bg-amber-700 dark:bg-amber-900'
+  if (page.props.errors[ErrorCode.TOO_MANY_REQUESTS]) return 'bg-amber-700 dark:bg-amber-700'
   if (page.props.errors[ErrorCode.EMAIL_ALREADY_VERIFIED]) return 'bg-red-700 dark:bg-red-900'
   return 'bg-primary'
 })
@@ -85,6 +91,17 @@ const sendButtonColorClass = computed(function () {
   if (page.props.errors[ErrorCode.EMAIL_ALREADY_VERIFIED]) return '!bg-primary-contrast !text-red-700 !border-red-700'
   return '!bg-primary-contrast !text-primary'
 })
+
+// Listen for broadcast from other tabs the email is already verified
+const { isSupported, data, close } = useBroadcastChannel({ name: ChannelName.EMAIL_VERIFIED })
+watch(data, function () {
+  if (isSupported.value) {
+    router.get(props.resumeBuilderUrl)
+    close()
+  }
+})
+
+applyTheme()
 </script>
 
 <template>

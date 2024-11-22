@@ -4,8 +4,160 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "5b79401810b274c82704673b80845b7f",
+  "content-hash": "a6cb990f301cd9a57bf012d8e9248f4f",
   "packages": [
+    {
+      "name": "aws/aws-crt-php",
+      "version": "v1.2.7",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/awslabs/aws-crt-php.git",
+        "reference": "d71d9906c7bb63a28295447ba12e74723bd3730e"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/awslabs/aws-crt-php/zipball/d71d9906c7bb63a28295447ba12e74723bd3730e",
+        "reference": "d71d9906c7bb63a28295447ba12e74723bd3730e",
+        "shasum": ""
+      },
+      "require": {
+        "php": ">=5.5"
+      },
+      "require-dev": {
+        "phpunit/phpunit": "^4.8.35||^5.6.3||^9.5",
+        "yoast/phpunit-polyfills": "^1.0"
+      },
+      "suggest": {
+        "ext-awscrt": "Make sure you install awscrt native extension to use any of the functionality."
+      },
+      "type": "library",
+      "autoload": {
+        "classmap": [
+          "src/"
+        ]
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "Apache-2.0"
+      ],
+      "authors": [
+        {
+          "name": "AWS SDK Common Runtime Team",
+          "email": "aws-sdk-common-runtime@amazon.com"
+        }
+      ],
+      "description": "AWS Common Runtime for PHP",
+      "homepage": "https://github.com/awslabs/aws-crt-php",
+      "keywords": [
+        "amazon",
+        "aws",
+        "crt",
+        "sdk"
+      ],
+      "support": {
+        "issues": "https://github.com/awslabs/aws-crt-php/issues",
+        "source": "https://github.com/awslabs/aws-crt-php/tree/v1.2.7"
+      },
+      "time": "2024-10-18T22:15:13+00:00"
+    },
+    {
+      "name": "aws/aws-sdk-php",
+      "version": "3.330.2",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/aws/aws-sdk-php.git",
+        "reference": "4ac43cc8356fb16a494c3631c8f39f6e7555f00a"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/4ac43cc8356fb16a494c3631c8f39f6e7555f00a",
+        "reference": "4ac43cc8356fb16a494c3631c8f39f6e7555f00a",
+        "shasum": ""
+      },
+      "require": {
+        "aws/aws-crt-php": "^1.2.3",
+        "ext-json": "*",
+        "ext-pcre": "*",
+        "ext-simplexml": "*",
+        "guzzlehttp/guzzle": "^6.5.8 || ^7.4.5",
+        "guzzlehttp/promises": "^1.4.0 || ^2.0",
+        "guzzlehttp/psr7": "^1.9.1 || ^2.4.5",
+        "mtdowling/jmespath.php": "^2.6",
+        "php": ">=7.2.5",
+        "psr/http-message": "^1.0 || ^2.0"
+      },
+      "require-dev": {
+        "andrewsville/php-token-reflection": "^1.4",
+        "aws/aws-php-sns-message-validator": "~1.0",
+        "behat/behat": "~3.0",
+        "composer/composer": "^1.10.22",
+        "dms/phpunit-arraysubset-asserts": "^0.4.0",
+        "doctrine/cache": "~1.4",
+        "ext-dom": "*",
+        "ext-openssl": "*",
+        "ext-pcntl": "*",
+        "ext-sockets": "*",
+        "nette/neon": "^2.3",
+        "paragonie/random_compat": ">= 2",
+        "phpunit/phpunit": "^5.6.3 || ^8.5 || ^9.5",
+        "psr/cache": "^1.0",
+        "psr/simple-cache": "^1.0 || ^2.0 || ^3.0",
+        "sebastian/comparator": "^1.2.3 || ^4.0",
+        "yoast/phpunit-polyfills": "^1.0"
+      },
+      "suggest": {
+        "aws/aws-php-sns-message-validator": "To validate incoming SNS notifications",
+        "doctrine/cache": "To use the DoctrineCacheAdapter",
+        "ext-curl": "To send requests using cURL",
+        "ext-openssl": "Allows working with CloudFront private distributions and verifying received SNS messages",
+        "ext-sockets": "To use client-side monitoring"
+      },
+      "type": "library",
+      "extra": {
+        "branch-alias": {
+          "dev-master": "3.0-dev"
+        }
+      },
+      "autoload": {
+        "files": [
+          "src/functions.php"
+        ],
+        "psr-4": {
+          "Aws\\": "src/"
+        },
+        "exclude-from-classmap": [
+          "src/data/"
+        ]
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "Apache-2.0"
+      ],
+      "authors": [
+        {
+          "name": "Amazon Web Services",
+          "homepage": "http://aws.amazon.com"
+        }
+      ],
+      "description": "AWS SDK for PHP - Use Amazon Web Services in your PHP project",
+      "homepage": "http://aws.amazon.com/sdkforphp",
+      "keywords": [
+        "amazon",
+        "aws",
+        "cloud",
+        "dynamodb",
+        "ec2",
+        "glacier",
+        "s3",
+        "sdk"
+      ],
+      "support": {
+        "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
+        "issues": "https://github.com/aws/aws-sdk-php/issues",
+        "source": "https://github.com/aws/aws-sdk-php/tree/3.330.2"
+      },
+      "time": "2024-11-26T19:07:56+00:00"
+    },
     {
       "name": "brick/math",
       "version": "0.12.1",
@@ -209,6 +361,53 @@
         "source": "https://github.com/dflydev/dflydev-dot-access-data/tree/v3.0.3"
       },
       "time": "2024-07-08T12:26:09+00:00"
+    },
+    {
+      "name": "doctrine/deprecations",
+      "version": "1.1.3",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/doctrine/deprecations.git",
+        "reference": "dfbaa3c2d2e9a9df1118213f3b8b0c597bb99fab"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/doctrine/deprecations/zipball/dfbaa3c2d2e9a9df1118213f3b8b0c597bb99fab",
+        "reference": "dfbaa3c2d2e9a9df1118213f3b8b0c597bb99fab",
+        "shasum": ""
+      },
+      "require": {
+        "php": "^7.1 || ^8.0"
+      },
+      "require-dev": {
+        "doctrine/coding-standard": "^9",
+        "phpstan/phpstan": "1.4.10 || 1.10.15",
+        "phpstan/phpstan-phpunit": "^1.0",
+        "phpunit/phpunit": "^7.5 || ^8.5 || ^9.5",
+        "psalm/plugin-phpunit": "0.18.4",
+        "psr/log": "^1 || ^2 || ^3",
+        "vimeo/psalm": "4.30.0 || 5.12.0"
+      },
+      "suggest": {
+        "psr/log": "Allows logging deprecations via PSR-3 logger implementation"
+      },
+      "type": "library",
+      "autoload": {
+        "psr-4": {
+          "Doctrine\\Deprecations\\": "lib/Doctrine/Deprecations"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "MIT"
+      ],
+      "description": "A small layer on top of trigger_error(E_USER_DEPRECATED) or PSR-3 logging with options to disable all deprecations or selectively for packages.",
+      "homepage": "https://www.doctrine-project.org/",
+      "support": {
+        "issues": "https://github.com/doctrine/deprecations/issues",
+        "source": "https://github.com/doctrine/deprecations/tree/1.1.3"
+      },
+      "time": "2024-01-30T19:34:25+00:00"
     },
     {
       "name": "doctrine/inflector",
@@ -2080,6 +2279,61 @@
       "time": "2024-10-08T08:58:34+00:00"
     },
     {
+      "name": "league/flysystem-aws-s3-v3",
+      "version": "3.29.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/thephpleague/flysystem-aws-s3-v3.git",
+        "reference": "c6ff6d4606e48249b63f269eba7fabdb584e76a9"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/thephpleague/flysystem-aws-s3-v3/zipball/c6ff6d4606e48249b63f269eba7fabdb584e76a9",
+        "reference": "c6ff6d4606e48249b63f269eba7fabdb584e76a9",
+        "shasum": ""
+      },
+      "require": {
+        "aws/aws-sdk-php": "^3.295.10",
+        "league/flysystem": "^3.10.0",
+        "league/mime-type-detection": "^1.0.0",
+        "php": "^8.0.2"
+      },
+      "conflict": {
+        "guzzlehttp/guzzle": "<7.0",
+        "guzzlehttp/ringphp": "<1.1.1"
+      },
+      "type": "library",
+      "autoload": {
+        "psr-4": {
+          "League\\Flysystem\\AwsS3V3\\": ""
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "MIT"
+      ],
+      "authors": [
+        {
+          "name": "Frank de Jonge",
+          "email": "info@frankdejonge.nl"
+        }
+      ],
+      "description": "AWS S3 filesystem adapter for Flysystem.",
+      "keywords": [
+        "Flysystem",
+        "aws",
+        "file",
+        "files",
+        "filesystem",
+        "s3",
+        "storage"
+      ],
+      "support": {
+        "source": "https://github.com/thephpleague/flysystem-aws-s3-v3/tree/3.29.0"
+      },
+      "time": "2024-08-17T13:10:48+00:00"
+    },
+    {
       "name": "league/flysystem-local",
       "version": "3.29.0",
       "source": {
@@ -2362,6 +2616,72 @@
         }
       ],
       "time": "2024-11-12T13:57:08+00:00"
+    },
+    {
+      "name": "mtdowling/jmespath.php",
+      "version": "2.8.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/jmespath/jmespath.php.git",
+        "reference": "a2a865e05d5f420b50cc2f85bb78d565db12a6bc"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/jmespath/jmespath.php/zipball/a2a865e05d5f420b50cc2f85bb78d565db12a6bc",
+        "reference": "a2a865e05d5f420b50cc2f85bb78d565db12a6bc",
+        "shasum": ""
+      },
+      "require": {
+        "php": "^7.2.5 || ^8.0",
+        "symfony/polyfill-mbstring": "^1.17"
+      },
+      "require-dev": {
+        "composer/xdebug-handler": "^3.0.3",
+        "phpunit/phpunit": "^8.5.33"
+      },
+      "bin": [
+        "bin/jp.php"
+      ],
+      "type": "library",
+      "extra": {
+        "branch-alias": {
+          "dev-master": "2.8-dev"
+        }
+      },
+      "autoload": {
+        "files": [
+          "src/JmesPath.php"
+        ],
+        "psr-4": {
+          "JmesPath\\": "src/"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "MIT"
+      ],
+      "authors": [
+        {
+          "name": "Graham Campbell",
+          "email": "hello@gjcampbell.co.uk",
+          "homepage": "https://github.com/GrahamCampbell"
+        },
+        {
+          "name": "Michael Dowling",
+          "email": "mtdowling@gmail.com",
+          "homepage": "https://github.com/mtdowling"
+        }
+      ],
+      "description": "Declaratively specify how to extract elements from a JSON document",
+      "keywords": [
+        "json",
+        "jsonpath"
+      ],
+      "support": {
+        "issues": "https://github.com/jmespath/jmespath.php/issues",
+        "source": "https://github.com/jmespath/jmespath.php/tree/2.8.0"
+      },
+      "time": "2024-09-04T18:46:31+00:00"
     },
     {
       "name": "nesbot/carbon",
@@ -2880,6 +3200,181 @@
       "time": "2020-10-15T08:29:30+00:00"
     },
     {
+      "name": "phpdocumentor/reflection-common",
+      "version": "2.2.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/phpDocumentor/ReflectionCommon.git",
+        "reference": "1d01c49d4ed62f25aa84a747ad35d5a16924662b"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/phpDocumentor/ReflectionCommon/zipball/1d01c49d4ed62f25aa84a747ad35d5a16924662b",
+        "reference": "1d01c49d4ed62f25aa84a747ad35d5a16924662b",
+        "shasum": ""
+      },
+      "require": {
+        "php": "^7.2 || ^8.0"
+      },
+      "type": "library",
+      "extra": {
+        "branch-alias": {
+          "dev-2.x": "2.x-dev"
+        }
+      },
+      "autoload": {
+        "psr-4": {
+          "phpDocumentor\\Reflection\\": "src/"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "MIT"
+      ],
+      "authors": [
+        {
+          "name": "Jaap van Otterdijk",
+          "email": "opensource@ijaap.nl"
+        }
+      ],
+      "description": "Common reflection classes used by phpdocumentor to reflect the code structure",
+      "homepage": "http://www.phpdoc.org",
+      "keywords": [
+        "FQSEN",
+        "phpDocumentor",
+        "phpdoc",
+        "reflection",
+        "static analysis"
+      ],
+      "support": {
+        "issues": "https://github.com/phpDocumentor/ReflectionCommon/issues",
+        "source": "https://github.com/phpDocumentor/ReflectionCommon/tree/2.x"
+      },
+      "time": "2020-06-27T09:03:43+00:00"
+    },
+    {
+      "name": "phpdocumentor/reflection-docblock",
+      "version": "5.6.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
+        "reference": "f3558a4c23426d12bffeaab463f8a8d8b681193c"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/f3558a4c23426d12bffeaab463f8a8d8b681193c",
+        "reference": "f3558a4c23426d12bffeaab463f8a8d8b681193c",
+        "shasum": ""
+      },
+      "require": {
+        "doctrine/deprecations": "^1.1",
+        "ext-filter": "*",
+        "php": "^7.4 || ^8.0",
+        "phpdocumentor/reflection-common": "^2.2",
+        "phpdocumentor/type-resolver": "^1.7",
+        "phpstan/phpdoc-parser": "^1.7|^2.0",
+        "webmozart/assert": "^1.9.1"
+      },
+      "require-dev": {
+        "mockery/mockery": "~1.3.5 || ~1.6.0",
+        "phpstan/extension-installer": "^1.1",
+        "phpstan/phpstan": "^1.8",
+        "phpstan/phpstan-mockery": "^1.1",
+        "phpstan/phpstan-webmozart-assert": "^1.2",
+        "phpunit/phpunit": "^9.5",
+        "psalm/phar": "^5.26"
+      },
+      "type": "library",
+      "extra": {
+        "branch-alias": {
+          "dev-master": "5.x-dev"
+        }
+      },
+      "autoload": {
+        "psr-4": {
+          "phpDocumentor\\Reflection\\": "src"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "MIT"
+      ],
+      "authors": [
+        {
+          "name": "Mike van Riel",
+          "email": "me@mikevanriel.com"
+        },
+        {
+          "name": "Jaap van Otterdijk",
+          "email": "opensource@ijaap.nl"
+        }
+      ],
+      "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
+      "support": {
+        "issues": "https://github.com/phpDocumentor/ReflectionDocBlock/issues",
+        "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/5.6.0"
+      },
+      "time": "2024-11-12T11:25:25+00:00"
+    },
+    {
+      "name": "phpdocumentor/type-resolver",
+      "version": "1.10.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/phpDocumentor/TypeResolver.git",
+        "reference": "679e3ce485b99e84c775d28e2e96fade9a7fb50a"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/679e3ce485b99e84c775d28e2e96fade9a7fb50a",
+        "reference": "679e3ce485b99e84c775d28e2e96fade9a7fb50a",
+        "shasum": ""
+      },
+      "require": {
+        "doctrine/deprecations": "^1.0",
+        "php": "^7.3 || ^8.0",
+        "phpdocumentor/reflection-common": "^2.0",
+        "phpstan/phpdoc-parser": "^1.18|^2.0"
+      },
+      "require-dev": {
+        "ext-tokenizer": "*",
+        "phpbench/phpbench": "^1.2",
+        "phpstan/extension-installer": "^1.1",
+        "phpstan/phpstan": "^1.8",
+        "phpstan/phpstan-phpunit": "^1.1",
+        "phpunit/phpunit": "^9.5",
+        "rector/rector": "^0.13.9",
+        "vimeo/psalm": "^4.25"
+      },
+      "type": "library",
+      "extra": {
+        "branch-alias": {
+          "dev-1.x": "1.x-dev"
+        }
+      },
+      "autoload": {
+        "psr-4": {
+          "phpDocumentor\\Reflection\\": "src"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "MIT"
+      ],
+      "authors": [
+        {
+          "name": "Mike van Riel",
+          "email": "me@mikevanriel.com"
+        }
+      ],
+      "description": "A PSR-5 based resolver of Class names, Types and Structural Element Names",
+      "support": {
+        "issues": "https://github.com/phpDocumentor/TypeResolver/issues",
+        "source": "https://github.com/phpDocumentor/TypeResolver/tree/1.10.0"
+      },
+      "time": "2024-11-09T15:12:26+00:00"
+    },
+    {
       "name": "phpoption/phpoption",
       "version": "1.9.3",
       "source": {
@@ -3063,6 +3558,53 @@
         }
       ],
       "time": "2024-09-16T03:06:04+00:00"
+    },
+    {
+      "name": "phpstan/phpdoc-parser",
+      "version": "2.0.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/phpstan/phpdoc-parser.git",
+        "reference": "c00d78fb6b29658347f9d37ebe104bffadf36299"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/c00d78fb6b29658347f9d37ebe104bffadf36299",
+        "reference": "c00d78fb6b29658347f9d37ebe104bffadf36299",
+        "shasum": ""
+      },
+      "require": {
+        "php": "^7.4 || ^8.0"
+      },
+      "require-dev": {
+        "doctrine/annotations": "^2.0",
+        "nikic/php-parser": "^5.3.0",
+        "php-parallel-lint/php-parallel-lint": "^1.2",
+        "phpstan/extension-installer": "^1.0",
+        "phpstan/phpstan": "^2.0",
+        "phpstan/phpstan-phpunit": "^2.0",
+        "phpstan/phpstan-strict-rules": "^2.0",
+        "phpunit/phpunit": "^9.6",
+        "symfony/process": "^5.2"
+      },
+      "type": "library",
+      "autoload": {
+        "psr-4": {
+          "PHPStan\\PhpDocParser\\": [
+            "src/"
+          ]
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "MIT"
+      ],
+      "description": "PHPDoc parser with support for nullable, intersection and generic types",
+      "support": {
+        "issues": "https://github.com/phpstan/phpdoc-parser/issues",
+        "source": "https://github.com/phpstan/phpdoc-parser/tree/2.0.0"
+      },
+      "time": "2024-10-13T11:29:49+00:00"
     },
     {
       "name": "predis/predis",
@@ -3995,6 +4537,200 @@
         }
       ],
       "time": "2024-11-08T18:45:41+00:00"
+    },
+    {
+      "name": "spomky-labs/cbor-php",
+      "version": "3.1.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/Spomky-Labs/cbor-php.git",
+        "reference": "499d9bff0a6d59c4f1b813cc617fc3fd56d6dca4"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/Spomky-Labs/cbor-php/zipball/499d9bff0a6d59c4f1b813cc617fc3fd56d6dca4",
+        "reference": "499d9bff0a6d59c4f1b813cc617fc3fd56d6dca4",
+        "shasum": ""
+      },
+      "require": {
+        "brick/math": "^0.9|^0.10|^0.11|^0.12",
+        "ext-mbstring": "*",
+        "php": ">=8.0"
+      },
+      "require-dev": {
+        "ekino/phpstan-banned-code": "^1.0",
+        "ext-json": "*",
+        "infection/infection": "^0.29",
+        "php-parallel-lint/php-parallel-lint": "^1.3",
+        "phpstan/extension-installer": "^1.1",
+        "phpstan/phpstan": "^1.0",
+        "phpstan/phpstan-beberlei-assert": "^1.0",
+        "phpstan/phpstan-deprecation-rules": "^1.0",
+        "phpstan/phpstan-phpunit": "^1.0",
+        "phpstan/phpstan-strict-rules": "^1.0",
+        "phpunit/phpunit": "^10.1|^11.0",
+        "qossmic/deptrac": "^2.0",
+        "rector/rector": "^1.0",
+        "roave/security-advisories": "dev-latest",
+        "symfony/var-dumper": "^6.0|^7.0",
+        "symplify/easy-coding-standard": "^12.0"
+      },
+      "suggest": {
+        "ext-bcmath": "GMP or BCMath extensions will drastically improve the library performance. BCMath extension needed to handle the Big Float and Decimal Fraction Tags",
+        "ext-gmp": "GMP or BCMath extensions will drastically improve the library performance"
+      },
+      "type": "library",
+      "autoload": {
+        "psr-4": {
+          "CBOR\\": "src/"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "MIT"
+      ],
+      "authors": [
+        {
+          "name": "Florent Morselli",
+          "homepage": "https://github.com/Spomky"
+        },
+        {
+          "name": "All contributors",
+          "homepage": "https://github.com/Spomky-Labs/cbor-php/contributors"
+        }
+      ],
+      "description": "CBOR Encoder/Decoder for PHP",
+      "keywords": [
+        "Concise Binary Object Representation",
+        "RFC7049",
+        "cbor"
+      ],
+      "support": {
+        "issues": "https://github.com/Spomky-Labs/cbor-php/issues",
+        "source": "https://github.com/Spomky-Labs/cbor-php/tree/3.1.0"
+      },
+      "funding": [
+        {
+          "url": "https://github.com/Spomky",
+          "type": "github"
+        },
+        {
+          "url": "https://www.patreon.com/FlorentMorselli",
+          "type": "patreon"
+        }
+      ],
+      "time": "2024-07-18T08:37:03+00:00"
+    },
+    {
+      "name": "spomky-labs/pki-framework",
+      "version": "1.2.1",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/Spomky-Labs/pki-framework.git",
+        "reference": "0b10c8b53366729417d6226ae89a665f9e2d61b6"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/Spomky-Labs/pki-framework/zipball/0b10c8b53366729417d6226ae89a665f9e2d61b6",
+        "reference": "0b10c8b53366729417d6226ae89a665f9e2d61b6",
+        "shasum": ""
+      },
+      "require": {
+        "brick/math": "^0.10|^0.11|^0.12",
+        "ext-mbstring": "*",
+        "php": ">=8.1"
+      },
+      "require-dev": {
+        "ekino/phpstan-banned-code": "^1.0",
+        "ext-gmp": "*",
+        "ext-openssl": "*",
+        "infection/infection": "^0.28",
+        "php-parallel-lint/php-parallel-lint": "^1.3",
+        "phpstan/extension-installer": "^1.3",
+        "phpstan/phpstan": "^1.8",
+        "phpstan/phpstan-beberlei-assert": "^1.0",
+        "phpstan/phpstan-deprecation-rules": "^1.0",
+        "phpstan/phpstan-phpunit": "^1.1",
+        "phpstan/phpstan-strict-rules": "^1.3",
+        "phpunit/phpunit": "^10.1|^11.0",
+        "rector/rector": "^1.0",
+        "roave/security-advisories": "dev-latest",
+        "symfony/phpunit-bridge": "^6.4|^7.0",
+        "symfony/string": "^6.4|^7.0",
+        "symfony/var-dumper": "^6.4|^7.0",
+        "symplify/easy-coding-standard": "^12.0"
+      },
+      "suggest": {
+        "ext-bcmath": "For better performance (or GMP)",
+        "ext-gmp": "For better performance (or BCMath)",
+        "ext-openssl": "For OpenSSL based cyphering"
+      },
+      "type": "library",
+      "autoload": {
+        "psr-4": {
+          "SpomkyLabs\\Pki\\": "src/"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "MIT"
+      ],
+      "authors": [
+        {
+          "name": "Joni Eskelinen",
+          "email": "jonieske@gmail.com",
+          "role": "Original developer"
+        },
+        {
+          "name": "Florent Morselli",
+          "email": "florent.morselli@spomky-labs.com",
+          "role": "Spomky-Labs PKI Framework developer"
+        }
+      ],
+      "description": "A PHP framework for managing Public Key Infrastructures. It comprises X.509 public key certificates, attribute certificates, certification requests and certification path validation.",
+      "homepage": "https://github.com/spomky-labs/pki-framework",
+      "keywords": [
+        "DER",
+        "Private Key",
+        "ac",
+        "algorithm identifier",
+        "asn.1",
+        "asn1",
+        "attribute certificate",
+        "certificate",
+        "certification request",
+        "cryptography",
+        "csr",
+        "decrypt",
+        "ec",
+        "encrypt",
+        "pem",
+        "pkcs",
+        "public key",
+        "rsa",
+        "sign",
+        "signature",
+        "verify",
+        "x.509",
+        "x.690",
+        "x509",
+        "x690"
+      ],
+      "support": {
+        "issues": "https://github.com/Spomky-Labs/pki-framework/issues",
+        "source": "https://github.com/Spomky-Labs/pki-framework/tree/1.2.1"
+      },
+      "funding": [
+        {
+          "url": "https://github.com/Spomky",
+          "type": "github"
+        },
+        {
+          "url": "https://www.patreon.com/FlorentMorselli",
+          "type": "patreon"
+        }
+      ],
+      "time": "2024-03-30T18:03:49+00:00"
     },
     {
       "name": "symfony/clock",
@@ -5643,6 +6379,165 @@
       "time": "2024-11-06T14:23:19+00:00"
     },
     {
+      "name": "symfony/property-access",
+      "version": "v7.2.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/symfony/property-access.git",
+        "reference": "3ae42efba01e45aaedecf5c93c8d6a3ab3a82276"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/property-access/zipball/3ae42efba01e45aaedecf5c93c8d6a3ab3a82276",
+        "reference": "3ae42efba01e45aaedecf5c93c8d6a3ab3a82276",
+        "shasum": ""
+      },
+      "require": {
+        "php": ">=8.2",
+        "symfony/property-info": "^6.4|^7.0"
+      },
+      "require-dev": {
+        "symfony/cache": "^6.4|^7.0"
+      },
+      "type": "library",
+      "autoload": {
+        "psr-4": {
+          "Symfony\\Component\\PropertyAccess\\": ""
+        },
+        "exclude-from-classmap": [
+          "/Tests/"
+        ]
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "MIT"
+      ],
+      "authors": [
+        {
+          "name": "Fabien Potencier",
+          "email": "fabien@symfony.com"
+        },
+        {
+          "name": "Symfony Community",
+          "homepage": "https://symfony.com/contributors"
+        }
+      ],
+      "description": "Provides functions to read and write from/to an object or array using a simple string notation",
+      "homepage": "https://symfony.com",
+      "keywords": [
+        "access",
+        "array",
+        "extraction",
+        "index",
+        "injection",
+        "object",
+        "property",
+        "property-path",
+        "reflection"
+      ],
+      "support": {
+        "source": "https://github.com/symfony/property-access/tree/v7.2.0"
+      },
+      "funding": [
+        {
+          "url": "https://symfony.com/sponsor",
+          "type": "custom"
+        },
+        {
+          "url": "https://github.com/fabpot",
+          "type": "github"
+        },
+        {
+          "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+          "type": "tidelift"
+        }
+      ],
+      "time": "2024-09-26T12:28:35+00:00"
+    },
+    {
+      "name": "symfony/property-info",
+      "version": "v7.2.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/symfony/property-info.git",
+        "reference": "b00580d9d7c9654e1df95df85105d0da67418b3f"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/property-info/zipball/b00580d9d7c9654e1df95df85105d0da67418b3f",
+        "reference": "b00580d9d7c9654e1df95df85105d0da67418b3f",
+        "shasum": ""
+      },
+      "require": {
+        "php": ">=8.2",
+        "symfony/string": "^6.4|^7.0",
+        "symfony/type-info": "^7.1"
+      },
+      "conflict": {
+        "phpdocumentor/reflection-docblock": "<5.2",
+        "phpdocumentor/type-resolver": "<1.5.1",
+        "symfony/dependency-injection": "<6.4"
+      },
+      "require-dev": {
+        "phpdocumentor/reflection-docblock": "^5.2",
+        "phpstan/phpdoc-parser": "^1.0|^2.0",
+        "symfony/cache": "^6.4|^7.0",
+        "symfony/dependency-injection": "^6.4|^7.0",
+        "symfony/serializer": "^6.4|^7.0"
+      },
+      "type": "library",
+      "autoload": {
+        "psr-4": {
+          "Symfony\\Component\\PropertyInfo\\": ""
+        },
+        "exclude-from-classmap": [
+          "/Tests/"
+        ]
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "MIT"
+      ],
+      "authors": [
+        {
+          "name": "Kévin Dunglas",
+          "email": "dunglas@gmail.com"
+        },
+        {
+          "name": "Symfony Community",
+          "homepage": "https://symfony.com/contributors"
+        }
+      ],
+      "description": "Extracts information about PHP class' properties using metadata of popular sources",
+      "homepage": "https://symfony.com",
+      "keywords": [
+        "doctrine",
+        "phpdoc",
+        "property",
+        "symfony",
+        "type",
+        "validator"
+      ],
+      "support": {
+        "source": "https://github.com/symfony/property-info/tree/v7.2.0"
+      },
+      "funding": [
+        {
+          "url": "https://symfony.com/sponsor",
+          "type": "custom"
+        },
+        {
+          "url": "https://github.com/fabpot",
+          "type": "github"
+        },
+        {
+          "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+          "type": "tidelift"
+        }
+      ],
+      "time": "2024-11-27T09:50:52+00:00"
+    },
+    {
       "name": "symfony/routing",
       "version": "v7.1.6",
       "source": {
@@ -5722,6 +6617,104 @@
         }
       ],
       "time": "2024-10-01T08:31:23+00:00"
+    },
+    {
+      "name": "symfony/serializer",
+      "version": "v7.2.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/symfony/serializer.git",
+        "reference": "3f5ed9f5e6c02e3853109190ba38408f5e1d2dd0"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/serializer/zipball/3f5ed9f5e6c02e3853109190ba38408f5e1d2dd0",
+        "reference": "3f5ed9f5e6c02e3853109190ba38408f5e1d2dd0",
+        "shasum": ""
+      },
+      "require": {
+        "php": ">=8.2",
+        "symfony/deprecation-contracts": "^2.5|^3",
+        "symfony/polyfill-ctype": "~1.8"
+      },
+      "conflict": {
+        "phpdocumentor/reflection-docblock": "<3.2.2",
+        "phpdocumentor/type-resolver": "<1.4.0",
+        "symfony/dependency-injection": "<6.4",
+        "symfony/property-access": "<6.4",
+        "symfony/property-info": "<6.4",
+        "symfony/uid": "<6.4",
+        "symfony/validator": "<6.4",
+        "symfony/yaml": "<6.4"
+      },
+      "require-dev": {
+        "phpdocumentor/reflection-docblock": "^3.2|^4.0|^5.0",
+        "phpstan/phpdoc-parser": "^1.0|^2.0",
+        "seld/jsonlint": "^1.10",
+        "symfony/cache": "^6.4|^7.0",
+        "symfony/config": "^6.4|^7.0",
+        "symfony/console": "^6.4|^7.0",
+        "symfony/dependency-injection": "^7.2",
+        "symfony/error-handler": "^6.4|^7.0",
+        "symfony/filesystem": "^6.4|^7.0",
+        "symfony/form": "^6.4|^7.0",
+        "symfony/http-foundation": "^6.4|^7.0",
+        "symfony/http-kernel": "^6.4|^7.0",
+        "symfony/messenger": "^6.4|^7.0",
+        "symfony/mime": "^6.4|^7.0",
+        "symfony/property-access": "^6.4|^7.0",
+        "symfony/property-info": "^6.4|^7.0",
+        "symfony/translation-contracts": "^2.5|^3",
+        "symfony/type-info": "^7.1",
+        "symfony/uid": "^6.4|^7.0",
+        "symfony/validator": "^6.4|^7.0",
+        "symfony/var-dumper": "^6.4|^7.0",
+        "symfony/var-exporter": "^6.4|^7.0",
+        "symfony/yaml": "^6.4|^7.0"
+      },
+      "type": "library",
+      "autoload": {
+        "psr-4": {
+          "Symfony\\Component\\Serializer\\": ""
+        },
+        "exclude-from-classmap": [
+          "/Tests/"
+        ]
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "MIT"
+      ],
+      "authors": [
+        {
+          "name": "Fabien Potencier",
+          "email": "fabien@symfony.com"
+        },
+        {
+          "name": "Symfony Community",
+          "homepage": "https://symfony.com/contributors"
+        }
+      ],
+      "description": "Handles serializing and deserializing data structures, including object graphs, into array structures or other formats like XML and JSON.",
+      "homepage": "https://symfony.com",
+      "support": {
+        "source": "https://github.com/symfony/serializer/tree/v7.2.0"
+      },
+      "funding": [
+        {
+          "url": "https://symfony.com/sponsor",
+          "type": "custom"
+        },
+        {
+          "url": "https://github.com/fabpot",
+          "type": "github"
+        },
+        {
+          "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+          "type": "tidelift"
+        }
+      ],
+      "time": "2024-11-25T15:21:05+00:00"
     },
     {
       "name": "symfony/service-contracts",
@@ -6064,6 +7057,86 @@
         }
       ],
       "time": "2024-04-18T09:32:20+00:00"
+    },
+    {
+      "name": "symfony/type-info",
+      "version": "v7.2.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/symfony/type-info.git",
+        "reference": "e0bfd95bceb3886c59487828537691aecb7d9c6b"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/type-info/zipball/e0bfd95bceb3886c59487828537691aecb7d9c6b",
+        "reference": "e0bfd95bceb3886c59487828537691aecb7d9c6b",
+        "shasum": ""
+      },
+      "require": {
+        "php": ">=8.2",
+        "psr/container": "^1.1|^2.0"
+      },
+      "conflict": {
+        "phpstan/phpdoc-parser": "<1.0",
+        "symfony/dependency-injection": "<6.4"
+      },
+      "require-dev": {
+        "phpstan/phpdoc-parser": "^1.0|^2.0",
+        "symfony/dependency-injection": "^6.4|^7.0"
+      },
+      "type": "library",
+      "autoload": {
+        "psr-4": {
+          "Symfony\\Component\\TypeInfo\\": ""
+        },
+        "exclude-from-classmap": [
+          "/Tests/"
+        ]
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "MIT"
+      ],
+      "authors": [
+        {
+          "name": "Mathias Arlaud",
+          "email": "mathias.arlaud@gmail.com"
+        },
+        {
+          "name": "Baptiste LEDUC",
+          "email": "baptiste.leduc@gmail.com"
+        },
+        {
+          "name": "Symfony Community",
+          "homepage": "https://symfony.com/contributors"
+        }
+      ],
+      "description": "Extracts PHP types information.",
+      "homepage": "https://symfony.com",
+      "keywords": [
+        "PHPStan",
+        "phpdoc",
+        "symfony",
+        "type"
+      ],
+      "support": {
+        "source": "https://github.com/symfony/type-info/tree/v7.2.0"
+      },
+      "funding": [
+        {
+          "url": "https://symfony.com/sponsor",
+          "type": "custom"
+        },
+        {
+          "url": "https://github.com/fabpot",
+          "type": "github"
+        },
+        {
+          "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+          "type": "tidelift"
+        }
+      ],
+      "time": "2024-11-18T09:51:31+00:00"
     },
     {
       "name": "symfony/uid",
@@ -6432,6 +7505,174 @@
         }
       ],
       "time": "2024-11-21T01:49:47+00:00"
+    },
+    {
+      "name": "web-auth/cose-lib",
+      "version": "4.4.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/web-auth/cose-lib.git",
+        "reference": "2166016e48e0214f4f63320a7758a9386d14c92a"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/web-auth/cose-lib/zipball/2166016e48e0214f4f63320a7758a9386d14c92a",
+        "reference": "2166016e48e0214f4f63320a7758a9386d14c92a",
+        "shasum": ""
+      },
+      "require": {
+        "brick/math": "^0.9|^0.10|^0.11|^0.12",
+        "ext-json": "*",
+        "ext-openssl": "*",
+        "php": ">=8.1",
+        "spomky-labs/pki-framework": "^1.0"
+      },
+      "require-dev": {
+        "ekino/phpstan-banned-code": "^1.0",
+        "infection/infection": "^0.29",
+        "php-parallel-lint/php-parallel-lint": "^1.3",
+        "phpstan/extension-installer": "^1.3",
+        "phpstan/phpstan": "^1.7",
+        "phpstan/phpstan-deprecation-rules": "^1.0",
+        "phpstan/phpstan-phpunit": "^1.1",
+        "phpstan/phpstan-strict-rules": "^1.2",
+        "phpunit/phpunit": "^10.1|^11.0",
+        "qossmic/deptrac": "^2.0",
+        "rector/rector": "^1.0",
+        "symfony/phpunit-bridge": "^6.4|^7.0",
+        "symplify/easy-coding-standard": "^12.0"
+      },
+      "suggest": {
+        "ext-bcmath": "For better performance, please install either GMP (recommended) or BCMath extension",
+        "ext-gmp": "For better performance, please install either GMP (recommended) or BCMath extension"
+      },
+      "type": "library",
+      "autoload": {
+        "psr-4": {
+          "Cose\\": "src/"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "MIT"
+      ],
+      "authors": [
+        {
+          "name": "Florent Morselli",
+          "homepage": "https://github.com/Spomky"
+        },
+        {
+          "name": "All contributors",
+          "homepage": "https://github.com/web-auth/cose/contributors"
+        }
+      ],
+      "description": "CBOR Object Signing and Encryption (COSE) For PHP",
+      "homepage": "https://github.com/web-auth",
+      "keywords": [
+        "COSE",
+        "RFC8152"
+      ],
+      "support": {
+        "issues": "https://github.com/web-auth/cose-lib/issues",
+        "source": "https://github.com/web-auth/cose-lib/tree/4.4.0"
+      },
+      "funding": [
+        {
+          "url": "https://github.com/Spomky",
+          "type": "github"
+        },
+        {
+          "url": "https://www.patreon.com/FlorentMorselli",
+          "type": "patreon"
+        }
+      ],
+      "time": "2024-07-18T08:47:32+00:00"
+    },
+    {
+      "name": "web-auth/webauthn-lib",
+      "version": "5.0.1",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/web-auth/webauthn-lib.git",
+        "reference": "2cc8262b885cf01eee3c4c10ca3985bdd2614c97"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/web-auth/webauthn-lib/zipball/2cc8262b885cf01eee3c4c10ca3985bdd2614c97",
+        "reference": "2cc8262b885cf01eee3c4c10ca3985bdd2614c97",
+        "shasum": ""
+      },
+      "require": {
+        "ext-json": "*",
+        "ext-openssl": "*",
+        "paragonie/constant_time_encoding": "^2.6|^3.0",
+        "php": ">=8.2",
+        "phpdocumentor/reflection-docblock": "^5.3",
+        "psr/clock": "^1.0",
+        "psr/event-dispatcher": "^1.0",
+        "psr/log": "^1.0|^2.0|^3.0",
+        "spomky-labs/cbor-php": "^3.0",
+        "spomky-labs/pki-framework": "^1.0",
+        "symfony/clock": "^6.4|^7.0",
+        "symfony/deprecation-contracts": "^3.2",
+        "symfony/property-access": "^6.4|^7.0",
+        "symfony/property-info": "^6.4|^7.0",
+        "symfony/serializer": "^6.4|^7.0",
+        "symfony/uid": "^6.4|^7.0",
+        "web-auth/cose-lib": "^4.2.3"
+      },
+      "suggest": {
+        "psr/log-implementation": "Recommended to receive logs from the library",
+        "symfony/event-dispatcher": "Recommended to use dispatched events",
+        "web-token/jwt-library": "Mandatory for fetching Metadata Statement from distant sources"
+      },
+      "type": "library",
+      "extra": {
+        "thanks": {
+          "name": "web-auth/webauthn-framework",
+          "url": "https://github.com/web-auth/webauthn-framework"
+        }
+      },
+      "autoload": {
+        "psr-4": {
+          "Webauthn\\": "src/"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "MIT"
+      ],
+      "authors": [
+        {
+          "name": "Florent Morselli",
+          "homepage": "https://github.com/Spomky"
+        },
+        {
+          "name": "All contributors",
+          "homepage": "https://github.com/web-auth/webauthn-library/contributors"
+        }
+      ],
+      "description": "FIDO2/Webauthn Support For PHP",
+      "homepage": "https://github.com/web-auth",
+      "keywords": [
+        "FIDO2",
+        "fido",
+        "webauthn"
+      ],
+      "support": {
+        "source": "https://github.com/web-auth/webauthn-lib/tree/5.0.1"
+      },
+      "funding": [
+        {
+          "url": "https://github.com/Spomky",
+          "type": "github"
+        },
+        {
+          "url": "https://www.patreon.com/FlorentMorselli",
+          "type": "patreon"
+        }
+      ],
+      "time": "2024-07-20T05:24:59+00:00"
     },
     {
       "name": "webmozart/assert",
@@ -7872,53 +9113,6 @@
         }
       ],
       "time": "2024-04-18T06:56:21+00:00"
-    },
-    {
-      "name": "doctrine/deprecations",
-      "version": "1.1.3",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/doctrine/deprecations.git",
-        "reference": "dfbaa3c2d2e9a9df1118213f3b8b0c597bb99fab"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/doctrine/deprecations/zipball/dfbaa3c2d2e9a9df1118213f3b8b0c597bb99fab",
-        "reference": "dfbaa3c2d2e9a9df1118213f3b8b0c597bb99fab",
-        "shasum": ""
-      },
-      "require": {
-        "php": "^7.1 || ^8.0"
-      },
-      "require-dev": {
-        "doctrine/coding-standard": "^9",
-        "phpstan/phpstan": "1.4.10 || 1.10.15",
-        "phpstan/phpstan-phpunit": "^1.0",
-        "phpunit/phpunit": "^7.5 || ^8.5 || ^9.5",
-        "psalm/plugin-phpunit": "0.18.4",
-        "psr/log": "^1 || ^2 || ^3",
-        "vimeo/psalm": "4.30.0 || 5.12.0"
-      },
-      "suggest": {
-        "psr/log": "Allows logging deprecations via PSR-3 logger implementation"
-      },
-      "type": "library",
-      "autoload": {
-        "psr-4": {
-          "Doctrine\\Deprecations\\": "lib/Doctrine/Deprecations"
-        }
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": [
-        "MIT"
-      ],
-      "description": "A small layer on top of trigger_error(E_USER_DEPRECATED) or PSR-3 logging with options to disable all deprecations or selectively for packages.",
-      "homepage": "https://www.doctrine-project.org/",
-      "support": {
-        "issues": "https://github.com/doctrine/deprecations/issues",
-        "source": "https://github.com/doctrine/deprecations/tree/1.1.3"
-      },
-      "time": "2024-01-30T19:34:25+00:00"
     },
     {
       "name": "enlightn/security-checker",
@@ -9705,181 +10899,6 @@
       "time": "2022-02-21T01:04:05+00:00"
     },
     {
-      "name": "phpdocumentor/reflection-common",
-      "version": "2.2.0",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/phpDocumentor/ReflectionCommon.git",
-        "reference": "1d01c49d4ed62f25aa84a747ad35d5a16924662b"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/phpDocumentor/ReflectionCommon/zipball/1d01c49d4ed62f25aa84a747ad35d5a16924662b",
-        "reference": "1d01c49d4ed62f25aa84a747ad35d5a16924662b",
-        "shasum": ""
-      },
-      "require": {
-        "php": "^7.2 || ^8.0"
-      },
-      "type": "library",
-      "extra": {
-        "branch-alias": {
-          "dev-2.x": "2.x-dev"
-        }
-      },
-      "autoload": {
-        "psr-4": {
-          "phpDocumentor\\Reflection\\": "src/"
-        }
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": [
-        "MIT"
-      ],
-      "authors": [
-        {
-          "name": "Jaap van Otterdijk",
-          "email": "opensource@ijaap.nl"
-        }
-      ],
-      "description": "Common reflection classes used by phpdocumentor to reflect the code structure",
-      "homepage": "http://www.phpdoc.org",
-      "keywords": [
-        "FQSEN",
-        "phpDocumentor",
-        "phpdoc",
-        "reflection",
-        "static analysis"
-      ],
-      "support": {
-        "issues": "https://github.com/phpDocumentor/ReflectionCommon/issues",
-        "source": "https://github.com/phpDocumentor/ReflectionCommon/tree/2.x"
-      },
-      "time": "2020-06-27T09:03:43+00:00"
-    },
-    {
-      "name": "phpdocumentor/reflection-docblock",
-      "version": "5.6.0",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-        "reference": "f3558a4c23426d12bffeaab463f8a8d8b681193c"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/f3558a4c23426d12bffeaab463f8a8d8b681193c",
-        "reference": "f3558a4c23426d12bffeaab463f8a8d8b681193c",
-        "shasum": ""
-      },
-      "require": {
-        "doctrine/deprecations": "^1.1",
-        "ext-filter": "*",
-        "php": "^7.4 || ^8.0",
-        "phpdocumentor/reflection-common": "^2.2",
-        "phpdocumentor/type-resolver": "^1.7",
-        "phpstan/phpdoc-parser": "^1.7|^2.0",
-        "webmozart/assert": "^1.9.1"
-      },
-      "require-dev": {
-        "mockery/mockery": "~1.3.5 || ~1.6.0",
-        "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan": "^1.8",
-        "phpstan/phpstan-mockery": "^1.1",
-        "phpstan/phpstan-webmozart-assert": "^1.2",
-        "phpunit/phpunit": "^9.5",
-        "psalm/phar": "^5.26"
-      },
-      "type": "library",
-      "extra": {
-        "branch-alias": {
-          "dev-master": "5.x-dev"
-        }
-      },
-      "autoload": {
-        "psr-4": {
-          "phpDocumentor\\Reflection\\": "src"
-        }
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": [
-        "MIT"
-      ],
-      "authors": [
-        {
-          "name": "Mike van Riel",
-          "email": "me@mikevanriel.com"
-        },
-        {
-          "name": "Jaap van Otterdijk",
-          "email": "opensource@ijaap.nl"
-        }
-      ],
-      "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
-      "support": {
-        "issues": "https://github.com/phpDocumentor/ReflectionDocBlock/issues",
-        "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/5.6.0"
-      },
-      "time": "2024-11-12T11:25:25+00:00"
-    },
-    {
-      "name": "phpdocumentor/type-resolver",
-      "version": "1.10.0",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/phpDocumentor/TypeResolver.git",
-        "reference": "679e3ce485b99e84c775d28e2e96fade9a7fb50a"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/679e3ce485b99e84c775d28e2e96fade9a7fb50a",
-        "reference": "679e3ce485b99e84c775d28e2e96fade9a7fb50a",
-        "shasum": ""
-      },
-      "require": {
-        "doctrine/deprecations": "^1.0",
-        "php": "^7.3 || ^8.0",
-        "phpdocumentor/reflection-common": "^2.0",
-        "phpstan/phpdoc-parser": "^1.18|^2.0"
-      },
-      "require-dev": {
-        "ext-tokenizer": "*",
-        "phpbench/phpbench": "^1.2",
-        "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan": "^1.8",
-        "phpstan/phpstan-phpunit": "^1.1",
-        "phpunit/phpunit": "^9.5",
-        "rector/rector": "^0.13.9",
-        "vimeo/psalm": "^4.25"
-      },
-      "type": "library",
-      "extra": {
-        "branch-alias": {
-          "dev-1.x": "1.x-dev"
-        }
-      },
-      "autoload": {
-        "psr-4": {
-          "phpDocumentor\\Reflection\\": "src"
-        }
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": [
-        "MIT"
-      ],
-      "authors": [
-        {
-          "name": "Mike van Riel",
-          "email": "me@mikevanriel.com"
-        }
-      ],
-      "description": "A PSR-5 based resolver of Class names, Types and Structural Element Names",
-      "support": {
-        "issues": "https://github.com/phpDocumentor/TypeResolver/issues",
-        "source": "https://github.com/phpDocumentor/TypeResolver/tree/1.10.0"
-      },
-      "time": "2024-11-09T15:12:26+00:00"
-    },
-    {
       "name": "phpro/grumphp",
       "version": "v2.9.0",
       "source": {
@@ -9996,53 +11015,6 @@
         "source": "https://github.com/phpro/grumphp/tree/v2.9.0"
       },
       "time": "2024-10-25T10:11:05+00:00"
-    },
-    {
-      "name": "phpstan/phpdoc-parser",
-      "version": "2.0.0",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/phpstan/phpdoc-parser.git",
-        "reference": "c00d78fb6b29658347f9d37ebe104bffadf36299"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/c00d78fb6b29658347f9d37ebe104bffadf36299",
-        "reference": "c00d78fb6b29658347f9d37ebe104bffadf36299",
-        "shasum": ""
-      },
-      "require": {
-        "php": "^7.4 || ^8.0"
-      },
-      "require-dev": {
-        "doctrine/annotations": "^2.0",
-        "nikic/php-parser": "^5.3.0",
-        "php-parallel-lint/php-parallel-lint": "^1.2",
-        "phpstan/extension-installer": "^1.0",
-        "phpstan/phpstan": "^2.0",
-        "phpstan/phpstan-phpunit": "^2.0",
-        "phpstan/phpstan-strict-rules": "^2.0",
-        "phpunit/phpunit": "^9.6",
-        "symfony/process": "^5.2"
-      },
-      "type": "library",
-      "autoload": {
-        "psr-4": {
-          "PHPStan\\PhpDocParser\\": [
-            "src/"
-          ]
-        }
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": [
-        "MIT"
-      ],
-      "description": "PHPDoc parser with support for nullable, intersection and generic types",
-      "support": {
-        "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-        "source": "https://github.com/phpstan/phpdoc-parser/tree/2.0.0"
-      },
-      "time": "2024-10-13T11:29:49+00:00"
     },
     {
       "name": "phpunit/php-code-coverage",
@@ -12441,6 +13413,6 @@
   "platform": {
     "php": "^8.2"
   },
-  "platform-dev": [],
+  "platform-dev": {},
   "plugin-api-version": "2.6.0"
 }

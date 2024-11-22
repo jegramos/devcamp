@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
-use App\Actions\AddSoftDeleteMarkerAction;
 use App\Enums\Role;
+use App\Services\AwsS3Service;
+use App\Services\CloudStorageManager;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\Gate;
@@ -35,8 +36,8 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(TelescopeServiceProvider::class);
         }
 
-        $this->app->bind(AddSoftDeleteMarkerAction::class, function () {
-            return new AddSoftDeleteMarkerAction();
+        $this->app->singleton(CloudStorageManager::class, function () {
+            return new AwsS3Service();
         });
     }
 
@@ -77,7 +78,7 @@ class AppServiceProvider extends ServiceProvider
             return Limit::perMinute(5)->by($key);
         });
 
-        RateLimiter::for('send-email-verification', function (Request $request) {
+        RateLimiter::for('send-email-notification', function (Request $request) {
             $userId = $request->user()?->id;
             $route = $request->route()->getName() ?? $request->route()->uri();
             $key = $userId

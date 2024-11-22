@@ -1,5 +1,5 @@
 /**
- * Utility for creating custom Vuelidate validators.
+ * @description Utility for creating custom Vuelidate validators.
  * For more details, see:
  * @see https://vuelidate-next.netlify.app/custom_validators.html
  */
@@ -26,10 +26,12 @@ export const passwordRule = () => helpers.regex(passwordRegex)
  */
 export const uniqueUserIdentifierRule = (
   baseUrl: string,
-  type: 'username' | 'email',
+  type: 'username' | 'email' | 'mobile_number',
   excludedId: string | number | null = null
 ) =>
   async function (value: string) {
+    value = encodeURIComponent(value.trim())
+
     // Remove the last char of the url if it ends with a '/'
     if (baseUrl.charAt(baseUrl.length - 1) === '/') baseUrl = baseUrl.slice(0, -1)
 
@@ -40,3 +42,13 @@ export const uniqueUserIdentifierRule = (
     const { data } = await useApiCall(url).get().json()
     return data.value.available
   }
+
+/** @description Only allow certain file extensions **/
+export const mimeTypeRule = (mimeTypes: string[]) => (value: File) => {
+  return mimeTypes.includes(value.type)
+}
+
+/** @description The file size must not exceed the specified size in MB*/
+export const maxFileSizeRule = (maxMb: number) => (value: File) => {
+  return value.size <= maxMb * 1024 * 1024
+}

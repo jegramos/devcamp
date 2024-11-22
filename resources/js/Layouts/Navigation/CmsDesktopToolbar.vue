@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { router, usePage } from '@inertiajs/vue3'
 import Toolbar from 'primevue/toolbar'
 import Button from 'primevue/button'
@@ -11,10 +11,12 @@ import type { MenuItem } from 'primevue/menuitem'
 import InputText from 'primevue/inputtext'
 import CmsBreadCrumb from '@/Layouts/Navigation/CmsBreadCrumb.vue'
 import { useCmsDesktopSidebar } from '@/Composables/useCmsDesktopSidebar'
-import { getAvatarDisplayNamePlaceholder } from '@/Utils/avatar-helpers'
 import type { SharedPage } from '@/Types/shared-page.ts'
 
 const page = usePage<SharedPage>()
+const authenticatedUser = computed(function () {
+  return page.props.auth.user
+})
 
 /** Avatar Menu */
 const avatarMenu = ref()
@@ -71,7 +73,8 @@ const { toggle: toggleDesktopSidebar } = useCmsDesktopSidebar()
         <Avatar
           shape="circle"
           class="cursor-pointer overflow-hidden transition-transform hover:scale-105"
-          label="JR"
+          :image="authenticatedUser?.profile_picture_url ?? undefined"
+          :label="`${authenticatedUser?.profile_picture_url ? '' : authenticatedUser?.nameInitials}`"
           aria-haspopup="true"
           aria-controls="avatar-menu"
           @click="toggleAvatarMenu"
@@ -82,7 +85,8 @@ const { toggle: toggleDesktopSidebar } = useCmsDesktopSidebar()
               class="p-link relative mb-2 flex w-full items-center overflow-hidden p-2 pl-3 hover:bg-surface-100 dark:hover:bg-surface-400/10"
             >
               <Avatar
-                :label="getAvatarDisplayNamePlaceholder(page.props.auth.user?.full_name)"
+                :image="authenticatedUser?.profile_picture_url ?? undefined"
+                :label="`${authenticatedUser?.profile_picture_url ? '' : authenticatedUser?.nameInitials}`"
                 class="mr-2.5 overflow-hidden"
                 size="large"
               />

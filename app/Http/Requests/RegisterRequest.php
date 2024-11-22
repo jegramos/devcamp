@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Rules\DbVarcharMaxLengthRule;
-use App\Rules\EmailRule;
 use App\Rules\PasswordRule;
 use App\Rules\RecaptchaRule;
 use App\Rules\UsernameRule;
@@ -24,11 +23,11 @@ class RegisterRequest extends FormRequest
     private function getProcessRegistrationRules(): array
     {
         return [
-            'email' => ['required', new EmailRule()],
-            'username' => ['required', new UsernameRule()],
+            'email' => ['required', 'email:rfc', 'unique:users,email'],
+            'username' => ['required', new UsernameRule(), 'unique:users,username'],
             'password' => ['required', 'confirmed', new PasswordRule()],
-            'first_name' => ['required', new DbVarcharMaxLengthRule()],
-            'last_name' => ['required', new DbVarcharMaxLengthRule()],
+            'given_name' => ['required', new DbVarcharMaxLengthRule()],
+            'family_name' => ['required', new DbVarcharMaxLengthRule()],
             'country_id' => ['required', 'exists:countries,id'],
             'recaptcha_response_token' => [new RecaptchaRule()]
         ];

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3'
+import { Link, usePage } from '@inertiajs/vue3'
 import Button from 'primevue/button'
 import Tag from 'primevue/tag'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -7,6 +7,8 @@ import { faBriefcase, faHeart, faFolderOpen, faBookOpen, faCalendarCheck, faSign
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import AppLogo from '@/Components/AppLogo.vue'
 import AppAnimatedFloaters from '@/Components/AppAnimatedFloaters.vue'
+import type { SharedPage } from '@/Types/shared-page.ts'
+import { applyTheme } from '@/Utils/theme.ts'
 
 const features = [
   { name: 'Resume Builder', icon: faBriefcase },
@@ -25,6 +27,10 @@ defineProps({
     required: true,
   },
 })
+
+const page = usePage<SharedPage>()
+
+applyTheme()
 </script>
 
 <template>
@@ -64,9 +70,9 @@ defineProps({
           A convenient destination for <i>building</i> and <i>showcasing</i> portfolios.
         </p>
         <p class="mt-2 text-lg text-primary-contrast dark:font-medium dark:leading-normal dark:text-surface-950">
-          Create, manage, and display your professional portfolio with ease using <span class="font-brand">Devfolio</span>.
-          Whether you're a freelancer, student, or professional, our platform offers a comprehensive suite of tools tailored to
-          your needs.
+          Create, manage, and display your professional portfolio with ease using
+          <span class="font-brand"> {{ page.props.appName }} </span>. Whether you're a freelancer, student, or professional, our
+          platform offers a comprehensive suite of tools tailored to your needs.
         </p>
         <div class="absolute -right-2.5 top-1/2 h-[20%] w-[12px] -translate-y-1/2 bg-primary"></div>
         <div class="absolute -left-2.5 top-1/2 h-[20%] w-[12px] -translate-y-1/2 bg-primary"></div>
@@ -74,7 +80,7 @@ defineProps({
         <div class="absolute -bottom-3 left-1/2 h-4 w-4 -translate-x-1/2 rounded-full bg-primary-contrast"></div>
         <div class="mt-6 flex space-x-6">
           <Link :href="registerUrl" class="z-20">
-            <button class="z-20 w-60 rounded-lg bg-amber-600 px-6 py-3 font-bold text-primary-contrast dark:bg-amber-400">
+            <button class="dark:bg-amber500 z-20 w-60 rounded-lg bg-amber-600 px-6 py-3 font-bold text-primary-contrast">
               <FontAwesomeIcon :icon="faHeart" class="mr-2"></FontAwesomeIcon>
               Get Started for Free
             </button>

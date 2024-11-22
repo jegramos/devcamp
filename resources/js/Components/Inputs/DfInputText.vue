@@ -8,11 +8,11 @@
  * Guide for Vue3's attribute inheritance feature
  * @see https://vuejs.org/guide/components/attrs
  */
-
+import { computed, useSlots } from 'vue'
 import InputText from 'primevue/inputtext'
 import InputGroup from 'primevue/inputgroup'
 import InputGroupAddon from 'primevue/inputgroupaddon'
-import { computed, useSlots } from 'vue'
+import FloatLabel from 'primevue/floatlabel'
 
 defineOptions({
   inheritAttrs: false,
@@ -36,7 +36,15 @@ const renderAsInputGroup = computed(() => !!slots.icon)
         <InputGroupAddon>
           <slot name="icon"></slot>
         </InputGroupAddon>
-        <InputText v-bind="$attrs" />
+        <FloatLabel variant="on">
+          <InputText
+            :id="$.uid.toString()"
+            v-bind="$attrs"
+            :placeholder="undefined"
+            :class="{ 'cursor-not-allowed': $attrs.disabled }"
+          />
+          <label :for="$.uid.toString()">{{ $attrs.placeholder }}</label>
+        </FloatLabel>
       </InputGroup>
       <small v-if="$attrs.invalid" class="mt-1 animate-shake text-xs text-red-500 dark:text-red-300">
         {{ props.invalidMessage }}
@@ -46,7 +54,15 @@ const renderAsInputGroup = computed(() => !!slots.icon)
 
   <template v-else>
     <div class="flex w-full flex-col">
-      <InputText v-bind="$attrs" />
+      <FloatLabel variant="on">
+        <InputText
+          :id="$.uid.toString()"
+          v-bind="$attrs"
+          :placeholder="undefined"
+          :class="{ 'cursor-not-allowed': $attrs.disabled }"
+        />
+        <label :for="$.uid.toString()">{{ $attrs.placeholder }}</label>
+      </FloatLabel>
       <small v-if="$attrs.invalid" class="mt-1 animate-shake text-xs text-red-500 dark:text-red-300">
         {{ props.invalidMessage }}
       </small>

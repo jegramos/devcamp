@@ -3,16 +3,21 @@
 namespace App\Models;
 
 use App\Actions\AddSoftDeleteMarkerAction;
-use App\Notifications\QueuedVerifyEmailNotification;
+use App\Notifications\ResetPasswordNotification;
+use App\Notifications\VerifyEmailNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Traits\HasRoles;
+
+use function Illuminate\Support\defer;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -52,9 +57,11 @@ class User extends Authenticatable implements MustVerifyEmail
                 $user->email = $addSoftDeleteMarkerAction->execute($user->email);
                 $user->saveQuietly();
 
-                // Delete the UserProfile and ExternalAccount associated with the user
+                // Soft-delete all the relations
                 $user->userProfile()->delete();
                 $user->externalAccount()->delete();
+                $user->passkeys()->delete();
+                $user->accountSettings()->delete();
             });
         });
     }
@@ -89,12 +96,63 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(ExternalAccount::class);
     }
 
+    public function passkeys(): HasMany
+    {
+        return $this->hasMany(Passkey::class);
+    }
+
+    public function accountSettings(): HasOne
+    {
+        return $this->hasOne(AccountSettings::class);
+    }
+
+    public function isFromExternalAccount(): bool
+    {
+        return is_null($this->password);
+    }
+
+    public static function getViaUsernameAndPassword(string $username, string $password): ?static
+    {
+        $user = static::query()->where('username', $username)->first();
+
+        $hasCorrectCreds = $user && Hash::check($password, $user->password);
+        if (! $hasCorrectCreds) {
+            return null;
+        }
+
+        return $user;
+    }
+
+    public static function getViaEmailAndPassword(string $email, string $password): ?static
+    {
+        $user = static::query()->where('email', $email)->first();
+
+        $hasCorrectCreds = $user && Hash::check($password, $user->password);
+        if (! $hasCorrectCreds) {
+            return null;
+        }
+
+        return $user;
+    }
+
     /**
      * Send an email verification notification asynchronously
      */
     public function sendEmailVerificationNotification(): void
     {
-        $expirationInMinutes = Config::get('auth.verification.expiration.email', 60);
-        $this->notify(new QueuedVerifyEmailNotification($this, $expirationInMinutes));
+        $expirationInMinutes = Config::get('auth.verification.expire', 60);
+        defer(function () use ($expirationInMinutes) {
+            $this->notify(new VerifyEmailNotification($this, $expirationInMinutes));
+        });
+    }
+
+    /*
+     * Override default password reset notification
+     */
+    public function sendPasswordResetNotification($token): void
+    {
+        defer(function () use ($token) {
+            $this->notify(new ResetPasswordNotification($token));
+        });
     }
 }

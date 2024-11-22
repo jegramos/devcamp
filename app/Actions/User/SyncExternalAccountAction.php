@@ -6,6 +6,7 @@ use App\Enums\ExternalLoginProvider;
 use App\Exceptions\DuplicateEmailException;
 use App\Models\ExternalAccount;
 use App\Models\User;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
@@ -17,7 +18,18 @@ use Laravel\Socialite\Contracts\User as ProviderUser;
  * or updates the internal user details if there is already an external account bound.
  *
  * Example:
+ * <code>
+ * $config = config('services.google.oauth');
+ * $provider = Socialite::buildProvider(GoogleProvider::class, $config);
  *
+ * $user = syncExternalAccountAction->execute(
+ *      ExternalLoginProvider::GOOGLE,
+ *      $provider->user(),
+ *      $createUserAction,
+ *      $updateUserAction,
+ *      [Role::USER]
+ * );
+ * </code>
  */
 readonly class SyncExternalAccountAction
 {
@@ -29,9 +41,10 @@ readonly class SyncExternalAccountAction
         ProviderUser          $providerAccount,
         CreateUserAction      $createUserAction,
         UpdateUserAction      $updateUserAction,
-        array                 $roles = []
+        array                 $roles = [],
+        bool                  $forceUpdate = false
     ): User {
-        return DB::transaction(function () use ($provider, $providerAccount, $createUserAction, $updateUserAction, $roles) {
+        return DB::transaction(function () use ($provider, $providerAccount, $createUserAction, $updateUserAction, $roles, $forceUpdate) {
             // Check if there is an existing record for the `provider` & `provider_id`
             $providerUserId = $providerAccount->getId();
             $providerUserEmail = $providerAccount->getEmail();
@@ -56,8 +69,8 @@ readonly class SyncExternalAccountAction
                     'email' => $providerUserEmail,
                     'username' => $provider->value . '-user-' . Str::uuid()->toString(),
                     'password' => null,
-                    'first_name' => $this->parseFirstname($provider, $providerAccount),
-                    'last_name' => $this->parseLastname($provider, $providerAccount),
+                    'given_name' => $this->parseGivenName($provider, $providerAccount),
+                    'family_name' => $this->parseFamilyName($provider, $providerAccount),
                     'email_verified_at' => now(),
                     'profile_picture_path' => $providerAccount->getAvatar(),
                 ];
@@ -74,27 +87,40 @@ readonly class SyncExternalAccountAction
                     $user->syncRoles($roles);
                 }
 
-                return $user;
+                return $user->fresh(['userProfile', 'roles', 'externalAccount']);
             }
 
             // If there is an existing record, we update the tokens and update the user profile
-            $externalAccount->update([
-                'access_token' => $providerAccount->token,
-                'refresh_token' => $providerAccount->refreshToken,
-            ]);
+            $externalAccount->access_token = $providerAccount->token;
 
-            $updateUserAction->execute($externalAccount->user, [
+            // Some providers (Google) only sends back the refresh token when
+            // the user sees the Google UI prompt. Retain the current one, if none is provided.
+            if (!is_null($providerAccount->refreshToken)) {
+                $externalAccount->refresh_token = $providerAccount->refreshToken;
+            }
+            $externalAccount->save();
+
+            $updateUserInfo = [
                 'email' => $providerUserEmail,
-                'first_name' => $this->parseFirstname($provider, $providerAccount),
-                'last_name' => $this->parseLastname($provider, $providerAccount),
+                'given_name' => $this->parseGivenName($provider, $providerAccount),
+                'family_name' => $this->parseFamilyName($provider, $providerAccount),
                 'profile_picture_path' => $providerAccount->getAvatar(),
-            ]);
+            ];
 
-            return $externalAccount->user->load(['userProfile', 'roles']);
+            // Always update the fields from the external provider
+            // when this action is called. For example, when the flag is `false`,
+            // only the email will be updated when the user logs in.
+            if (!$forceUpdate) {
+                $updateUserInfo = Arr::only($updateUserInfo, ['email']);
+            }
+
+            $updateUserAction->execute($externalAccount->user, $updateUserInfo);
+
+            return $externalAccount->user->load(['userProfile', 'roles', 'externalAccount']);
         });
     }
 
-    private function parseFirstname(ExternalLoginProvider $provider, ProviderUser $providerAccount): string
+    private function parseGivenName(ExternalLoginProvider $provider, ProviderUser $providerAccount): string
     {
         if ($provider === ExternalLoginProvider::GOOGLE) {
             return $providerAccount->user['given_name'];
@@ -120,7 +146,7 @@ readonly class SyncExternalAccountAction
         throw new InvalidArgumentException('Invalid provider account.');
     }
 
-    private function parseLastname(ExternalLoginProvider $provider, ProviderUser $providerAccount): string
+    private function parseFamilyName(ExternalLoginProvider $provider, ProviderUser $providerAccount): string
     {
         if ($provider === ExternalLoginProvider::GOOGLE) {
             return $providerAccount->user['family_name'];

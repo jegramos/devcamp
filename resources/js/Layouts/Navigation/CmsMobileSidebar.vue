@@ -1,20 +1,24 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Link, usePage } from '@inertiajs/vue3'
+import { computed, ref } from 'vue'
+import { Link, router, usePage } from '@inertiajs/vue3'
 import Drawer from 'primevue/drawer'
 import Button from 'primevue/button'
 import Avatar from 'primevue/avatar'
 import Tag from 'primevue/tag'
 import type { SharedPage } from '@/Types/shared-page.ts'
-import { getAvatarDisplayNamePlaceholder } from '@/Utils/avatar-helpers'
 import { useCmsNavLinks } from '@/Composables/useCmsNavLinks.ts'
 
 const visible = ref(false)
 const page = usePage<SharedPage>()
-const authenticatedUser = page.props.auth?.user
-const nameInitials = getAvatarDisplayNamePlaceholder(authenticatedUser?.full_name)
+const authenticatedUser = computed(function () {
+  return page.props.auth?.user
+})
 
 const { navItems } = useCmsNavLinks(page)
+
+const logout = function () {
+  router.post(page.props.logoutUrl)
+}
 </script>
 
 <template>
@@ -24,8 +28,8 @@ const { navItems } = useCmsNavLinks(page)
       <div v-if="authenticatedUser" class="flex w-full items-center">
         <div class="flex">
           <Avatar
-            :image="authenticatedUser.profile_picture_url ?? undefined"
-            :label="`${authenticatedUser.profile_picture_url ? '' : nameInitials}`"
+            :image="authenticatedUser?.profile_picture_url ?? undefined"
+            :label="`${authenticatedUser?.profile_picture_url ? '' : authenticatedUser?.nameInitials}`"
             class="mr-2.5 overflow-hidden"
             shape="square"
             size="large"
@@ -61,7 +65,7 @@ const { navItems } = useCmsNavLinks(page)
     <!-- End Nav Items -->
     <!-- Start Logout Button -->
     <div class="mt-2 flex">
-      <Button label="Logout" icon="pi pi-sign-out" class="flex-auto" severity="danger"></Button>
+      <Button label="Logout" icon="pi pi-sign-out" class="flex-auto" severity="danger" @click="logout"></Button>
     </div>
     <!-- End Logout Button -->
   </Drawer>

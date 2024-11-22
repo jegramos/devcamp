@@ -3,12 +3,13 @@ import { ref } from 'vue'
 const isMinimized = ref(false)
 const isMaximized = ref(true)
 
+/**
+ * @description Used as the central state store of the Sidebar in Desktop view
+ */
 export function useCmsDesktopSidebar() {
   const toggle = function () {
     isMinimized.value = !isMinimized.value
     isMaximized.value = !isMaximized.value
-    console.log('isMinimized: ' + isMinimized.value)
-    console.log('isMaximized: ' + isMaximized.value)
   }
 
   const minimize = function () {

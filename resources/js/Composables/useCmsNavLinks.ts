@@ -13,13 +13,15 @@ export type NavItem = {
   links: NavLink[]
 }
 
+/**
+ * @description The central store of nav links for the different components in the app.
+ */
 export const useCmsNavLinks = function (page: Page<SharedPage>) {
   const navItems = ref<NavItem[]>([
     {
       group: 'Portfolio',
       links: [
         { name: 'Resume', uri: page.props.pageUris.resume, icon: 'pi pi-briefcase' },
-        { name: 'Projects', uri: '/projects', icon: 'pi pi-folder-open' },
         { name: 'Blogs', uri: '/blogs', icon: 'pi pi-book' },
         { name: 'Calendar', uri: '/calendar', icon: 'pi pi-calendar' },
       ],
@@ -28,7 +30,7 @@ export const useCmsNavLinks = function (page: Page<SharedPage>) {
       group: 'Account',
       links: [
         { name: 'Profile', uri: '/profile', icon: 'pi pi-user' },
-        { name: 'Settings', uri: '/settings', icon: 'pi pi-cog' },
+        { name: 'Settings', uri: '/account-settings', icon: 'pi pi-cog' },
       ],
     },
     {

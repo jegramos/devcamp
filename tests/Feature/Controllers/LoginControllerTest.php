@@ -22,6 +22,7 @@ it('can show the login form', function () {
             ->has('loginViaGoogleUrl')
             ->has('loginViaGithubUrl')
             ->has('resumeBuilderUrl')
+            ->has('forgotPasswordUrl')
     );
 });
 
@@ -66,6 +67,33 @@ describe('with database access', function () {
             ->assertInertia(
                 fn (AssertableInertia $page) => $page
                     ->has('errors.' . ErrorCode::INVALID_CREDENTIALS->value)
+            );
+    });
+
+    it('returns an error if the account is deactivated', function () {
+        $payload = [
+            'username' => fake()->unique()->userName(),
+            'email' => fake()->unique()->safeEmail(),
+            'password' => fake()->password(10),
+            'remember' => false,
+        ];
+
+        UserFactory::new()
+            ->inactive()
+            ->has(UserProfileFactory::new())
+            ->create([
+                'username' => $payload['username'],
+                'email' => $payload['email'],
+                'password' => $payload['password'],
+            ]);
+
+        followingRedirects()
+            ->from(route('auth.login.showForm'))
+            ->post(route('auth.login.authenticate'), $payload)
+            ->assertInertia(
+                fn (AssertableInertia $page) => $page
+                    ->component('Auth/LoginPage')
+                    ->has('errors.' . ErrorCode::ACCOUNT_DEACTIVATED->value)
             );
     });
 

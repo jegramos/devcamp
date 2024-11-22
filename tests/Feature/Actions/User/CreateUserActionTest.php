@@ -18,9 +18,8 @@ it('can create a user', /** @throws Throwable */ function () {
         'email' => fake()->unique()->safeEmail(),
         'username' => fake()->unique()->userName(),
         'password' => fake()->password(10),
-        'first_name' => fake()->firstName($gender),
-        'last_name' => fake()->lastName(),
-        'middle_name' => fake()->lastName(),
+        'given_name' => fake()->firstName($gender),
+        'family_name' => fake()->lastName(),
         'roles' => [Role::USER->value],
         'active' => true,
         'email_verified_at' => now(),
@@ -45,9 +44,8 @@ it('can create a user', /** @throws Throwable */ function () {
         ->and($createdUser->active)->toBe($userInfo['active'])
         ->and($createdUser->email_verified_at)->not->toBeNull()
         ->and($createdUser->roles->pluck('name')->toArray())->toBe($userInfo['roles'])
-        ->and($createdUser->userProfile->first_name)->toBe($userInfo['first_name'])
-        ->and($createdUser->userProfile->last_name)->toBe($userInfo['last_name'])
-        ->and($createdUser->userProfile->middle_name)->toBe($userInfo['middle_name'])
+        ->and($createdUser->userProfile->given_name)->toBe($userInfo['given_name'])
+        ->and($createdUser->userProfile->family_name)->toBe($userInfo['family_name'])
         ->and($createdUser->userProfile->mobile_number)->toBe($userInfo['mobile_number'])
         ->and($createdUser->userProfile->birthday->toDateString())->toBe($userInfo['birthday'])
         ->and($createdUser->userProfile->gender->value)->toBe($userInfo['gender'])

@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue'
 import { Link, useForm, usePage, Head, router } from '@inertiajs/vue3'
-import { useBroadcastChannel } from '@vueuse/core'
+import { useBroadcastChannel, useMediaQuery } from '@vueuse/core'
 import { required, helpers, minLength, email, requiredIf, sameAs } from '@vuelidate/validators'
 import Card from 'primevue/card'
-import Toast from 'primevue/toast'
 import Button from 'primevue/button'
 import Divider from 'primevue/divider'
 import Message from 'primevue/message'
@@ -20,6 +19,7 @@ import { ErrorCode, type SharedPage } from '@/Types/shared-page.ts'
 import { useClientValidatedForm } from '@/Composables/useClientValidatedForm'
 import { passwordRegex, passwordRule, uniqueUserIdentifierRule } from '@/Utils/vuelidate-custom-validators'
 import { ChannelName } from '@/Types/broadcast-channel.ts'
+import { applyTheme } from '@/Utils/theme.ts'
 
 const props = defineProps({
   loginUrl: {
@@ -65,14 +65,13 @@ const form = useForm({
   email: '',
   password: '',
   password_confirmation: '',
-  first_name: '',
-  last_name: '',
+  given_name: '',
+  family_name: '',
   country_id: '',
   recaptcha_response_token: '',
 })
 
 const clientValidationRules = {
-  $lazy: true,
   username: {
     required: helpers.withMessage('Username is required.', required),
     minLength: helpers.withMessage('Must be 3 or more characters', minLength(3)),
@@ -87,10 +86,10 @@ const clientValidationRules = {
       helpers.withMessage('This email is already taken', uniqueUserIdentifierRule(props.checkAvailabilityBaseUrl, 'email'))
     ),
   },
-  first_name: {
+  given_name: {
     required: helpers.withMessage('First name is required.', required),
   },
-  last_name: {
+  family_name: {
     required: helpers.withMessage('Last name is required.', required),
   },
   password: {
@@ -131,14 +130,15 @@ const submit = async function (event: Event) {
 let recaptchaTheme = 'light'
 if (props.recaptchaEnabled) {
   useRecaptcha('recaptcha-container')
-  recaptchaTheme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  const isPreferredDark = useMediaQuery('(prefers-color-scheme: dark)')
+  recaptchaTheme = isPreferredDark ? 'dark' : 'light'
 }
 
 // Change the BG color if there are errors
 const page = usePage<SharedPage>()
 const bgColorClass = computed(function () {
-  if (page.props.errors.TOO_MANY_REQUESTS) return 'bg-amber-700 dark:bg-amber-900'
-  if (form.hasErrors) return 'bg-red-700 dark:bg-red-900'
+  if (page.props.errors.TOO_MANY_REQUESTS) return 'bg-amber-700 dark:bg-amber-800'
+  if (formWithValidation.hasErrors) return 'bg-red-700 dark:bg-red-900'
   else return 'bg-primary/90 dark:bg-primary'
 })
 
@@ -147,18 +147,19 @@ const { isSupported, data } = useBroadcastChannel({ name: ChannelName.LOGIN_CHAN
 if (isSupported.value) {
   watch(data, () => router.get(props.resumeBuilderUrl))
 }
+
+applyTheme()
 </script>
 
 <template>
   <Head title="Register"></Head>
   <section :class="`relative flex h-screen w-full flex-col items-center justify-center px-2 md:px-0 ${bgColorClass}`">
-    <Toast />
     <AppAnimatedFloaters />
     <Message
       v-if="!!page.props.errors[ErrorCode.EXTERNAL_ACCOUNT_EMAIL_CONFLICT]"
       severity="error"
       icon="pi pi-exclamation-triangle"
-      class="mb-4 w-full animate-shake md:w-[80%] lg:w-[50%] dark:!bg-surface-950"
+      class="mb-4 w-full animate-shake md:w-[80%] lg:w-[50%] dark:!bg-surface-900"
     >
       {{ page.props.errors[ErrorCode.EXTERNAL_ACCOUNT_EMAIL_CONFLICT] }}
     </Message>
@@ -178,20 +179,20 @@ if (isSupported.value) {
           <!-- Start Username and Email -->
           <section class="mt-4 flex w-full flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
             <DfInputText
-              v-model="form.email"
-              placeholder="Email *"
-              :invalid="!!form.errors.email"
-              :invalid-message="form.errors.email"
+              v-model="formWithValidation.email"
+              placeholder="Email"
+              :invalid="!!formWithValidation.errors.email"
+              :invalid-message="formWithValidation.errors.email"
             >
               <template #icon>
                 <i class="pi pi-envelope"></i>
               </template>
             </DfInputText>
             <DfInputText
-              v-model="form.username"
-              placeholder="Username *"
-              :invalid="!!form.errors.username"
-              :invalid-message="form.errors.username"
+              v-model="formWithValidation.username"
+              placeholder="Username"
+              :invalid="!!formWithValidation.errors.username"
+              :invalid-message="formWithValidation.errors.username"
             >
               <template #icon>
                 <i class="pi pi-user"></i>
@@ -202,20 +203,20 @@ if (isSupported.value) {
           <!-- Start Firstname and Lastname -->
           <section class="mt-4 flex w-full flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
             <DfInputText
-              v-model="form.first_name"
-              placeholder="First Name *"
-              :invalid="!!form.errors.first_name"
-              :invalid-message="form.errors.first_name"
+              v-model="formWithValidation.given_name"
+              placeholder="First Name"
+              :invalid="!!formWithValidation.errors.given_name"
+              :invalid-message="formWithValidation.errors.given_name"
             >
               <template #icon>
                 <i class="pi pi-id-card"></i>
               </template>
             </DfInputText>
             <DfInputText
-              v-model="form.last_name"
+              v-model="formWithValidation.family_name"
               placeholder="Last Name"
-              :invalid="!!form.errors.last_name"
-              :invalid-message="form.errors.last_name"
+              :invalid="!!formWithValidation.errors.family_name"
+              :invalid-message="formWithValidation.errors.family_name"
             >
               <template #icon>
                 <i class="pi pi-id-card"></i>
@@ -226,10 +227,10 @@ if (isSupported.value) {
           <!-- Start Password and Confirmation -->
           <section class="mt-4 flex w-full flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
             <DfPassword
-              v-model="form.password"
-              placeholder="Password *"
-              :invalid="!!form.errors.password"
-              :invalid-message="form.errors.password"
+              v-model="formWithValidation.password"
+              placeholder="Password"
+              :invalid="!!formWithValidation.errors.password"
+              :invalid-message="formWithValidation.errors.password"
               toggle-mask
               :enable-feedback="true"
               feedback-header="Create your password"
@@ -249,10 +250,10 @@ if (isSupported.value) {
               </template>
             </DfPassword>
             <DfPassword
-              v-model="form.password_confirmation"
+              v-model="formWithValidation.password_confirmation"
               placeholder="Confirm Password"
-              :invalid="!!form.errors.password_confirmation"
-              :invalid-message="form.errors.password_confirmation"
+              :invalid="!!formWithValidation.errors.password_confirmation"
+              :invalid-message="formWithValidation.errors.password_confirmation"
               :feedback="false"
               toggle-mask
             >
@@ -265,14 +266,14 @@ if (isSupported.value) {
           <!-- Start Country -->
           <section class="mt-4 flex flex-col space-y-4 md:w-[49%] md:flex-row md:space-x-4 md:space-y-0">
             <DfSelect
-              v-model="form.country_id"
-              placeholder="Country *"
+              v-model="formWithValidation.country_id"
+              placeholder="Country"
               :options="countryOptions"
               editable
               option-label="name"
               option-value="id"
-              :invalid="!!form.errors.country_id"
-              :invalid-message="form.errors.country_id"
+              :invalid="!!formWithValidation.errors.country_id"
+              :invalid-message="formWithValidation.errors.country_id"
             >
               <template #icon>
                 <i class="pi pi-map"></i>
@@ -284,14 +285,20 @@ if (isSupported.value) {
           <div v-if="props.recaptchaEnabled" class="mt-4 flex flex-col items-start md:w-[49%]">
             <div id="recaptcha-container" class="g-recaptcha" :data-sitekey="recaptchaSiteKey" :data-theme="recaptchaTheme"></div>
             <small
-              v-if="!!form.errors.recaptcha_response_token"
+              v-if="!!formWithValidation.errors.recaptcha_response_token"
               class="mt-1 animate-shake text-xs text-red-500 dark:text-red-300"
             >
-              {{ form.errors.recaptcha_response_token }}
+              {{ formWithValidation.errors.recaptcha_response_token }}
             </small>
           </div>
           <!-- End Recaptcha -->
-          <Button label="Sign Up" class="mt-4 w-full" :disabled="form.processing" :loading="form.processing" type="submit">
+          <Button
+            label="Sign Up"
+            class="mt-4 w-full"
+            :disabled="formWithValidation.processing"
+            :loading="formWithValidation.processing"
+            type="submit"
+          >
             <template #icon>
               <FontAwesomeIcon :icon="faRocket"></FontAwesomeIcon>
             </template>
@@ -307,7 +314,7 @@ if (isSupported.value) {
           <div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
             <a :href="loginViaGoogleUrl" target="_blank" class="flex w-full">
               <Button
-                :disabled="form.processing"
+                :disabled="formWithValidation.processing"
                 icon="pi pi-google"
                 label="Sign up with Google"
                 class="w-full !border-red-900 !bg-red-900 !text-surface-0"
@@ -315,7 +322,7 @@ if (isSupported.value) {
             </a>
             <a :href="loginViaGithubUrl" target="_blank" class="flex w-full">
               <Button
-                :disabled="form.processing"
+                :disabled="formWithValidation.processing"
                 icon="pi pi-github"
                 label="Sign up with Github"
                 class="w-full !border-surface-950 !bg-surface-950 !text-surface-0"
@@ -327,7 +334,7 @@ if (isSupported.value) {
           <small class="tracking-wide">
             Already have an account?
             <Link :href="loginUrl">
-              <span class="font-bold text-amber-600 underline-offset-4 hover:underline dark:text-amber-300"> Login </span>
+              <span class="font-bold text-amber-600 underline-offset-4 hover:underline dark:text-amber-300"> Sign in </span>
             </Link>
           </small>
         </div>

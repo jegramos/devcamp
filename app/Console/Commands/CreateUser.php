@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use App\Actions\User\CreateUserAction;
 use App\Models\User;
 use App\Rules\DbVarcharMaxLengthRule;
-use App\Rules\EmailRule;
 use App\Rules\PasswordRule;
 use App\Rules\UsernameRule;
 use Illuminate\Console\Command;
@@ -83,7 +82,7 @@ class CreateUser extends Command
             )
             ->text(
                 'Email',
-                validate: ['required', new EmailRule()],
+                validate: ['required', 'email:rfc', 'unique:users,email'],
                 name: 'email',
                 transform: fn ($email) => strtolower($email),
             )
@@ -127,7 +126,7 @@ class CreateUser extends Command
         Validator::validate($data, [
             'first_name' => ['required', new DbVarcharMaxLengthRule()],
             'last_name' => ['required', new DbVarcharMaxLengthRule()],
-            'email' => ['required', new EmailRule()],
+            'email' => ['required', 'email:rfc', 'unique:users,email'],
             'username' => ['required', new UsernameRule()],
             'password' => ['required', new PasswordRule()],
             'roles' => ['required', 'array'],
