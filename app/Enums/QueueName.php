@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum Queue: string
+enum QueueName: string
 {
     case DEFAULT = 'default';
     case EMAILS = 'emails';

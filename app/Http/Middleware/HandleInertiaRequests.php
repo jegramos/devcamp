@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Enums\ExternalLoginProvider;
+use App\Enums\Permission;
 use App\Enums\SessionFlashKey;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -44,10 +45,16 @@ class HandleInertiaRequests extends Middleware
             'appName' => config('app.name'),
             'logoutUrl' => auth()->user() ? route('auth.logout.current') : null,
             'pageUris' => [
-                'resume' => route(name: 'builder.resume.index', absolute: false),
-                'about' => route(name: 'aboutPage', absolute: false),
+                'portfolio.resume' => route(name: 'builder.resume.index', absolute: false),
+                'misc.about' => route(name: 'aboutPage', absolute: false),
+                'account.profile' => route(name: 'profile.index', absolute: false),
+                'account.settings' => route(name: 'accountSettings.index', absolute: false),
+                'admin.userManagement' => route(name: 'users.index', absolute: false),
             ],
-            'accountSettings' => Auth::check() ? Auth::user()->accountSettings?->data : null,
+            'accountSettings' => Auth::check() ? Auth::user()->accountSettings->data : null,
+            'auth.can' => [
+                'view_users' => Auth::check() && Auth::user()->can(Permission::VIEW_USERS->value),
+            ],
             'auth.user' => function () {
                 if (!Auth::check()) {
                     return null;
@@ -65,7 +72,7 @@ class HandleInertiaRequests extends Middleware
                     'roles' => $user
                         ->roles
                         ->pluck('name')
-                        ->map(fn (string $role) => Str::title($role))
+                        ->map(fn (string $role) => Str::title(str_replace('_', ' ', $role)))
                         ->toArray(),
                     'provider_name' => $user->externalAccount()->exists() ? Str::title($user->externalAccount->provider->value) : null,
                     'from_external_account' => $user->isFromExternalAccount(),

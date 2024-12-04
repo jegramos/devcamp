@@ -18,10 +18,13 @@ export type Passkey = {
 }
 
 const page = usePage<SharedPage>()
-
 const props = defineProps({
   passkeys: {
     type: Array<Passkey>,
+    required: true,
+  },
+  passkeyRegisterOptions: {
+    type: String,
     required: true,
   },
   createPasskeyUrl: {
@@ -49,7 +52,9 @@ const props = defineProps({
     <div v-if="!page.props.auth.user?.from_external_account">
       <AccountSettingsPagePasskeysCard
         :enabled="page.props.accountSettings?.passkeys_enabled || false"
+        :store-account-settings-url="props.storeAccountSettingsUrl"
         :passkeys="props.passkeys"
+        :passkey-register-options="props.passkeyRegisterOptions"
         :create-passkey-url="props.createPasskeyUrl"
         destroy-passkey-url="props.destroyPasskeyUrl"
       />

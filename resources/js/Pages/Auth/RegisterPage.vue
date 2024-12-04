@@ -269,7 +269,6 @@ applyTheme()
               v-model="formWithValidation.country_id"
               placeholder="Country"
               :options="countryOptions"
-              editable
               option-label="name"
               option-value="id"
               :invalid="!!formWithValidation.errors.country_id"

@@ -68,10 +68,7 @@ readonly class UpdateUserAction
 
     private function getUserWhiteListedProperties(): array
     {
-        $userFillable = (new User())->getFillable();
-
-        // Don't include the password when updating profile information.
-        return array_values(array_filter($userFillable, fn (string $f) => $f !== 'password'));
+        return (new User())->getFillable();
     }
 
     private function getUserProfileWhitelistProperties(): array

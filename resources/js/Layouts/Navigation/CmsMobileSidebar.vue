@@ -55,9 +55,9 @@ const logout = function () {
           :key="link.name"
           :href="link.uri"
           class="flex transform items-center rounded-lg px-3 py-2 transition-colors hover:cursor-pointer hover:bg-primary/20 hover:text-primary"
-          :class="{ 'bg-primary/20 text-primary': page.url === link.uri }"
+          :class="{ 'bg-primary/20 text-primary': page.url.startsWith(link.uri) }"
         >
-          <i :class="link.icon"></i>
+          <i :class="`${link.icon} rounded-lg border p-1 ${page.url.startsWith(link.uri) ? 'border-primary' : ''}`"></i>
           <span class="mx-2 text-sm font-medium">{{ link.name }}</span>
         </Link>
       </div>

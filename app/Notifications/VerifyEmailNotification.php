@@ -39,7 +39,7 @@ class VerifyEmailNotification extends VerifyEmail
             ->line("Thank you for registering to $appName.")
             ->line(
                 "Please click the button below to verify your email address. 
-               Please note that this link will expire in $this->expirationTimeMinutes minutes."
+               Note that this link will expire in $this->expirationTimeMinutes minutes."
             )
             ->action('Verify Email Address', $url)
             ->line('If you did not create an account, please ignore this email.');
@@ -53,7 +53,7 @@ class VerifyEmailNotification extends VerifyEmail
 
         return URL::temporarySignedRoute(
             'verification.verify',
-            Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
+            Carbon::now()->addMinutes($this->expirationTimeMinutes),
             [
                 'id' => $notifiable->getKey(),
                 'hash' => sha1($notifiable->getEmailForVerification()),

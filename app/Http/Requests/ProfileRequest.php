@@ -29,9 +29,9 @@ class ProfileRequest extends FormRequest
     private function getUpdateProfileRules(): array
     {
         return [
-            'username' => ['nullable', new UsernameRule(), 'unique:users,username,' . $this->user()->id . ',id'],
-            'given_name' => ['nullable', 'string', new DbVarcharMaxLengthRule()],
-            'family_name' => ['nullable', 'string', new DbVarcharMaxLengthRule()],
+            'username' => [new UsernameRule(), 'unique:users,username,' . $this->user()->id . ',id'],
+            'given_name' => [new DbVarcharMaxLengthRule()],
+            'family_name' => [new DbVarcharMaxLengthRule()],
             'mobile_number' => [
                 'nullable',
                 new InternationalPhoneFormatRule(),
@@ -60,7 +60,7 @@ class ProfileRequest extends FormRequest
     private function getSendEmailUpdateConfirmationRules(): array
     {
         return [
-            'email' => ['required', ['required', 'email:rfc', 'unique:users,email,' . $this->user()->id . ',id']],
+            'email' => ['required', 'email:rfc', 'unique:users,email,' . $this->user()->id . ',id'],
         ];
     }
 

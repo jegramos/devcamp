@@ -3,18 +3,26 @@
 namespace App\Models;
 
 use App\Actions\AddSoftDeleteMarkerAction;
+use App\Http\QueryFilters\User\ActiveFilter;
+use App\Http\QueryFilters\User\RoleFilter;
+use App\Http\QueryFilters\User\SearchFilter;
+use App\Http\QueryFilters\User\VerifiedFilter;
 use App\Notifications\ResetPasswordNotification;
+use App\Notifications\VerifyAccountNotification;
 use App\Notifications\VerifyEmailNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 use Spatie\Permission\Traits\HasRoles;
 
 use function Illuminate\Support\defer;
@@ -52,7 +60,8 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         parent::boot();
 
-        static::deleting(function (User $user, AddSoftDeleteMarkerAction $addSoftDeleteMarkerAction) {
+        static::deleting(function (User $user) {
+            $addSoftDeleteMarkerAction = resolve(AddSoftDeleteMarkerAction::class);
             DB::transaction(function () use ($user, $addSoftDeleteMarkerAction) {
                 $user->email = $addSoftDeleteMarkerAction->execute($user->email);
                 $user->saveQuietly();
@@ -64,6 +73,48 @@ class User extends Authenticatable implements MustVerifyEmail
                 $user->accountSettings()->delete();
             });
         });
+    }
+
+    /**
+     * @Scope
+     */
+    public function scopeSorted(Builder $builder, Request $request): Builder
+    {
+        if (!$request->input('sort')) {
+            // Default to latest entry first
+            return $builder->orderBy('users.id', 'desc');
+        }
+
+        $sortedBy = $request->input('sort');
+        $order = $sortedBy[0] === '-' ? 'desc' : 'asc';
+
+        // Remove the leading '-' if it exists
+        $sortedBy = $sortedBy[0] === '-' ? substr($sortedBy, 1) : $sortedBy;
+
+        if ($sortedBy === 'created_at') {
+            return $builder->orderBy('users.created_at', $order);
+        }
+
+        // Sorting via family_name or given_name requires the userProfile relation
+        return $builder->join('user_profiles', 'user_profiles.user_id', '=', 'users.id')
+            ->orderBy('user_profiles.' . $sortedBy, $order);
+    }
+
+    /**
+     * @Scope
+     * Filter scope HTTP query filters
+     */
+    public function scopeFiltered(Builder $builder): Builder
+    {
+        return app(Pipeline::class)
+            ->send($builder->with('userProfile', 'roles'))
+            ->through([
+                ActiveFilter::class,
+                VerifiedFilter::class,
+                RoleFilter::class,
+                SearchFilter::class,
+            ])
+            ->thenReturn();
     }
 
     /**
@@ -116,7 +167,7 @@ class User extends Authenticatable implements MustVerifyEmail
         $user = static::query()->where('username', $username)->first();
 
         $hasCorrectCreds = $user && Hash::check($password, $user->password);
-        if (! $hasCorrectCreds) {
+        if (!$hasCorrectCreds) {
             return null;
         }
 
@@ -128,7 +179,7 @@ class User extends Authenticatable implements MustVerifyEmail
         $user = static::query()->where('email', $email)->first();
 
         $hasCorrectCreds = $user && Hash::check($password, $user->password);
-        if (! $hasCorrectCreds) {
+        if (!$hasCorrectCreds) {
             return null;
         }
 
@@ -143,6 +194,17 @@ class User extends Authenticatable implements MustVerifyEmail
         $expirationInMinutes = Config::get('auth.verification.expire', 60);
         defer(function () use ($expirationInMinutes) {
             $this->notify(new VerifyEmailNotification($this, $expirationInMinutes));
+        });
+    }
+
+    /**
+     * Send an account verification notification
+     */
+    public function sendAccountVerificationNotification(string $temporaryPassword): void
+    {
+        $expirationInMinutes = Config::get('auth.verification.expire', 60);
+        defer(function () use ($temporaryPassword, $expirationInMinutes) {
+            $this->notify(new VerifyAccountNotification($this, $temporaryPassword, $expirationInMinutes));
         });
     }
 

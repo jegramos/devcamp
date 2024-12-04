@@ -3,9 +3,12 @@
 use App\Actions\User\CreateUserAction;
 use App\Enums\Gender;
 use App\Enums\Role;
+use App\Enums\Theme;
 use Illuminate\Support\Facades\DB;
 
 use function Pest\Laravel\artisan;
+use function PHPUnit\Framework\assertFalse;
+use function PHPUnit\Framework\assertTrue;
 
 beforeEach(function () {
     artisan('db:seed');
@@ -57,4 +60,39 @@ it('can create a user', /** @throws Throwable */ function () {
         ->and($createdUser->userProfile->postal_code)->toBe($userInfo['postal_code'])
         ->and($createdUser->userProfile->country_id)->toBe($userInfo['country_id'])
         ->and($createdUser->userProfile->profile_picture_path)->toBe($userInfo['profile_picture_path']);
+});
+
+it('automatically generates an AccountSettings relationship record', /** @throws Throwable */function () {
+    $action = resolve(CreateUserAction::class);
+    $gender = fake()->randomElement(Gender::toArray());
+    $userInfo = [
+        'email' => fake()->unique()->safeEmail(),
+        'username' => fake()->unique()->userName(),
+        'password' => fake()->password(10),
+        'given_name' => fake()->firstName($gender),
+        'family_name' => fake()->lastName(),
+        'roles' => [Role::USER->value],
+        'active' => true,
+        'email_verified_at' => now(),
+        'mobile_number' => fake()->phoneNumber(),
+        'gender' => $gender,
+        'birthday' => fake()->date(),
+        'profile_picture_path' => fake()->filePath(),
+        'country_id' => DB::table('countries')->first()->id,
+        'address_line_1' => fake()->streetName(),
+        'address_line_2' => fake()->streetName(),
+        'address_line_3' => fake()->streetName(),
+        'city_municipality' => fake()->city(),
+        'province_state_county' => fake()->city(),
+        'postal_code' => fake()->postcode(),
+    ];
+
+    $user = $action->execute($userInfo);
+    assertTrue($user->accountSettings()->exists());
+
+    // Check for the default settings set
+    $user->load('accountSettings')->refresh();
+    assertFalse($user->accountSettings->passkeysEnabled());
+    assertFalse($user->accountSettings->twoFactorAuthEnabled());
+    assertTrue($user->accountSettings->currentTheme() === Theme::AUTO->value);
 });

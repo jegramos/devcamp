@@ -12,7 +12,7 @@ import type { UserProfile } from '@/Pages/Account/ProfilePage.vue'
 import DfDatePicker from '@/Components/Inputs/DfDatePicker.vue'
 import DfSelect from '@/Components/Inputs/DfSelect.vue'
 import { helpers, minLength, required } from '@vuelidate/validators'
-import { uniqueUserIdentifierRule } from '@/Utils/vuelidate-custom-validators.ts'
+import { mobilePhoneRule, uniqueUserIdentifierRule } from '@/Utils/vuelidate-custom-validators.ts'
 import { useClientValidatedForm } from '@/Composables/useClientValidatedForm.ts'
 import { useDateFormat } from '@vueuse/core'
 import { useToast } from 'primevue/usetoast'
@@ -88,6 +88,7 @@ const clientValidationRules = {
     required: helpers.withMessage('Last name is required.', required),
   },
   mobile_number: {
+    mobile_number: helpers.withMessage('Must be a valid mobile number', mobilePhoneRule()),
     unique: helpers.withAsync(
       helpers.withMessage(
         'This mobile number is already taken',
@@ -210,7 +211,6 @@ const submit = function () {
               { name: 'Female', id: 'female' },
               { name: 'Other', id: 'other' },
             ]"
-            editable
             option-label="name"
             option-value="id"
             :invalid="!!form.errors.gender"
@@ -239,7 +239,6 @@ const submit = function () {
             v-model="form.country_id"
             placeholder="Country"
             :options="countryOptions"
-            editable
             option-label="name"
             option-value="id"
             :invalid="!!form.errors.country_id"

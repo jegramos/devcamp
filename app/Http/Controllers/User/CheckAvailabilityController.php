@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\ApiController;
 use App\Models\User;
 use App\Models\UserProfile;
+use App\Rules\InternationalPhoneFormatRule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -24,8 +25,18 @@ class CheckAvailabilityController extends ApiController
      */
     public function __invoke(string $type, string $value, Request $request, ?int $excludedId = null): JsonResponse
     {
+        $rule = ['required', 'string'];
+
+        if ($type === 'email') {
+            $rule = ['required', 'email'];
+        }
+
+        if ($type === 'mobile_number') {
+            $rule = ['required', new InternationalPhoneFormatRule(), 'phone:mobile,lenient,international'];
+        }
+
         $validator = Validator::make(['value' => $value], [
-            'value' => ['required', $type === 'email' ? 'email' : 'string']
+            'value' => $rule
         ]);
 
         $validator->validate();

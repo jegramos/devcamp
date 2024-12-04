@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\ErrorCode;
+use Database\Factories\AccountSettingsFactory;
 use Database\Factories\UserFactory;
 use Database\Factories\UserProfileFactory;
 use Inertia\Testing\AssertableInertia;
@@ -36,6 +37,7 @@ describe('with database access', function () {
 
         UserFactory::new()
             ->has(UserProfileFactory::new())
+            ->has(AccountSettingsFactory::new())
             ->create([
                 'username' => $username ?? fake()->unique()->userName(),
                 'email' => $email ?? fake()->unique()->safeEmail(),
@@ -81,6 +83,7 @@ describe('with database access', function () {
         UserFactory::new()
             ->inactive()
             ->has(UserProfileFactory::new())
+            ->has(AccountSettingsFactory::new())
             ->create([
                 'username' => $payload['username'],
                 'email' => $payload['email'],

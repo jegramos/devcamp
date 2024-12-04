@@ -12,7 +12,7 @@ class PasskeyRequest extends FormRequest
         $routeName = $this->route()->getName();
 
         return match ($routeName) {
-            'passkey.store' => $this->getStoreRules(),
+            'passkeys.store' => $this->getStoreRules(),
             default => [],
         };
     }
@@ -21,6 +21,7 @@ class PasskeyRequest extends FormRequest
     {
         return [
             'name' => ['required', new DbVarcharMaxLengthRule()],
+            'passkey' => ['required', 'json']
         ];
     }
 }

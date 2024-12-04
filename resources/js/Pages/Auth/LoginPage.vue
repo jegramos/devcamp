@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, watch } from 'vue'
-import { Link, useForm, usePage, Head, router } from '@inertiajs/vue3'
+import { computed, ref, watch } from 'vue'
+import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3'
 import { useBroadcastChannel } from '@vueuse/core'
 import Card from 'primevue/card'
 import Button from 'primevue/button'
@@ -16,6 +16,10 @@ import DfPassword from '@/Components/Inputs/DfPassword.vue'
 import { ErrorCode, type SharedPage } from '@/Types/shared-page.ts'
 import { ChannelName } from '@/Types/broadcast-channel.ts'
 import { applyTheme } from '@/Utils/theme.ts'
+import { browserSupportsWebAuthn, startAuthentication } from '@simplewebauthn/browser'
+import type { PublicKeyCredentialRequestOptionsJSON } from '@simplewebauthn/types'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faFingerprint } from '@fortawesome/free-solid-svg-icons'
 
 const props = defineProps({
   registerUrl: {
@@ -34,11 +38,19 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  loginViaPasskeyUrl: {
+    type: String,
+    required: true,
+  },
   resumeBuilderUrl: {
     type: String,
     required: true,
   },
   forgotPasswordUrl: {
+    type: String,
+    required: true,
+  },
+  passkeyAuthenticateOptions: {
     type: String,
     required: true,
   },
@@ -112,6 +124,21 @@ watch(data, function () {
 })
 
 applyTheme()
+
+const showPasskeyWarningMessage = ref(false)
+const loginViaPasskeyForm = useForm({
+  answer: '',
+})
+const authenticateViaPasskey = async function () {
+  if (!browserSupportsWebAuthn()) return (showPasskeyWarningMessage.value = true)
+
+  const answer = await startAuthentication({
+    optionsJSON: JSON.parse(props.passkeyAuthenticateOptions) as PublicKeyCredentialRequestOptionsJSON,
+  })
+
+  loginViaPasskeyForm.answer = JSON.stringify(answer)
+  loginViaPasskeyForm.post(props.loginViaPasskeyUrl)
+}
 </script>
 
 <template>
@@ -166,6 +193,22 @@ applyTheme()
       class="mb-4 w-full animate-shake md:w-[55%] lg:w-[35%] dark:!bg-surface-900"
     >
       {{ page.props.errors[ErrorCode.ACCOUNT_DEACTIVATED] }}
+    </Message>
+    <Message
+      v-if="!!page.props.errors[ErrorCode.BAD_REQUEST]"
+      severity="error"
+      icon="pi pi-exclamation-triangle"
+      class="mb-4 w-full animate-shake md:w-[55%] lg:w-[35%] dark:!bg-surface-900"
+    >
+      {{ page.props.errors[ErrorCode.BAD_REQUEST] }}
+    </Message>
+    <Message
+      v-if="showPasskeyWarningMessage"
+      severity="warn"
+      icon="pi pi-key"
+      class="mb-4 w-full animate-shake md:w-[55%] lg:w-[35%] dark:!bg-surface-900"
+    >
+      Your device or browser does not support <span class="font-bold">Passkeys</span>.
     </Message>
     <Card class="z-10 w-full md:w-[55%] lg:w-[35%]">
       <template #title>
@@ -229,7 +272,7 @@ applyTheme()
             icon="pi pi-sign-in"
             label="Sign in"
             class="w-full"
-            :disabled="form.processing"
+            :disabled="form.processing || loginViaPasskeyForm.processing"
             :loading="form.processing"
             @click="submit"
           ></Button>
@@ -237,9 +280,21 @@ applyTheme()
             <small class="font-thin">or</small>
           </Divider>
           <div class="flex flex-col space-y-2 dark:space-y-3">
+            <Button
+              label="Sign in with Passkeys"
+              class="w-full !border-surface-800 !bg-surface-800 !text-amber-300"
+              severity="primary"
+              :loading="loginViaPasskeyForm.processing"
+              :disabled="loginViaPasskeyForm.processing || form.processing"
+              @click="authenticateViaPasskey"
+            >
+              <template #icon>
+                <FontAwesomeIcon :icon="faFingerprint" />
+              </template>
+            </Button>
             <a :href="props.loginViaGoogleUrl" target="_blank">
               <Button
-                :disabled="form.processing"
+                :disabled="form.processing || loginViaPasskeyForm.processing"
                 icon="pi pi-google"
                 label="Sign in with Google"
                 class="w-full !border-red-900 !bg-red-900 !text-surface-0"
@@ -247,7 +302,7 @@ applyTheme()
             </a>
             <a :href="props.loginViaGithubUrl" target="_blank">
               <Button
-                :disabled="form.processing"
+                :disabled="form.processing || loginViaPasskeyForm.processing"
                 icon="pi pi-github"
                 label="Sign in with Github"
                 class="w-full !border-surface-950 !bg-surface-950 !text-surface-0"

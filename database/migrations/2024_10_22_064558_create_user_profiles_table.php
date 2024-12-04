@@ -36,6 +36,10 @@ return new class () extends Migration {
 
             $table->timestamps();
             $table->softdeletes();
+
+            $table->index('given_name');
+            $table->index('family_name');
+            $table->index(['given_name', 'family_name']);
         });
     }
 

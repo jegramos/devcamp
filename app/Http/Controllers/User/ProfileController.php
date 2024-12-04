@@ -6,7 +6,7 @@ use App\Actions\GetCountryListAction;
 use App\Actions\User\UpdateUserAction;
 use App\Enums\SessionFlashKey;
 use App\Http\Requests\ProfileRequest;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\UserProfileResource;
 use App\Models\User;
 use App\Notifications\ConfirmEmailUpdateNotification;
 use App\Services\CloudStorageManager;
@@ -26,7 +26,7 @@ class ProfileController
         $checkAvailabilityBaseUrl = route('api.checkAvailability', ['type' => 1, 'value' => 1]);
         $checkAvailabilityBaseUrl = explode('/1/1', $checkAvailabilityBaseUrl)[0];
         return Inertia::render('Account/ProfilePage', [
-            'profile' => new UserResource(Auth::user()->load('userProfile')),
+            'profile' => new UserProfileResource(Auth::user()->load('userProfile')),
             'countryOptions' => $getCountryListAction->execute('id', 'name'),
             'updateProfileUrl' => route('profile.update'),
             'checkAvailabilityBaseUrl' => $checkAvailabilityBaseUrl,

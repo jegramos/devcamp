@@ -36,4 +36,19 @@ class AccountSettings extends Model
             ]
         ]);
     }
+
+    public function passkeysEnabled(): bool
+    {
+        return $this->data['passkeys_enabled'];
+    }
+
+    public function currentTheme(): string
+    {
+        return $this->data['theme'];
+    }
+
+    public function twoFactorAuthEnabled(): bool
+    {
+        return $this->data['2fa_enabled'];
+    }
 }

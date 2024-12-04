@@ -3,6 +3,7 @@ import { createApp, type DefineComponent, h } from 'vue'
 import { createInertiaApp } from '@inertiajs/vue3'
 import { primeVue } from './Plugins/primevue'
 import ToastService from 'primevue/toastservice'
+import Tooltip from 'primevue/tooltip'
 
 createInertiaApp({
   title: (title) => (title ? `${title} - DevFolio` : 'DevFolio'),
@@ -11,11 +12,13 @@ createInertiaApp({
     return pages[`./Pages/${name}.vue`]
   },
   setup({ el, App, props, plugin }) {
-    createApp({ render: () => h(App, props) })
+    const app = createApp({ render: () => h(App, props) })
       .use(plugin)
       .use(primeVue.options, primeVue.config)
       .use(ToastService)
-      .mount(el)
+
+    app.directive('tooltip', Tooltip)
+    app.mount(el)
   },
   progress: {
     color: '#f5940b',

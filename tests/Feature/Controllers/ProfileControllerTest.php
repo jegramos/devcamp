@@ -4,6 +4,7 @@ use App\Enums\Gender;
 use App\Enums\SessionFlashKey;
 use App\Models\User;
 use App\Notifications\ConfirmEmailUpdateNotification;
+use Database\Factories\AccountSettingsFactory;
 use Database\Factories\UserFactory;
 use Database\Factories\UserProfileFactory;
 use Illuminate\Http\UploadedFile;
@@ -26,6 +27,7 @@ beforeEach(function () {
 it('can show the profile page', function () {
     $user = UserFactory::new()
         ->has(UserProfileFactory::new())
+        ->has(AccountSettingsFactory::new())
         ->create();
 
     actingAs($user);
@@ -49,6 +51,7 @@ it('can show the profile page', function () {
 it('can update the profile of the logged in user', function () {
     $user = UserFactory::new()
         ->has(UserProfileFactory::new())
+        ->has(AccountSettingsFactory::new())
         ->create();
 
     actingAs($user);
@@ -92,11 +95,15 @@ it('can validate if username is already taken', function () {
     $username = fake()->unique()->username();
     UserFactory::new()
         ->has(UserProfileFactory::new())
+        ->has(AccountSettingsFactory::new())
         ->create([
             'username' => $username,
         ]);
 
-    $user = UserFactory::new()->has(UserProfileFactory::new())->create();
+    $user = UserFactory::new()
+        ->has(UserProfileFactory::new())
+        ->has(AccountSettingsFactory::new())
+        ->create();
     actingAs($user);
 
     $updatePayload = [
@@ -129,9 +136,13 @@ it('can validate mobile number if already taken', function () {
     $mobileNumber = '+639064647210';
     UserFactory::new()
         ->has(UserProfileFactory::new()->state(['mobile_number' => $mobileNumber]))
+        ->has(AccountSettingsFactory::new())
         ->create();
 
-    $user = UserFactory::new()->has(UserProfileFactory::new())->create();
+    $user = UserFactory::new()
+        ->has(UserProfileFactory::new())
+        ->has(AccountSettingsFactory::new())
+        ->create();
     actingAs($user);
 
     $updatePayload = [
@@ -161,7 +172,10 @@ it('can validate mobile number if already taken', function () {
 });
 
 it("can upload the user's profile picture", function () {
-    $user = UserFactory::new()->has(UserProfileFactory::new())->create();
+    $user = UserFactory::new()
+        ->has(UserProfileFactory::new())
+        ->has(AccountSettingsFactory::new())
+        ->create();
     actingAs($user);
 
     $file = UploadedFile::fake()->image('fake_image.jpg', 500, 500);
@@ -179,7 +193,10 @@ it('can request an email update confirmation notification', /** @throws Throwabl
     Notification::fake();
 
     /** @var User $user */
-    $user = UserFactory::new()->has(UserProfileFactory::new())->create();
+    $user = UserFactory::new()
+        ->has(UserProfileFactory::new())
+        ->has(AccountSettingsFactory::new())
+        ->create();
     actingAs($user);
 
     $newEmail = fake()->unique()->safeEmail();
@@ -196,7 +213,10 @@ it('can request an email update confirmation notification', /** @throws Throwabl
 });
 
 it('can confirm the email update notification', function () {
-    $user = UserFactory::new()->has(UserProfileFactory::new())->create();
+    $user = UserFactory::new()
+        ->has(UserProfileFactory::new())
+        ->has(AccountSettingsFactory::new())
+        ->create();
 
     // The user can verify without logging in
     $newEmail = fake()->unique()->safeEmail();
@@ -234,7 +254,10 @@ it('can confirm the email update notification', function () {
 
 it('can change password', function () {
     $oldPassword = fake()->password() . 'Jj1!';
-    $user = UserFactory::new()->has(UserProfileFactory::new())->create([
+    $user = UserFactory::new()
+        ->has(UserProfileFactory::new())
+        ->has(AccountSettingsFactory::new())
+        ->create([
         'password' => Hash::make($oldPassword)
     ]);
     actingAs($user);
@@ -260,9 +283,12 @@ it('can change password', function () {
 
 it('can reject password change if old password is incorrect', function () {
     $oldPassword = fake()->password() . 'Jj1!';
-    $user = UserFactory::new()->has(UserProfileFactory::new())->create([
-        'password' => Hash::make($oldPassword)
-    ]);
+    $user = UserFactory::new()
+        ->has(UserProfileFactory::new())
+        ->has(AccountSettingsFactory::new())
+        ->create([
+            'password' => Hash::make($oldPassword)
+        ]);
     actingAs($user);
 
     $newPassword = fake()->password . 'Jj1!';

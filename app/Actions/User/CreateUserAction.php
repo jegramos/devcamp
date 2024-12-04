@@ -55,7 +55,7 @@ readonly class CreateUserAction
 
             AccountSettings::createWithDefaults($user);
 
-            return $user->load(['userProfile', 'roles']);
+            return $user->load(['userProfile', 'roles', 'accountSettings']);
         });
     }
 

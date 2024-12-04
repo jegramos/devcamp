@@ -5,26 +5,37 @@ namespace App\Http\Controllers;
 use App\Enums\SessionFlashKey;
 use App\Http\Requests\AccountSettingsRequest;
 use App\Models\User;
+use App\Services\PasskeyService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use Throwable;
+use Webauthn\Exception\InvalidDataException;
 
 class AccountSettingsController
 {
-    public function index(AccountSettingsRequest $request): Response
+    /**
+     * @throws InvalidDataException
+     */
+    public function index(AccountSettingsRequest $request, PasskeyService $passkeyService): Response
     {
         /** @var User $user */
         $user = $request->user();
-        $destroyPasskeyUrl = route('accountSettings.passkeys.destroy', ['passkey' => 1]);
+        $destroyPasskeyUrl = route('passkeys.destroy', ['passkey' => 1]);
         $destroyPasskeyUrl = explode('/1', $destroyPasskeyUrl)[0];
+
+        $passkeyRegisterOptions = $passkeyService->createRegisterOptions($user);
+        Session::flash(SessionFlashKey::CMS_PASSKEY_REGISTER_OPTIONS->value, $passkeyRegisterOptions);
 
         return Inertia::render('Account/AccountSettingsPage', [
             'storeAccountSettingsUrl' => route('accountSettings.store'),
-            'createPasskeyUrl' => route('accountSettings.passkeys.store'),
+            'createPasskeyUrl' => route('passkeys.store'),
             'destroyPasskeyUrl' => $destroyPasskeyUrl,
             'currentSettings' => $user->accountSettings->data,
+            'passkeyRegisterOptions' => $passkeyService->serialize($passkeyRegisterOptions),
             'passkeys' => $user
                 ->passkeys()
                 ->latest()
@@ -32,7 +43,7 @@ class AccountSettingsController
                 ->map(fn ($passkey) => [
                     'id' => $passkey->id,
                     'name' => $passkey->name,
-                    'created_at' => $passkey->created_at->diffForHumans(),
+                    'created_at' => $passkey->created_at->diffForHumans(['options' => Carbon::JUST_NOW]),
                 ])
         ]);
     }

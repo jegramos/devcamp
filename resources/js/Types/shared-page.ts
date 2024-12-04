@@ -6,8 +6,11 @@ export type SharedPage = {
   appName: string
   logoutUrl: string
   pageUris: {
-    resume: string
-    about: string
+    'portfolio.resume': string
+    'misc.about': string
+    'account.profile': string
+    'account.settings': string
+    'admin.userManagement': string
   }
   accountSettings: {
     theme: 'light' | 'dark' | 'auto'
@@ -26,6 +29,9 @@ export type SharedPage = {
       provider_name: string | null
       from_external_account: boolean
       recommend_username_change: boolean
+    }
+    can: {
+      view_users: boolean
     }
   }
   flash: {
@@ -61,4 +67,6 @@ export enum SessionFlashKey {
   CMS_LOGIN_SUCCESS = 'CMS_LOGIN_SUCCESS',
   CMS_EMAIL_VERIFIED = 'CMS_EMAIL_VERIFIED',
   CMS_EMAIL_UPDATE_CONFIRMED = 'CMS_EMAIL_UPDATE_CONFIRMED',
+  CMS_PASSKEY_REGISTER_OPTIONS = 'CMS_PASSKEY_REGISTER_OPTIONS',
+  CMS_PASSKEY_AUTHENTICATE_OPTIONS = 'CMS_PASSKEY_AUTHENTICATE_OPTIONS',
 }

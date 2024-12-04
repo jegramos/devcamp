@@ -7,10 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /** @mixin User */
-class UserResource extends JsonResource
+class UserProfileResource extends JsonResource
 {
-    public static $wrap = null;
-
     public function toArray(Request $request): array
     {
         return [
@@ -31,7 +29,7 @@ class UserResource extends JsonResource
                 'address_line_2' => $this->userProfile->address_line_2,
                 'address_line_3' => $this->userProfile->address_line_3,
                 'profile_picture_url' => $this->userProfile->profile_picture_url,
-            ])
+            ]),
         ];
     }
 }

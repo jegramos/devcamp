@@ -1,9 +1,11 @@
 <?php
 
+use App\Enums\Permission;
 use App\Http\Controllers\AboutPageController;
 use App\Http\Controllers\AccountSettingsController;
 use App\Http\Controllers\Auth\GithubLoginController;
 use App\Http\Controllers\Auth\GoogleLoginController;
+use App\Http\Controllers\Auth\PasskeyLoginController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Builder\ResumeBuilderController;
 use App\Http\Controllers\LandingPageController;
@@ -109,6 +111,21 @@ Route::middleware('guest')->prefix('oauth')->name('oauth.')->group(function () {
         });
 });
 
+// Passkeys
+Route::prefix('passkeys')->name('passkeys.')->group(function () {
+    Route::post('', [PasskeyController::class, 'store'])
+        ->middleware(['auth', 'verified'])
+        ->name('store');
+
+    Route::post('login', PasskeyLoginController::class)
+        ->middleware('guest')
+        ->name('login');
+
+    Route::delete('{passkey}', [PasskeyController::class, 'destroy'])
+        ->middleware(['auth', 'verified'])
+        ->name('destroy');
+});
+
 // Verify Email Routes
 Route::controller(VerifyEmailController::class)
     ->name('verification.')
@@ -172,15 +189,6 @@ Route::middleware(['auth', 'verified'])
     ->group(function () {
         Route::get('', 'index')->name('index');
         Route::post('', 'store')->name('store');
-
-        // Passkeys
-        Route::controller(PasskeyController::class)
-            ->name('passkeys.')
-            ->prefix('passkeys')
-            ->group(function () {
-                Route::post('', 'store')->name('store');
-                Route::delete('{passkey}', 'destroy')->name('destroy');
-            });
     });
 
 // User Routes
@@ -189,7 +197,21 @@ Route::middleware(['auth', 'verified'])
     ->name('users.')
     ->controller(UserController::class)
     ->group(function () {
-        Route::post('/create', 'create')->name('create');
+        Route::get('', 'index')
+            ->middleware('can:' . Permission::VIEW_USERS->value)
+            ->name('index');
+
+        Route::post('', 'store')
+            ->middleware('can:' . Permission::CREATE_USERS->value)
+            ->name('store');
+
+        Route::patch('{user}', 'update')
+            ->middleware('can:' . Permission::UPDATE_USERS->value)
+            ->name('update');
+
+        Route::delete('{user}', 'destroy')
+            ->middleware('can:' . Permission::DELETE_USERS->value)
+            ->name('destroy');
     });
 
 // Builder Routes

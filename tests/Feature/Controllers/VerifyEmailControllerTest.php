@@ -2,6 +2,7 @@
 
 use App\Enums\SessionFlashKey;
 use App\Notifications\VerifyEmailNotification;
+use Database\Factories\AccountSettingsFactory;
 use Database\Factories\UserFactory;
 use Database\Factories\UserProfileFactory;
 use Inertia\Testing\AssertableInertia;
@@ -21,6 +22,7 @@ it('can show the verify email notice page', function () {
     $user = UserFactory::new()
         ->unverified()
         ->has(UserProfileFactory::new())
+        ->has(AccountSettingsFactory::new())
         ->create();
 
     actingAs($user);
@@ -42,6 +44,7 @@ it('can resend the verification email notification', /** @throws Throwable */ fu
     $user = UserFactory::new()
         ->unverified()
         ->has(UserProfileFactory::new())
+        ->has(AccountSettingsFactory::new())
         ->create();
 
     actingAs($user);
@@ -63,6 +66,7 @@ it('can verify the email address', function () {
     $user = UserFactory::new()
         ->unverified()
         ->has(UserProfileFactory::new())
+        ->has(AccountSettingsFactory::new())
         ->create();
 
     $expirationMinutes = Config::get('auth.verification.expire', 60);
