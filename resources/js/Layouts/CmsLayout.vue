@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { nextTick } from 'vue'
-import { useBroadcastChannel } from '@vueuse/core'
-import Toast from 'primevue/toast'
 import { usePage } from '@inertiajs/vue3'
 import { useToast } from 'primevue/usetoast'
+import Toast from 'primevue/toast'
+import ConfirmDialog from 'primevue/confirmdialog'
+import { useBroadcastChannel } from '@vueuse/core'
 import CmsDesktopSidebar from '@/Layouts/Navigation/CmsDesktopSidebar.vue'
 import CmsDesktopToolbar from '@/Layouts/Navigation/CmsDesktopToolbar.vue'
 import { useCmsDesktopSidebar } from '@/Composables/useCmsDesktopSidebar'
@@ -79,6 +80,7 @@ applyTheme()
 
 <template>
   <Toast />
+  <ConfirmDialog />
   <section class="flex min-h-screen bg-surface-200 text-surface-700 dark:bg-surface-950 dark:text-surface-0">
     <CmsDesktopSidebar
       :class="`${cmsDesktopSideIsMaximized ? 'w-[20%]' : 'w-0 -translate-x-96 transform'}

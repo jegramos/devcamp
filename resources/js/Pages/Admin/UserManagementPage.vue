@@ -64,6 +64,14 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  updateUserUrl: {
+    type: String,
+    required: true,
+  },
+  deleteUserUrl: {
+    type: String,
+    required: true,
+  },
   countryOptions: {
     type: Array<{ id: number; name: string }>,
     required: true,
@@ -86,7 +94,15 @@ const props = defineProps({
     <template v-if="users.data.length > 0">
       <!-- Start User List Grid -->
       <section v-if="!!props.users?.data" class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <UserManagementPageUserCard v-for="user in props.users?.data" :key="user.id" :user="user" />
+        <UserManagementPageUserCard
+          v-for="user in props.users?.data"
+          :key="user.id"
+          :user="user"
+          :check-availability-base-url="props.checkAvailabilityBaseUrl"
+          :update-user-url="props.updateUserUrl"
+          :delete-user-url="props.deleteUserUrl"
+          :country-options="props.countryOptions"
+        />
       </section>
       <!-- End User List Grid -->
       <!-- Start Pagination -->

@@ -4,6 +4,7 @@ import { createInertiaApp } from '@inertiajs/vue3'
 import { primeVue } from './Plugins/primevue'
 import ToastService from 'primevue/toastservice'
 import Tooltip from 'primevue/tooltip'
+import ConfirmationService from 'primevue/confirmationservice'
 
 createInertiaApp({
   title: (title) => (title ? `${title} - DevFolio` : 'DevFolio'),
@@ -16,6 +17,7 @@ createInertiaApp({
       .use(plugin)
       .use(primeVue.options, primeVue.config)
       .use(ToastService)
+      .use(ConfirmationService)
 
     app.directive('tooltip', Tooltip)
     app.mount(el)

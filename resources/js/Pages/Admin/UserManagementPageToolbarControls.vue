@@ -144,7 +144,7 @@ const createUserForm = useForm({
   postal_code: '',
 })
 
-const clientValidationRules = {
+const createUserClientValidationRules = {
   username: {
     required: helpers.withMessage('Username is required.', required),
     minLength: helpers.withMessage('Must be 3 or more characters', minLength(3)),
@@ -190,7 +190,7 @@ const clientValidationRules = {
   },
 }
 
-const validatedCreateUserForm = useClientValidatedForm(clientValidationRules, createUserForm)
+const validatedCreateUserForm = useClientValidatedForm(createUserClientValidationRules, createUserForm)
 
 const toast = useToast()
 const submitCreateUserForm = function () {

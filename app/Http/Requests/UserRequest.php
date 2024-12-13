@@ -70,20 +70,22 @@ class UserRequest extends FormRequest
 
     public function getUpdateRules(): array
     {
+        $userId = $this->route('user')->id;
         return [
-            'email' => ['email:rfc', 'unique:users,email,' . $this->user()->id . ',id'],
-            'username' => [new UsernameRule(), 'unique:users,username,' . $this->user()->id . ',id'],
+            'email' => ['email:rfc', 'unique:users,email,' . $userId . ',id'],
+            'username' => [new UsernameRule(), 'unique:users,username,' . $userId . ',id'],
             'mobile_number' => [
                 'nullable',
                 new InternationalPhoneFormatRule(),
                 'phone:mobile,lenient,international',
-                'unique:user_profiles,mobile_number,' . $this->user()->id . ',user_id',
+                'unique:user_profiles,mobile_number,' . $userId . ',user_id',
             ],
             'password' => [
                 'confirmed',
                 new PasswordRule(),
             ],
             'active' => ['boolean'],
+            'verified' => ['boolean'],
             'given_name' => [new DbVarcharMaxLengthRule()],
             'family_name' => [new DbVarcharMaxLengthRule()],
             'gender' => ['nullable', new Enum(Gender::class)],

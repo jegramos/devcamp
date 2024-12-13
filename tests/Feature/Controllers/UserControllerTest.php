@@ -425,7 +425,8 @@ it('can update a user', /** @throws Throwable */ function () {
         'city_municipality' => fake()->city(),
         'province_state_county' => fake()->city(),
         'postal_code' => fake()->postcode(),
-        'active' => false
+        'active' => false,
+        'verified' => false,
     ];
 
     followingRedirects()
@@ -454,7 +455,8 @@ it('can update a user', /** @throws Throwable */ function () {
         ->and($user->userProfile->city_municipality)->toBe($updatePayload['city_municipality'])
         ->and($user->userProfile->province_state_county)->toBe($updatePayload['province_state_county'])
         ->and($user->userProfile->postal_code)->toBe($updatePayload['postal_code'])
-        ->and($user->active)->toBe($updatePayload['active']);
+        ->and($user->active)->toBe($updatePayload['active'])
+        ->and($user->email_verified_at)->toBeNull();
 });
 
 it('can delete a user', function () {

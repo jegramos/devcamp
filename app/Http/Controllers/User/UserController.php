@@ -29,6 +29,10 @@ class UserController
 
         $checkAvailabilityBaseUrl = route('api.checkAvailability', ['type' => 1, 'value' => 1]);
         $checkAvailabilityBaseUrl = explode('/1/1', $checkAvailabilityBaseUrl)[0];
+        $updateUserUrl = route('users.update', ['user' => 1]);
+        $updateUserUrl = explode('/1', $updateUserUrl)[0];
+        $deleteUserUrl = route('users.destroy', ['user' => 1]);
+        $deleteUserUrl = explode('/1', $deleteUserUrl)[0];
 
         return Inertia::render('Admin/UserManagementPage', [
             'users' => $users,
@@ -36,6 +40,8 @@ class UserController
             'totalFiltersActive' => count($request->validated()),
             'checkAvailabilityBaseUrl' => $checkAvailabilityBaseUrl,
             'storeUserUrl' => route('users.store'),
+            'updateUserUrl' => $updateUserUrl,
+            'deleteUserUrl' => $deleteUserUrl,
             'countryOptions' => Inertia::defer(fn () => $getCountryListAction->execute('id', 'name')),
         ]);
     }
@@ -55,7 +61,16 @@ class UserController
      */
     public function update(User $user, UserRequest $request, UpdateUserAction $updateUserAction): RedirectResponse
     {
-        $updateUserAction->execute($user, $request->validated());
+        $updateInfo = $request->validated();
+        if (isset($updateInfo['verified']) && $updateInfo['verified']) {
+            $updateInfo['email_verified_at'] = now();
+        } else {
+            $updateInfo['email_verified_at'] = null;
+        }
+
+        unset($updateInfo['verified']);
+
+        $updateUserAction->execute($user, $updateInfo);
         return redirect()->back()->with(SessionFlashKey::CMS_SUCCESS->value, 'User updated successfully.');
     }
 
