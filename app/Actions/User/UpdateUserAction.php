@@ -3,6 +3,7 @@
 namespace App\Actions\User;
 
 use App\Models\User;
+use App\Models\UserProfile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
@@ -17,10 +18,9 @@ use Throwable;
  * <code>
  * $user = User::find(123);
  * $updateData = [
- *     'first_name' => 'John',
- *     'last_name' => 'Doe',
- *     'email' => '[email address removed]',
- *     // ... other updatable fields
+ *     'given_name' => 'Ramon',
+ *     'family_name' => 'Magsaysay',
+ *     'email' => 'example@email.com',
  *     'roles' => [Role::ADMIN, Role::USER]
  * ];
  *
@@ -34,7 +34,7 @@ readonly class UpdateUserAction
      */
     public function execute(User $user, array $data): User
     {
-        $whitelistedProperties = $this->getWhitelistedProperties($user);
+        $whitelistedProperties = $this->getWhitelistedProperties();
         $nonWhitelistedKeys = Arr::except($data, $whitelistedProperties);
         if (!empty($nonWhitelistedKeys)) {
             $invalidKeys = implode(', ', array_keys($nonWhitelistedKeys));
@@ -44,8 +44,8 @@ readonly class UpdateUserAction
 
         return DB::transaction(function () use ($user, $data, $whitelistedProperties) {
             $filteredData = Arr::only($data, $whitelistedProperties);
-            $user->update(Arr::only($filteredData, $this->getUserWhiteListedProperties($user)));
-            $user->userProfile()->update(Arr::only($filteredData, $this->getUserProfileWhitelistProperties($user)));
+            $user->update(Arr::only($filteredData, $this->getUserWhiteListedProperties()));
+            $user->userProfile()->update(Arr::only($filteredData, $this->getUserProfileWhitelistProperties()));
 
             if (isset($filteredData['roles'])) {
                 $user->syncRoles($filteredData['roles']);
@@ -55,10 +55,10 @@ readonly class UpdateUserAction
         });
     }
 
-    private function getWhitelistedProperties(User $user): array
+    private function getWhitelistedProperties(): array
     {
-        $userWhitelist = $this->getUserWhiteListedProperties($user);
-        $userProfileFillable = $this->getUserProfileWhitelistProperties($user);
+        $userWhitelist = $this->getUserWhiteListedProperties();
+        $userProfileFillable = $this->getUserProfileWhitelistProperties();
         return array_merge(
             $userWhitelist,
             $userProfileFillable,
@@ -66,17 +66,13 @@ readonly class UpdateUserAction
         );
     }
 
-    private function getUserWhiteListedProperties(User $user): array
+    private function getUserWhiteListedProperties(): array
     {
-        $userFillable = $user->getFillable();
-
-        // Don't include the password when updating profile information.
-        // There is a separate action class.
-        return array_values(array_filter($userFillable, fn (string $f) => $f !== 'password'));
+        return (new User())->getFillable();
     }
 
-    private function getUserProfileWhitelistProperties(User $user): array
+    private function getUserProfileWhitelistProperties(): array
     {
-        return $user->userProfile->getFillable();
+        return (new UserProfile())->getFillable();
     }
 }

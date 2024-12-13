@@ -30,4 +30,9 @@ class EmailRule implements ValidationRule
             $fail($validator->errors()->first($attribute));
         }
     }
+
+    public function exclude(): static
+    {
+        return $this;
+    }
 }

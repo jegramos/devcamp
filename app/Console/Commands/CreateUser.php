@@ -5,10 +5,10 @@ namespace App\Console\Commands;
 use App\Actions\User\CreateUserAction;
 use App\Models\User;
 use App\Rules\DbVarcharMaxLengthRule;
-use App\Rules\EmailRule;
 use App\Rules\PasswordRule;
 use App\Rules\UsernameRule;
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Spatie\Permission\Models\Role;
@@ -23,8 +23,8 @@ class CreateUser extends Command
 {
     protected $signature = 'user:create
                            {--I|interactive : Run in interactive mode}
-                           {--F|first-name= : First name of the user. E.g.: --first-name="Juan"}
-                           {--L|last-name= : Last name of the user. E.g.: --last-name="Dela Cruz"}
+                           {--G|given-name= : Given name of the user. E.g.: --given-name="Juan"}
+                           {--F|family-name= : Family name of the user. E.g.: --family-name="Dela Cruz"}
                            {--E|email= : Email of the user. E.g.: --email="sample@example.com"}
                            {--U|username= : Username of the user. E.g.: --username="juan.delacruz"}
                            {--P|password= : Password of the user. E.g.: --password="Test_passw0rd"}
@@ -49,7 +49,7 @@ class CreateUser extends Command
         }
 
         // Assume the email is valid since it was created via the console
-        $data['email_verified'] = true;
+        $data['email_verified_at'] = Carbon::now();
 
         try {
             $user = $createUserAction->execute($data);
@@ -72,18 +72,18 @@ class CreateUser extends Command
     {
         return form()
             ->text(
-                'First Name',
+                'Given Name',
                 validate: ['required', new DbVarcharMaxLengthRule()],
-                name: 'first_name',
+                name: 'given_name',
             )
             ->text(
-                'Last Name',
+                'Family Name',
                 validate: ['required', new DbVarcharMaxLengthRule()],
-                name: 'last_name',
+                name: 'family_name',
             )
             ->text(
                 'Email',
-                validate: ['required', new EmailRule()],
+                validate: ['required', 'email:rfc', 'unique:users,email'],
                 name: 'email',
                 transform: fn ($email) => strtolower($email),
             )
@@ -116,8 +116,8 @@ class CreateUser extends Command
     private function handleCommandLineInput(): array
     {
         $data = [
-            'first_name' => $this->option('first-name'),
-            'last_name' => $this->option('last-name'),
+            'given_name' => $this->option('given-name'),
+            'family_name' => $this->option('family-name'),
             'email' => $this->option('email'),
             'username' => $this->option('username'),
             'password' => $this->option('password'),
@@ -125,9 +125,9 @@ class CreateUser extends Command
         ];
 
         Validator::validate($data, [
-            'first_name' => ['required', new DbVarcharMaxLengthRule()],
-            'last_name' => ['required', new DbVarcharMaxLengthRule()],
-            'email' => ['required', new EmailRule()],
+            'given_name' => ['required', new DbVarcharMaxLengthRule()],
+            'family_name' => ['required', new DbVarcharMaxLengthRule()],
+            'email' => ['required', 'email:rfc', 'unique:users,email'],
             'username' => ['required', new UsernameRule()],
             'password' => ['required', new PasswordRule()],
             'roles' => ['required', 'array'],

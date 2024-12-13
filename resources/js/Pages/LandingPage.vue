@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3'
+import { Link, usePage } from '@inertiajs/vue3'
 import Button from 'primevue/button'
-import Tag from 'primevue/tag'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faBriefcase, faHeart, faFolderOpen, faBookOpen, faCalendarCheck, faSignInAlt } from '@fortawesome/free-solid-svg-icons'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import AppLogo from '@/Components/AppLogo.vue'
 import AppAnimatedFloaters from '@/Components/AppAnimatedFloaters.vue'
+import type { SharedPage } from '@/Types/shared-page'
+import { applyTheme } from '@/Utils/theme'
 
 const features = [
   { name: 'Resume Builder', icon: faBriefcase },
@@ -25,21 +26,25 @@ defineProps({
     required: true,
   },
 })
+
+const page = usePage<SharedPage>()
+
+applyTheme()
 </script>
 
 <template>
   <section class="relative flex h-screen w-full flex-col bg-primary">
     <AppAnimatedFloaters class="z-10" />
+    <div class="flex h-12 w-full items-center justify-center bg-amber-500 px-4 py-1 md:bg-primary md:py-1.5">
+      <small class="text-xs font-bold text-surface-200 md:text-sm md:font-medium dark:font-bold">
+        <i class="pi pi-sparkles mr-2"></i>
+        <span>MVP Version</span>
+        <i class="pi pi-sparkles ml-2 -rotate-180"></i>
+      </small>
+    </div>
     <!-- Start Head Section -->
-    <section
-      class="flex w-full items-center justify-between border-t-8 border-primary bg-primary-contrast px-4 py-2 md:p-4 dark:bg-surface-950"
-    >
+    <section class="flex w-full items-center justify-between bg-primary-contrast px-4 py-2 md:p-4 dark:bg-surface-950">
       <AppLogo color="primary" icon-size-class="text-lg lg:text-xl" text-size-class="text-xl lg:text-2xl"></AppLogo>
-      <div class="hidden md:block">
-        <Tag class="!px-6 !text-xs uppercase" icon="pi pi-sparkles">
-          <span class="ml-1"> This Site is currently in Public Beta </span>
-        </Tag>
-      </div>
       <div class="z-20 hidden md:block">
         <Button
           label="View on Github"
@@ -53,20 +58,20 @@ defineProps({
     <!-- Start (iPad and Up View) Main Content -->
     <section class="mt-28 hidden w-full flex-grow justify-center bg-primary md:flex">
       <div
-        class="relative flex w-full flex-col items-center rounded-2xl border-8 border-primary-contrast px-6 py-10 text-center md:w-[85%] lg:w-[60%] dark:border-surface-950"
+        class="relative flex w-full flex-col items-center rounded-2xl border-8 border-primary-contrast px-6 py-10 text-center md:w-[85%] lg:w-[60%]"
       >
         <p
-          class="absolute -top-6 left-1/2 -translate-x-1/2 whitespace-normal bg-primary px-10 pb-6 font-stylish font-black text-primary-contrast md:whitespace-nowrap md:text-4xl lg:text-5xl dark:text-surface-950"
+          class="absolute -top-6 left-1/2 -translate-x-1/2 whitespace-normal bg-primary px-10 pb-6 font-stylish font-black text-primary-contrast md:whitespace-nowrap md:text-4xl lg:text-5xl"
         >
           Micro-CMS Portfolio Builder
         </p>
-        <p class="mt-2 font-stylish text-lg font-bold text-primary-contrast lg:mt-4 lg:text-xl dark:text-surface-950">
+        <p class="mt-2 font-stylish text-lg font-bold text-primary-contrast lg:mt-4 lg:text-xl">
           A convenient destination for <i>building</i> and <i>showcasing</i> portfolios.
         </p>
-        <p class="mt-2 text-lg text-primary-contrast dark:font-medium dark:leading-normal dark:text-surface-950">
-          Create, manage, and display your professional portfolio with ease using <span class="font-brand">Devfolio</span>.
-          Whether you're a freelancer, student, or professional, our platform offers a comprehensive suite of tools tailored to
-          your needs.
+        <p class="mt-2 text-lg text-primary-contrast dark:font-medium dark:leading-normal">
+          Create, manage, and display your professional portfolio with ease using
+          <span class="font-brand"> {{ page.props.appName }} </span>. Whether you're a freelancer, student, or professional, our
+          platform offers a comprehensive suite of tools tailored to your needs.
         </p>
         <div class="absolute -right-2.5 top-1/2 h-[20%] w-[12px] -translate-y-1/2 bg-primary"></div>
         <div class="absolute -left-2.5 top-1/2 h-[20%] w-[12px] -translate-y-1/2 bg-primary"></div>
@@ -74,14 +79,14 @@ defineProps({
         <div class="absolute -bottom-3 left-1/2 h-4 w-4 -translate-x-1/2 rounded-full bg-primary-contrast"></div>
         <div class="mt-6 flex space-x-6">
           <Link :href="registerUrl" class="z-20">
-            <button class="z-20 w-60 rounded-lg bg-amber-600 px-6 py-3 font-bold text-primary-contrast dark:bg-amber-400">
+            <button class="z-20 w-60 rounded-lg bg-amber-600 px-6 py-3 font-bold text-primary-contrast dark:bg-amber-600">
               <FontAwesomeIcon :icon="faHeart" class="mr-2"></FontAwesomeIcon>
               Get Started for Free
             </button>
           </Link>
           <Link :href="loginUrl" class="z-20">
             <button
-              class="w-60 rounded-lg bg-primary-contrast px-6 py-3 font-bold text-primary dark:bg-surface-950 dark:text-primary"
+              class="w-60 rounded-lg bg-primary-contrast px-6 py-3 font-bold text-primary dark:bg-surface-950 dark:text-primary-contrast"
             >
               <FontAwesomeIcon :icon="faSignInAlt" class="mr-2"></FontAwesomeIcon>
               Sign in
@@ -93,13 +98,11 @@ defineProps({
     <!-- End (iPad and Up View) Main Content -->
     <!-- Start (Phone View) Main Content -->
     <section class="flex flex-col px-4 md:hidden">
-      <span class="mb-4 mt-8 font-stylish text-3xl font-black text-primary-contrast dark:text-surface-950">
-        A Micro-CMS Portfolio Builder
-      </span>
-      <p class="font-stylish text-sm font-bold leading-loose text-primary-contrast dark:text-surface-950">
+      <span class="mb-4 mt-8 font-stylish text-3xl font-black text-primary-contrast"> A Micro-CMS Portfolio Builder </span>
+      <p class="font-stylish text-sm font-bold leading-loose text-primary-contrast">
         Your Ultimate Destination for Building and Showcasing Portfolios.
       </p>
-      <p class="text-sm leading-loose text-primary-contrast dark:font-medium dark:leading-normal dark:text-surface-950">
+      <p class="text-sm leading-loose text-primary-contrast dark:font-medium dark:leading-normal">
         Create, manage, and display your professional portfolio with ease using <span class="font-brand">Devfolio</span>. Whether
         you're a freelancer, student, or professional, our platform offers a comprehensive suite of tools tailored to your needs.
       </p>
@@ -135,12 +138,12 @@ defineProps({
       <!-- End Phone View -->
       <!-- Start iPad and Up View -->
       <div
-        class="hidden w-full items-center justify-evenly rounded-2xl p-6 font-brand text-primary-contrast transition-transform md:flex dark:text-surface-950"
+        class="hidden w-full items-center justify-evenly rounded-2xl p-6 font-brand text-primary-contrast transition-transform md:flex"
       >
         <button v-for="feature in features" :key="feature.name" class="group z-20 flex h-full flex-col items-center">
           <FontAwesomeIcon
             :icon="feature.icon"
-            class="mb-2 rounded-full border-4 border-primary-contrast p-2 transition-transform group-hover:animate-bounce md:text-xl lg:text-3xl dark:border-surface-950"
+            class="mb-2 rounded-full border-4 border-primary-contrast p-2 transition-transform group-hover:animate-bounce md:text-xl lg:text-3xl"
           >
           </FontAwesomeIcon>
           <span

@@ -37,16 +37,16 @@ describe('with database access access', function () {
         $username = fake()->unique()->userName();
         $email = fake()->unique()->safeEmail();
         $password = fake()->password(10) . 'Jj1!';
-        $firstName = fake()->firstNameMale();
-        $lastName = fake()->lastName();
+        $givenName = fake()->firstNameMale();
+        $familyName = fake()->lastName();
         $country_id = DB::table('countries')->inRandomOrder()->first()->id;
         $payload = [
             'username' => $username,
             'email' => $email,
             'password' => $password,
             'password_confirmation' => $password,
-            'first_name' => $firstName,
-            'last_name' => $lastName,
+            'given_name' => $givenName,
+            'family_name' => $familyName,
             'country_id' => $country_id,
         ];
 
@@ -66,8 +66,8 @@ describe('with database access access', function () {
         $username = fake()->unique()->userName();
         $email = fake()->unique()->safeEmail();
         $password = fake()->password(10) . 'Jj1!';
-        $firstName = fake()->firstNameMale();
-        $lastName = fake()->lastName();
+        $givenName = fake()->firstNameMale();
+        $familyName = fake()->lastName();
         $country_id = DB::table('countries')->inRandomOrder()->first()->id;
 
         $payload = [
@@ -75,8 +75,8 @@ describe('with database access access', function () {
             'email' => $email,
             'password' => $password,
             'password_confirmation' => $password,
-            'first_name' => $firstName,
-            'last_name' => $lastName,
+            'given_name' => $givenName,
+            'family_name' => $familyName,
             'country_id' => $country_id,
             'recaptcha_response_token' => null,
         ];
@@ -95,8 +95,8 @@ describe('with database access access', function () {
         $username = fake()->unique()->userName();
         $email = fake()->unique()->safeEmail();
         $password = fake()->password(10) . 'Jj1!';
-        $firstName = fake()->firstNameMale();
-        $lastName = fake()->lastName();
+        $givenName = fake()->firstNameMale();
+        $familyName = fake()->lastName();
         $country_id = DB::table('countries')->inRandomOrder()->first()->id;
 
         $payload = [
@@ -104,14 +104,13 @@ describe('with database access access', function () {
             'email' => $email,
             'password' => $password,
             'password_confirmation' => $password,
-            'first_name' => $firstName,
-            'last_name' => $lastName,
+            'given_name' => $givenName,
+            'family_name' => $familyName,
             'country_id' => $country_id,
             // The .env.testing has an always 'success' config set for recaptcha
             // see https://developers.google.com/recaptcha/docs/faq
             'recaptcha_response_token' => 'test_token',
         ];
-
 
         followingRedirects()
             ->post(route('auth.register.process'), $payload)

@@ -1,6 +1,8 @@
 <?php
 
+use Database\Factories\AccountSettingsFactory;
 use Database\Factories\UserFactory;
+use Database\Factories\UserProfileFactory;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\artisan;
@@ -12,7 +14,10 @@ beforeEach(function () {
 });
 
 it('can logout the current authenticated user', function () {
-    $user = UserFactory::new()->create();
+    $user = UserFactory::new()
+        ->has(UserProfileFactory::new())
+        ->has(AccountSettingsFactory::new())
+        ->create();
     actingAs($user);
 
     $response = post(route('auth.logout.current'));

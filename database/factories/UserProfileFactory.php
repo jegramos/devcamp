@@ -13,9 +13,8 @@ class UserProfileFactory extends Factory
         $gender = $this->faker->randomElement(Gender::toArray());
         return [
             'user_id' => UserFactory::new(),
-            'first_name' => fake()->firstName($gender),
-            'last_name' => fake()->lastName($gender),
-            'middle_name' => fake()->lastName($gender),
+            'given_name' => fake()->firstName($gender),
+            'family_name' => fake()->lastName($gender),
             'mobile_number' => fake()->phoneNumber(),
             'gender' => $gender,
             'birthday' => fake()->date(),
@@ -28,14 +27,5 @@ class UserProfileFactory extends Factory
             'province_state_county' => fake()->city(),
             'postal_code' => fake()->postcode(),
         ];
-    }
-
-    public function withoutMiddlename(): Factory
-    {
-        return $this->state(function () {
-            return [
-                'middle_name' => null,
-            ];
-        });
     }
 }

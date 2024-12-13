@@ -23,7 +23,7 @@ class UsernameRule implements ValidationRule
 
         $validator = Validator::make(
             [$attribute => $value],
-            [$attribute => ['string', 'min:3', 'max:50', 'unique:users,username', new AlphaDashDotRule()]]
+            [$attribute => ['string', 'min:3', 'max:50', new AlphaDashDotRule()]]
         );
 
         if ($validator->fails()) {

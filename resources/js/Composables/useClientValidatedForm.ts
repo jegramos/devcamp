@@ -5,9 +5,9 @@ import { useVuelidate } from '@vuelidate/core'
 type InertiaFormRecord = Record<string | number | symbol, unknown>
 type InertiaSubmissionMethod = (url: string, options?: Partial<VisitOptions>) => Promise<void>
 
-// Extend InertiaForm and convert the originally synchronous `post`, `put`, `patch`, `delete`, and `get` methods
+// Extend InertiaForm and convert the originally synchronous `post`, `put`, `patch`, `delete` and `get` methods
 // to asynchronous methods returning a Promise<void>.
-type ClientValidatedInertiaForm<T extends InertiaFormRecord> = Omit<
+export type ClientValidatedInertiaForm<T extends InertiaFormRecord> = Omit<
   InertiaForm<T>,
   'post' | 'put' | 'patch' | 'delete' | 'get'
 > & {
@@ -19,7 +19,7 @@ type ClientValidatedInertiaForm<T extends InertiaFormRecord> = Omit<
 }
 
 /**
- * Enhances an Inertia form with client-side validation capabilities.
+ * @description Enhances an Inertia form with client-side validation capabilities.
  *
  * This function wraps an Inertia form in a Proxy to intercept and extend its `post`, `put`, `patch`, `delete`, and `get`
  * methods with client-side validation logic using Vuelidate. When these methods are called, the Inertia form data is first

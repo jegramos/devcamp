@@ -2,10 +2,13 @@
 
 namespace App\Providers;
 
-use App\Actions\AddSoftDeleteMarkerAction;
 use App\Enums\Role;
+use App\Services\AwsS3Service;
+use App\Services\CloudStorageManager;
+use App\Services\PasskeyService;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
@@ -35,8 +38,12 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(TelescopeServiceProvider::class);
         }
 
-        $this->app->bind(AddSoftDeleteMarkerAction::class, function () {
-            return new AddSoftDeleteMarkerAction();
+        $this->app->singleton(CloudStorageManager::class, function () {
+            return new AwsS3Service();
+        });
+
+        $this->app->singleton(PasskeyService::class, function () {
+            return new PasskeyService();
         });
     }
 
@@ -54,6 +61,12 @@ class AppServiceProvider extends ServiceProvider
         Gate::after(function ($user) {
             return $user->hasRole(Role::SUPER_USER) ? true : null;
         });
+
+        /**
+         * Disable the 'data' wrapping fo the outermost resource
+         * @see https://laravel.com/docs/11.x/eloquent-resources#resource-collections
+         */
+        JsonResource::withoutWrapping();
 
         /** Rate Limits */
         RateLimiter::for('login', function (Request $request) {
@@ -77,7 +90,7 @@ class AppServiceProvider extends ServiceProvider
             return Limit::perMinute(5)->by($key);
         });
 
-        RateLimiter::for('send-email-verification', function (Request $request) {
+        RateLimiter::for('send-email-notification', function (Request $request) {
             $userId = $request->user()?->id;
             $route = $request->route()->getName() ?? $request->route()->uri();
             $key = $userId

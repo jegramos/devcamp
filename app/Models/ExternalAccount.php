@@ -23,8 +23,13 @@ class ExternalAccount extends Model
     ];
 
     protected $hidden = [
+        /** @uses accessToken */
         'access_token',
+
+        /** @uses idToken */
         'id_token',
+
+        /** @uses refreshToken */
         'refresh_token',
     ];
 
