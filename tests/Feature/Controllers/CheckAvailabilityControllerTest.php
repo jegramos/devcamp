@@ -98,7 +98,7 @@ it('ignores the ID of the user when `excludedId` param is provided', function (s
 })->with([
     'with username' => ['type' => 'username', 'value' => fake()->unique()->userName()],
     'with email' => ['type' => 'email', 'value' => fake()->unique()->safeEmail()],
-    'with mobile number' => ['type' => 'mobile_number', 'value' => '+6390646472' . fake()->randomNumber(2)],
+    'with mobile number' => ['type' => 'mobile_number', 'value' => '+63906464721' . fake()->randomNumber(1)],
 ]);
 
 it('only accepts "username", "email", or "mobile_number" as the `type` param', function () {
