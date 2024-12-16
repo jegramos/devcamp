@@ -1,0 +1,102 @@
+services:
+  # The Laravel API application
+  app:
+    image: jegramos/${DOCKER_COMPOSE_PROJECT_NAME}:${DOCKER_COMPOSE_IMAGE_TAG}
+    restart: unless-stopped
+    environment:
+      PHP_FPM_POOL_NAME: 'app_api'
+    volumes:
+      - type: bind
+        source: .env
+        target: /var/www/html/.env
+        read_only: true
+    networks:
+      - app-network
+    ports:
+      - '80:8080'
+      - '443:8443'
+    profiles: [ 'app' ]
+
+  # Queue Manager Container
+  horizon:
+    image: jegramos/${DOCKER_COMPOSE_PROJECT_NAME}:${DOCKER_COMPOSE_IMAGE_TAG}
+    restart: unless-stopped
+    command: [ 'php', '/var/www/html/artisan', 'horizon' ]
+    volumes:
+      - type: bind
+        source: .env
+        target: /var/www/html/.env
+        read_only: true
+    stop_signal: SIGTERM
+    healthcheck:
+      test: [ 'CMD', 'healthcheck-horizon' ]
+      start_period: 10s
+    networks:
+      - app-network
+    profiles: [ 'app' ]
+
+  # Dedicated Container for Scheduled tasks
+  task:
+    image: jegramos/${DOCKER_COMPOSE_PROJECT_NAME}:${DOCKER_COMPOSE_IMAGE_TAG}
+    restart: unless-stopped
+    command: [ 'php', '/var/www/html/artisan', 'schedule:work' ]
+    volumes:
+      - type: bind
+        source: .env
+        target: /var/www/html/.env
+        read_only: true
+    stop_signal: SIGTERM
+    healthcheck:
+      test: [ 'CMD', 'healthcheck-schedule' ]
+      start_period: 10s
+    networks:
+      - app-network
+    profiles: [ 'app' ]
+
+
+  # Main Database
+  db:
+    build:
+      context: .
+      dockerfile: mysql.Dockerfile
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - type: volume
+        source: db-vol
+        target: /var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - app-network
+    profiles: [ 'store' ]
+    # You may remove the port bindings if you don't need them
+    ports:
+      - '3306:3306'
+
+  # Cache Database
+  cache-store:
+    build:
+      context: .
+      dockerfile: redis.Dockerfile
+    command: redis-server --requirepass "${REDIS_PASSWORD}"
+    restart: unless-stopped
+    volumes:
+      - type: volume
+        source: cache-store-vol
+        target: /data
+    networks:
+      - app-network
+    profiles: [ 'store' ]
+    # You may remove the port bindings if you don't need them
+    ports:
+      - '6379:6379'
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db-vol:
+  cache-store-vol:

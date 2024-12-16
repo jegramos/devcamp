@@ -2,6 +2,7 @@
 
 use App\Actions\CreateApiErrorResponseAction;
 use App\Enums\ErrorCode;
+use App\Enums\SessionFlashKey;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -11,6 +12,7 @@ use Inertia\Inertia;
 use Laravel\Socialite\Two\InvalidStateException;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Request;
+use Illuminate\Console\Scheduling\Schedule;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -31,17 +33,14 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectGuestsTo(fn () => route('auth.login.showForm'));
         $middleware->redirectUsersTo(fn () => route('builder.resume.index'));
     })
+    ->withSchedule(function (Schedule $schedule) {
+        /**
+         * Delete expired password reset tokens
+         * @see https://laravel.com/docs/11.x/passwords#requesting-the-password-reset-link
+         */
+        $schedule->command('auth:clear-resets')->everyFifteenMinutes();
+    })
     ->withExceptions(function (Exceptions $exceptions) {
-        // Handle 429 errors. Redirect back to the previous route with an Error Code
-        $exceptions->render(function (ThrottleRequestsException $e) {
-            return redirect()
-                ->back()
-                ->withHeaders($e->getHeaders())
-                ->withErrors([
-                    ErrorCode::TOO_MANY_REQUESTS->value => 'Too many login attempts. Please try again in a minute.'
-                ]);
-        });
-
         $exceptions->respond(function (Response $response, Throwable $e, Request $request) {
             // Format API (JSON) error responses to make them consistent
             if ($request->is('api/*')) {
@@ -49,6 +48,20 @@ return Application::configure(basePath: dirname(__DIR__))
                 return $createApiErrorResponse->execute($e);
             }
 
+            // Handle RateLimit (429) Errors. Redirect back to the previous route with an Error Code
+            if ($e instanceof ThrottleRequestsException) {
+                return redirect()
+                    ->back()
+                    ->withHeaders($e->getHeaders())
+                    ->withErrors([
+                        ErrorCode::TOO_MANY_REQUESTS->value => $e->getMessage()
+                    ]);
+            }
+
+            /**
+             * Only show Inertia modal errors during local development and testing
+             * @see https://v2.inertiajs.com/error-handling
+             */
             if (!app()->environment(['local', 'testing'])) {
                 // An InvalidStateException from Socialite is likely an unauthorized request
                 if ($e instanceof InvalidStateException) {
@@ -68,13 +81,20 @@ return Application::configure(basePath: dirname(__DIR__))
                     ]);
                 }
 
-                /**
-                 * Only show Inertia modal errors during local development and testing
-                 * @see https://v2.inertiajs.com/error-handling
-                 */
-                return Inertia::render('ErrorPage', ['status' => $response->getStatusCode()])
+                $status = $response->getStatusCode();
+                \Log::debug('Error: ' . $e::class);
+                \Log::debug('Status: ' . $response->getStatusCode());
+                $message = $e->getMessage();
+                \Log::debug('Message: ' . $message);
+                return Inertia::render('ErrorPage', ['status' => $status, 'message' => $message])
                     ->toResponse($request)
                     ->setStatusCode($response->getStatusCode());
+            }
+
+            if ($response->getStatusCode() === 419) {
+                return back()->with([
+                    SessionFlashKey::CMS_ERROR->value => 'The page expired, please try again.',
+                ]);
             }
 
             return $response;

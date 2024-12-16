@@ -11,7 +11,9 @@ use App\Models\User;
 use Database\Factories\ExternalAccountFactory;
 use Database\Factories\UserFactory;
 use Database\Factories\UserProfileFactory;
+use Laravel\Socialite\Contracts\Provider;
 use Laravel\Socialite\Two\User as SocialiteUser;
+use Illuminate\Support\Str;
 
 use function Pest\Laravel\artisan;
 use function Pest\Laravel\assertDatabaseCount;
@@ -28,13 +30,11 @@ test('it can create a google new user', /** @throws Throwable */ function () {
         ->andReturn(rand(1, 100))
         ->shouldReceive('getEmail')
         ->andReturn('foo@example.com')
-        ->shouldReceive('token')
-        ->andReturn(Str::random(40))
-        ->shouldReceive('refreshToken')
-        ->andReturn(Str::random(40))
         ->shouldReceive('getAvatar')
         ->andReturn(fake()->imageUrl());
 
+    $providerUser->refreshToken = Str::random(40);
+    $providerUser->token = Str::random(40);
     $providerUser->user = [
         'given_name' => fake()->firstName(),
         'family_name' => fake()->lastName(),
@@ -62,13 +62,11 @@ test('it can create a github new user', /** @throws Throwable */ function () {
         ->andReturn(rand(1, 100))
         ->shouldReceive('getEmail')
         ->andReturn('foo@example.com')
-        ->shouldReceive('token')
-        ->andReturn(Str::random(40))
-        ->shouldReceive('refreshToken')
-        ->andReturn(Str::random(40))
         ->shouldReceive('getAvatar')
         ->andReturn(fake()->imageUrl());
 
+    $providerUser->refreshToken = Str::random(40);
+    $providerUser->token = Str::random(40);
     $providerUser->user = [
         'name' => fake()->firstName() . ' ' . fake()->lastName(),
     ];
@@ -81,7 +79,7 @@ test('it can create a github new user', /** @throws Throwable */ function () {
         $providerUser,
         $createUserAction,
         $updateUserAction,
-        [Role::USER]
+        [Role::USER],
     );
 
     assertDatabaseCount('users', 1);
@@ -89,27 +87,25 @@ test('it can create a github new user', /** @throws Throwable */ function () {
 
 test('it can update an google existing user', /** @throws Throwable */ function () {
     // Create an existing user with an external account
+    $user = UserFactory::new()->has(UserProfileFactory::new());
+
     /** @var ExternalAccount $externalAccount */
-    $userFactory = UserFactory::new()->has(UserProfileFactory::new());
     $externalAccount = ExternalAccountFactory::new()
-        ->for($userFactory)
+        ->for($user)
         ->create(['provider' => ExternalLoginProvider::GOOGLE])
         ->first();
 
     $providerUser = Mockery::mock(SocialiteUser::class);
     $providerUser
-        ->shouldReceive('user')
         ->shouldReceive('getId')
         ->andReturn($externalAccount->provider_id)
         ->shouldReceive('getEmail')
         ->andReturn($externalAccount->user->email)
-        ->shouldReceive('token')
-        ->andReturn(Str::random(40))
-        ->shouldReceive('refreshToken')
-        ->andReturn(Str::random(40))
         ->shouldReceive('getAvatar')
         ->andReturn(fake()->imageUrl());
 
+    $providerUser->refreshToken = Str::random(40);
+    $providerUser->token = Str::random(40);
     $providerUser->user = [
         'given_name' => fake()->firstName(),
         'family_name' => fake()->lastName(),
@@ -123,7 +119,8 @@ test('it can update an google existing user', /** @throws Throwable */ function 
         $providerUser,
         $createUserAction,
         $updateUserAction,
-        [Role::USER]
+        [Role::USER],
+        true
     );
 
     expect($updatedUser)
@@ -131,9 +128,8 @@ test('it can update an google existing user', /** @throws Throwable */ function 
         ->and($updatedUser->email)->toBe($externalAccount->user->email)
         ->and($updatedUser->externalAccount->access_token)->toBe($providerUser->token)
         ->and($updatedUser->externalAccount->refresh_token)->toBe($providerUser->refreshToken)
-        ->and($updatedUser->refreshToken)->toBe($providerUser->refreshToken)
-        ->and($updatedUser->userProfile->first_name)->toBe($providerUser->user['given_name'])
-        ->and($updatedUser->userProfile->last_name)->toBe($providerUser->user['family_name'])
+        ->and($updatedUser->userProfile->given_name)->toBe($providerUser->user['given_name'])
+        ->and($updatedUser->userProfile->family_name)->toBe($providerUser->user['family_name'])
         ->and($updatedUser->userProfile->profile_picture_path)->toBe($providerUser->getAvatar())
         ->and($updatedUser->email_verified_at)->not()->toBeNull();
 
@@ -142,10 +138,11 @@ test('it can update an google existing user', /** @throws Throwable */ function 
 
 test('it can update an github existing user', /** @throws Throwable */ function (string $name) {
     // Create an existing user with an external account
+    $user = UserFactory::new()->has(UserProfileFactory::new())->create();
+
     /** @var ExternalAccount $externalAccount */
-    $userFactory = UserFactory::new()->has(UserProfileFactory::new()->state(['middle_name' => null]))->create();
     $externalAccount = ExternalAccountFactory::new()
-        ->for($userFactory)
+        ->for($user)
         ->create(['provider' => ExternalLoginProvider::GITHUB])
         ->first();
 
@@ -156,13 +153,11 @@ test('it can update an github existing user', /** @throws Throwable */ function 
         ->andReturn($externalAccount->provider_id)
         ->shouldReceive('getEmail')
         ->andReturn($externalAccount->user->email)
-        ->shouldReceive('token')
-        ->andReturn(Str::random(40))
-        ->shouldReceive('refreshToken')
-        ->andReturn(Str::random(40))
         ->shouldReceive('getAvatar')
         ->andReturn(fake()->imageUrl());
 
+    $providerUser->refreshToken = Str::random(40);
+    $providerUser->token = Str::random(40);
     $providerUser->user = [
         'name' => $name,
     ];
@@ -175,7 +170,8 @@ test('it can update an github existing user', /** @throws Throwable */ function 
         $providerUser,
         $createUserAction,
         $updateUserAction,
-        [Role::USER]
+        [Role::USER],
+        true
     );
 
     expect($updatedUser)
@@ -183,7 +179,6 @@ test('it can update an github existing user', /** @throws Throwable */ function 
         ->and($updatedUser->email)->toBe($externalAccount->user->email)
         ->and($updatedUser->externalAccount->access_token)->toBe($providerUser->token)
         ->and($updatedUser->externalAccount->refresh_token)->toBe($providerUser->refreshToken)
-        ->and($updatedUser->refreshToken)->toBe($providerUser->refreshToken)
         ->and($updatedUser->userProfile->full_name)->toBe($providerUser->user['name'])
         ->and($updatedUser->userProfile->profile_picture_path)->toBe($providerUser->getAvatar())
         ->and($updatedUser->email_verified_at)->not()->toBeNull();
@@ -197,10 +192,11 @@ test('it can update an github existing user', /** @throws Throwable */ function 
 
 test('it can throw a duplicate email exception', /** @throws Throwable */ function () {
     // Create an existing user with an external account
+    $user = UserFactory::new()->has(UserProfileFactory::new());
+
     /** @var ExternalAccount $externalAccount */
-    $userFactory = UserFactory::new()->has(UserProfileFactory::new());
     $externalAccount = ExternalAccountFactory::new()
-        ->has($userFactory)
+        ->has($user)
         ->create(['provider' => ExternalLoginProvider::GOOGLE])
         ->first();
 
@@ -211,13 +207,11 @@ test('it can throw a duplicate email exception', /** @throws Throwable */ functi
         ->andReturn(Str::uuid()->toString()) // different external account
         ->shouldReceive('getEmail')
         ->andReturn($externalAccount->user->email) // with the same email as an existing internal user
-        ->shouldReceive('token')
-        ->andReturn(Str::random(40))
-        ->shouldReceive('refreshToken')
-        ->andReturn(Str::random(40))
         ->shouldReceive('getAvatar')
         ->andReturn(fake()->imageUrl());
 
+    $providerUser->refreshToken = Str::random(40);
+    $providerUser->token = Str::random(40);
     $providerUser->user = [
         'given_name' => fake()->firstName(),
         'family_name' => fake()->lastName(),
@@ -234,3 +228,58 @@ test('it can throw a duplicate email exception', /** @throws Throwable */ functi
         [Role::USER]
     );
 })->throws(DuplicateEmailException::class);
+
+test(
+    'it will only update the `email` and token fields if `forceUpdate` is set to `false`', /** @throws Throwable */
+    function () {
+
+        // Create an existing user with an external account
+        /** @var User $user */
+        $user = UserFactory::new()->has(UserProfileFactory::new())->create()->load('userProfile');
+
+        /** @var ExternalAccount $externalAccount */
+        $externalAccount = ExternalAccountFactory::new()
+            ->for($user)
+            ->create(['provider' => ExternalLoginProvider::GOOGLE])
+            ->first();
+
+        $providerUser = Mockery::mock(SocialiteUser::class);
+        $providerUser
+            ->shouldReceive('user')
+            ->shouldReceive('getId')
+            ->andReturn($externalAccount->provider_id)
+            ->shouldReceive('getEmail')
+            ->andReturn($externalAccount->user->email)
+            ->shouldReceive('getAvatar')
+            ->andReturn(fake()->imageUrl());
+
+        $providerUser->refreshToken = Str::random(40);
+        $providerUser->token = Str::random(40);
+        $providerUser->user = [
+            'given_name' => fake()->firstName(),
+            'family_name' => fake()->lastName(),
+        ];
+
+        $syncAction = resolve(SyncExternalAccountAction::class);
+        $createUserAction = resolve(CreateUserAction::class);
+        $updateUserAction = resolve(UpdateUserAction::class);
+        $updatedUser = $syncAction->execute(
+            $externalAccount->provider,
+            $providerUser,
+            $createUserAction,
+            $updateUserAction,
+            [Role::USER]
+        );
+
+        expect($updatedUser)
+            ->toBeInstanceOf(User::class)
+            ->and($updatedUser->email)->toBe($externalAccount->user->email)// from the provider
+            ->and($updatedUser->externalAccount->access_token)->toBe($providerUser->token) // from the provider
+            ->and($updatedUser->externalAccount->refresh_token)->toBe($providerUser->refreshToken) // from the provider
+            ->and($updatedUser->userProfile->full_name)->toBe($user->userProfile->full_name) // not changed
+            ->and($updatedUser->userProfile->profile_picture_path)->toBe($user->userProfile->profile_picture_path) // not changed
+            ->and($updatedUser->email_verified_at)->not()->toBeNull();
+
+        assertDatabaseCount('users', 1);
+    }
+);

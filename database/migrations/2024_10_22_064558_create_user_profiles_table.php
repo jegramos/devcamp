@@ -15,9 +15,8 @@ return new class () extends Migration {
             // Primary Information
             $table->id();
             $table->foreignId('user_id')->unique()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('middle_name')->nullable();
+            $table->string('given_name');
+            $table->string('family_name');
             $table->string('mobile_number')->nullable();
 
             $genders = array_column(Gender::cases(), 'value');
@@ -37,6 +36,10 @@ return new class () extends Migration {
 
             $table->timestamps();
             $table->softdeletes();
+
+            $table->index('given_name');
+            $table->index('family_name');
+            $table->index(['given_name', 'family_name']);
         });
     }
 

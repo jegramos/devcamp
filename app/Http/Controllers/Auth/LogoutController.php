@@ -6,12 +6,13 @@ use App\Http\Requests\LogoutRequest;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LogoutController
 {
     public function logoutCurrent(Request $request): RedirectResponse
     {
-        auth()->logout();
+        Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
@@ -26,7 +27,7 @@ class LogoutController
     public function logoutOtherDevices(LogoutRequest $request): RedirectResponse
     {
         $password = $request->input('password');
-        auth()->logoutOtherDevices($password);
+        Auth::logoutOtherDevices($password);
 
         return redirect()->back();
     }

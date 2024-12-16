@@ -4,10 +4,12 @@ namespace App\Models;
 
 use App\Actions\AddSoftDeleteMarkerAction;
 use App\Enums\Gender;
+use App\Services\CloudStorageManager;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class UserProfile extends Model
 {
@@ -15,9 +17,8 @@ class UserProfile extends Model
 
     protected $fillable = [
         'user_id',
-        'first_name',
-        'last_name',
-        'middle_name',
+        'given_name',
+        'family_name',
         'mobile_number',
         'gender',
         'birthday',
@@ -39,6 +40,9 @@ class UserProfile extends Model
     protected $appends = [
         /** @uses fullName() */
         'full_name',
+
+        /** @uses profilePictureUrl() */
+        'profile_picture_url',
     ];
 
     protected static function boot(): void
@@ -63,12 +67,27 @@ class UserProfile extends Model
 
     protected function fullName(): Attribute
     {
-        return Attribute::get(function () {
-            $firstName = $this->first_name;
-            $lastName = $this->last_name;
-            $middleName = $this->middle_name;
+        return Attribute::get(fn () => $this->given_name . ' ' . $this->family_name);
+    }
 
-            return $middleName ? "$firstName $middleName $lastName" : "$firstName $lastName";
+    /**
+     * Create a profile_picture_url attribute
+     */
+    protected function profilePictureUrl(): Attribute
+    {
+        return Attribute::get(function () {
+            // If the path is already a valid URL, we return it directly.
+            // This happens when the user was created via an external login provider (ex. Github)
+            if (Str::isUrl($this->profile_picture_path)) {
+                return $this->profile_picture_path;
+            }
+
+            if (!$this->profile_picture_path) {
+                return null;
+            }
+
+            $cloudFileManager = resolve(CloudStorageManager::class);
+            return $cloudFileManager->generateTmpUrl($this->profile_picture_path, 60 * 5);
         });
     }
 }

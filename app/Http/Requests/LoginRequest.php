@@ -19,8 +19,8 @@ class LoginRequest extends FormRequest
     private function getAuthenticateRules(): array
     {
         return [
-            'email' => ['string', 'nullable', 'required_without:username'],
-            'username' => ['string', 'nullable', 'required_without:email'],
+            'email' => ['nullable', 'string', 'required_without:username'],
+            'username' => ['nullable', 'string', 'required_without:email'],
             'password' => ['required', 'string'],
             'remember' => ['required', 'boolean'],
         ];

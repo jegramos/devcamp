@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, watch } from 'vue'
-import { Link, useForm, usePage, Head, router } from '@inertiajs/vue3'
+import { computed, ref, watch } from 'vue'
+import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3'
 import { useBroadcastChannel } from '@vueuse/core'
 import Card from 'primevue/card'
 import Button from 'primevue/button'
@@ -15,6 +15,11 @@ import DfInputText from '@/Components/Inputs/DfInputText.vue'
 import DfPassword from '@/Components/Inputs/DfPassword.vue'
 import { ErrorCode, type SharedPage } from '@/Types/shared-page.ts'
 import { ChannelName } from '@/Types/broadcast-channel.ts'
+import { applyTheme } from '@/Utils/theme.ts'
+import { browserSupportsWebAuthn, startAuthentication } from '@simplewebauthn/browser'
+import type { PublicKeyCredentialRequestOptionsJSON } from '@simplewebauthn/types'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faFingerprint } from '@fortawesome/free-solid-svg-icons'
 
 const props = defineProps({
   registerUrl: {
@@ -33,7 +38,19 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  loginViaPasskeyUrl: {
+    type: String,
+    required: true,
+  },
   resumeBuilderUrl: {
+    type: String,
+    required: true,
+  },
+  forgotPasswordUrl: {
+    type: String,
+    required: true,
+  },
+  passkeyAuthenticateOptions: {
     type: String,
     required: true,
   },
@@ -66,7 +83,7 @@ const showRateLimitToast = function () {
   toast.add({
     severity: 'warn',
     summary: 'Login',
-    detail: page.props.errors.TOO_MANY_REQUESTS,
+    detail: 'Too many attempts. Please try again in 1 minute.',
     life: 4000,
   })
 }
@@ -92,8 +109,8 @@ const submit = function () {
 }
 
 const bgColorClass = computed(() => {
-  if (page.props.errors[ErrorCode.TOO_MANY_REQUESTS]) return 'bg-amber-700 dark:bg-amber-900'
-  else if (page.props.errors[ErrorCode.INVALID_CREDENTIALS]) return 'bg-red-700 dark:bg-red-900'
+  if (page.props.errors[ErrorCode.TOO_MANY_REQUESTS]) return 'bg-amber-700 dark:bg-amber-800'
+  else if (page.props.errors[ErrorCode.INVALID_CREDENTIALS]) return 'bg-red-700 dark:bg-red-800'
   else return 'bg-primary/90 dark:bg-primary'
 })
 
@@ -105,6 +122,23 @@ watch(data, function () {
     close()
   }
 })
+
+applyTheme()
+
+const showPasskeyWarningMessage = ref(false)
+const loginViaPasskeyForm = useForm({
+  answer: '',
+})
+const authenticateViaPasskey = async function () {
+  if (!browserSupportsWebAuthn()) return (showPasskeyWarningMessage.value = true)
+
+  const answer = await startAuthentication({
+    optionsJSON: JSON.parse(props.passkeyAuthenticateOptions) as PublicKeyCredentialRequestOptionsJSON,
+  })
+
+  loginViaPasskeyForm.answer = JSON.stringify(answer)
+  loginViaPasskeyForm.post(props.loginViaPasskeyUrl)
+}
 </script>
 
 <template>
@@ -113,10 +147,34 @@ watch(data, function () {
     <Toast />
     <AppAnimatedFloaters />
     <Message
+      v-if="!!page.props.flash.CMS_SUCCESS"
+      severity="success"
+      icon="pi pi-check-circle"
+      class="mb-4 w-full md:w-[55%] lg:w-[35%] dark:!bg-surface-900"
+    >
+      {{ page.props.flash.CMS_SUCCESS }}
+    </Message>
+    <Message
+      v-if="!!page.props.flash.CMS_EMAIL_VERIFIED"
+      severity="success"
+      icon="pi pi-check-circle"
+      class="mb-4 w-full md:w-[55%] lg:w-[35%] dark:!bg-surface-900"
+    >
+      Your email address has been verified. Please login to continue.
+    </Message>
+    <Message
+      v-if="!!page.props.flash.CMS_EMAIL_UPDATE_CONFIRMED"
+      severity="success"
+      icon="pi pi-check-circle"
+      class="mb-4 w-full md:w-[55%] lg:w-[35%] dark:!bg-surface-900"
+    >
+      You've confirmed your email update request. Please login to continue.
+    </Message>
+    <Message
       v-if="!!page.props.errors[ErrorCode.INVALID_CREDENTIALS]"
       severity="error"
       icon="pi pi-exclamation-triangle"
-      class="mb-4 w-full animate-shake md:w-[55%] lg:w-[35%] dark:!bg-surface-950"
+      class="mb-4 w-full animate-shake md:w-[55%] lg:w-[35%] dark:!bg-surface-900"
     >
       {{ page.props.errors[ErrorCode.INVALID_CREDENTIALS] }}
     </Message>
@@ -124,9 +182,33 @@ watch(data, function () {
       v-if="!!page.props.errors[ErrorCode.EXTERNAL_ACCOUNT_EMAIL_CONFLICT]"
       severity="error"
       icon="pi pi-exclamation-triangle"
-      class="mb-4 w-full animate-shake md:w-[55%] lg:w-[35%] dark:!bg-surface-950"
+      class="mb-4 w-full animate-shake md:w-[55%] lg:w-[35%] dark:!bg-surface-900"
     >
       {{ page.props.errors[ErrorCode.EXTERNAL_ACCOUNT_EMAIL_CONFLICT] }}
+    </Message>
+    <Message
+      v-if="!!page.props.errors[ErrorCode.ACCOUNT_DEACTIVATED]"
+      severity="error"
+      icon="pi pi-ban"
+      class="mb-4 w-full animate-shake md:w-[55%] lg:w-[35%] dark:!bg-surface-900"
+    >
+      {{ page.props.errors[ErrorCode.ACCOUNT_DEACTIVATED] }}
+    </Message>
+    <Message
+      v-if="!!page.props.errors[ErrorCode.BAD_REQUEST]"
+      severity="error"
+      icon="pi pi-exclamation-triangle"
+      class="mb-4 w-full animate-shake md:w-[55%] lg:w-[35%] dark:!bg-surface-900"
+    >
+      {{ page.props.errors[ErrorCode.BAD_REQUEST] }}
+    </Message>
+    <Message
+      v-if="showPasskeyWarningMessage"
+      severity="warn"
+      icon="pi pi-key"
+      class="mb-4 w-full animate-shake md:w-[55%] lg:w-[35%] dark:!bg-surface-900"
+    >
+      Your device or browser does not support <span class="font-bold">Passkeys</span>.
     </Message>
     <Card class="z-10 w-full md:w-[55%] lg:w-[35%]">
       <template #title>
@@ -180,7 +262,9 @@ watch(data, function () {
               <Checkbox v-model="form.remember" binary input-id="rememberMe" />
               <label for="rememberMe" class="ml-2 text-sm"> Remember me </label>
             </div>
-            <span class="text-sm">Forgot password?</span>
+            <Link :href="props.forgotPasswordUrl" class="transform text-sm hover:underline hover:underline-offset-4"
+              >Forgot password?
+            </Link>
           </div>
           <!-- End Remember Me & Forgot Password -->
           <!-- Start Sign in Buttons -->
@@ -188,7 +272,7 @@ watch(data, function () {
             icon="pi pi-sign-in"
             label="Sign in"
             class="w-full"
-            :disabled="form.processing"
+            :disabled="form.processing || loginViaPasskeyForm.processing"
             :loading="form.processing"
             @click="submit"
           ></Button>
@@ -196,9 +280,21 @@ watch(data, function () {
             <small class="font-thin">or</small>
           </Divider>
           <div class="flex flex-col space-y-2 dark:space-y-3">
+            <Button
+              label="Sign in with Passkeys"
+              class="w-full !border-surface-800 !bg-surface-800 !text-amber-300"
+              severity="primary"
+              :loading="loginViaPasskeyForm.processing"
+              :disabled="loginViaPasskeyForm.processing || form.processing"
+              @click="authenticateViaPasskey"
+            >
+              <template #icon>
+                <FontAwesomeIcon :icon="faFingerprint" />
+              </template>
+            </Button>
             <a :href="props.loginViaGoogleUrl" target="_blank">
               <Button
-                :disabled="form.processing"
+                :disabled="form.processing || loginViaPasskeyForm.processing"
                 icon="pi pi-google"
                 label="Sign in with Google"
                 class="w-full !border-red-900 !bg-red-900 !text-surface-0"
@@ -206,7 +302,7 @@ watch(data, function () {
             </a>
             <a :href="props.loginViaGithubUrl" target="_blank">
               <Button
-                :disabled="form.processing"
+                :disabled="form.processing || loginViaPasskeyForm.processing"
                 icon="pi pi-github"
                 label="Sign in with Github"
                 class="w-full !border-surface-950 !bg-surface-950 !text-surface-0"

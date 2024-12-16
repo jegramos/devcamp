@@ -18,9 +18,8 @@ it('can update a user', /** @throws Throwable */ function () {
     $updateData = [
         'email' => 'jegramos.test@gmail.com',
         'username' => fake()->unique()->username(),
-        'first_name' => fake()->unique()->firstName(),
-        'last_name' => fake()->unique()->lastName(),
-        'middle_name' => fake()->unique()->lastName(),
+        'given_name' => fake()->unique()->firstName(),
+        'family_name' => fake()->unique()->lastName(),
         'roles' => [Role::USER->value],
         'active' => true,
         'email_verified_at' => now(),
@@ -46,9 +45,8 @@ it('can update a user', /** @throws Throwable */ function () {
         ->and($createdUser->active)->toBe($updateData['active'])
         ->and($createdUser->email_verified_at)->not->toBeNull()
         ->and($createdUser->roles->pluck('name')->toArray())->toBe($updateData['roles'])
-        ->and($createdUser->userProfile->first_name)->toBe($updateData['first_name'])
-        ->and($createdUser->userProfile->last_name)->toBe($updateData['last_name'])
-        ->and($createdUser->userProfile->middle_name)->toBe($updateData['middle_name'])
+        ->and($createdUser->userProfile->given_name)->toBe($updateData['given_name'])
+        ->and($createdUser->userProfile->family_name)->toBe($updateData['family_name'])
         ->and($createdUser->userProfile->mobile_number)->toBe($updateData['mobile_number'])
         ->and($createdUser->userProfile->birthday->toDateString())->toBe($updateData['birthday'])
         ->and($createdUser->userProfile->gender->value)->toBe($updateData['gender'])

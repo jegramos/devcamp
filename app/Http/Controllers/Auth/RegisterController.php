@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Actions\GetCountryListAction;
 use App\Actions\User\CreateUserAction;
 use App\Http\Requests\RegisterRequest;
-use DB;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -14,7 +15,7 @@ use Throwable;
 
 class RegisterController
 {
-    public function showForm(): Response
+    public function showForm(GetCountryListAction $getCountryListAction): Response
     {
         $recaptchaEnabled = config('services.google.recaptcha.enabled');
         $checkAvailabilityBaseUrl = route('api.checkAvailability', ['type' => 1, 'value' => 1]);
@@ -24,7 +25,7 @@ class RegisterController
             'loginUrl' => route('auth.login.showForm'),
             'processRegistrationUrl' => route('auth.register.process'),
             'checkAvailabilityBaseUrl' => $checkAvailabilityBaseUrl,
-            'countryOptions' => DB::table('countries')->select('id', 'name')->get(),
+            'countryOptions' => $getCountryListAction->execute('id', 'name'),
             'recaptchaEnabled' => $recaptchaEnabled,
             'recaptchaSiteKey' => $recaptchaEnabled ? config('services.google.recaptcha.site_key') : null,
             'loginViaGoogleUrl' => route('oauth.google.redirect'),
@@ -44,12 +45,12 @@ class RegisterController
             'email' => $request->validated('email'),
             'username' => $request->validated('username'),
             'password' => $request->validated('password'),
-            'first_name' => $request->validated('first_name'),
-            'last_name' => $request->validated('last_name'),
+            'given_name' => $request->validated('given_name'),
+            'family_name' => $request->validated('family_name'),
         ];
 
         $user = $createUserAction->execute($userInfo);
-        auth()->login($user);
+        Auth::login($user);
         $request->session()->regenerate();
 
         Event::dispatch(new Registered($user));

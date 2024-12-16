@@ -19,7 +19,7 @@ class RecaptchaRule implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if (!config('services.google.recaptcha.enabled')) {
-            Log::debug('RecaptchaRule no enabled: ' . $value);
+            Log::debug('RecaptchaRule not enabled: ' . $value);
             return;
         }
 

@@ -17,10 +17,11 @@ beforeEach(function () {
 it('can check un-available email and username', function (string $type, string $value) {
     $username = $type === 'username' ? $value : fake()->unique()->userName();
     $email = $type === 'email' ? $value : fake()->unique()->safeEmail();
+    $mobileNumber = $type === 'mobile_number' ? $value : '+63906464721' . fake()->randomNumber(1);
     $password = fake()->password(10);
 
     UserFactory::new()
-        ->has(UserProfileFactory::new())
+        ->has(UserProfileFactory::new()->state(['mobile_number' => $mobileNumber]))
         ->create(['username' => $username, 'email' => $email, 'password' => $password]);
 
     $response = get(
@@ -34,15 +35,17 @@ it('can check un-available email and username', function (string $type, string $
 })->with([
     'with username' => ['type' => 'username', 'value' => fake()->unique()->userName()],
     'with email' => ['type' => 'email', 'value' => fake()->unique()->safeEmail()],
+    'with mobile number' => ['type' => 'mobile_number', 'value' => '+63906464721' . fake()->randomNumber(1)],
 ]);
 
-it('can check available username and email', function (string $type, string $value) {
+it('can check available username, email, and mobile number', function (string $type, string $value) {
     $username = fake()->unique()->userName();
     $email = fake()->unique()->safeEmail();
+    $mobileNumber = '+6390646471' . fake()->randomNumber(2);
     $password = fake()->password(10);
 
     UserFactory::new()
-        ->has(UserProfileFactory::new())
+        ->has(UserProfileFactory::new()->state(['mobile_number' => $mobileNumber]))
         ->create(['username' => $username, 'email' => $email, 'password' => $password]);
 
     $response = get(
@@ -56,15 +59,17 @@ it('can check available username and email', function (string $type, string $val
 })->with([
     'with username' => ['type' => 'username', 'value' => fake()->unique()->userName()],
     'with email' => ['type' => 'email', 'value' => fake()->unique()->safeEmail()],
+    'with mobile number' => ['type' => 'mobile_number', 'value' => '+63906464721' . fake()->randomNumber(1)],
 ]);
 
 it('sets the response Content-Type to "application/json" implicitly', function () {
     $username = fake()->unique()->userName();
     $email = fake()->unique()->safeEmail();
+    $mobileNumber = '+6390646472' . fake()->randomNumber(2);
     $password = fake()->password(10);
 
     UserFactory::new()
-        ->has(UserProfileFactory::new())
+        ->has(UserProfileFactory::new()->state(['mobile_number' => $mobileNumber]))
         ->create(['username' => $username, 'email' => $email, 'password' => $password]);
 
     $response = get(route('api.checkAvailability', ['type' => 'email', 'value' => $email]));
@@ -75,10 +80,11 @@ it('sets the response Content-Type to "application/json" implicitly', function (
 it('ignores the ID of the user when `excludedId` param is provided', function (string $type, string $value) {
     $username = $type === 'username' ? $value : fake()->unique()->userName();
     $email = $type === 'email' ? $value : fake()->unique()->safeEmail();
+    $mobileNumber = $type === 'mobile_number' ? $value : fake()->unique()->phoneNumber();
     $password = fake()->password(10);
 
     $user = UserFactory::new()
-        ->has(UserProfileFactory::new())
+        ->has(UserProfileFactory::new()->state(['mobile_number' => $mobileNumber]))
         ->create(['username' => $username, 'email' => $email, 'password' => $password]);
 
     $response = get(
@@ -92,9 +98,10 @@ it('ignores the ID of the user when `excludedId` param is provided', function (s
 })->with([
     'with username' => ['type' => 'username', 'value' => fake()->unique()->userName()],
     'with email' => ['type' => 'email', 'value' => fake()->unique()->safeEmail()],
+    'with mobile number' => ['type' => 'mobile_number', 'value' => '+63906464721' . fake()->randomNumber(1)],
 ]);
 
-it('only accepts "username" or "email" as the `type` param', function () {
+it('only accepts "username", "email", or "mobile_number" as the `type` param', function () {
     $type = 'non-existing-type';
     $response = get(
         route('api.checkAvailability', ['type' => $type, 'value' => 'test']),

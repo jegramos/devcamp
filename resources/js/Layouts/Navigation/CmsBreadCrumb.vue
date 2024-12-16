@@ -15,7 +15,7 @@ const items = ref<{ label: string }[]>([])
 
 router.on('navigate', () => {
   for (const item of cmsNavLinks.navItems.value) {
-    const matchedGroupLink = item.links.find((link) => link.uri === page.url)
+    const matchedGroupLink = item.links.find((link) => page.url.startsWith(link.uri))
     if (matchedGroupLink) {
       groupName.value = item.group
       linkName.value = matchedGroupLink.name

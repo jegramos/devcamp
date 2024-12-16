@@ -23,9 +23,6 @@ export default tsEslint.config(
         sourceType: 'module',
       },
     },
-    rules: {
-      'no-undef': 'off',
-    },
   },
   eslintConfigPrettier
 )
