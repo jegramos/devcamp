@@ -42,7 +42,7 @@ export const uniqueUserIdentifierRule = (
 
     const url = excludedId !== null ? `${baseUrl}/${type}/${value}/${excludedId}` : `${baseUrl}/${type}/${value}`
     const { data } = await useApiCall(url).get().json()
-      console.log(data)
+    console.log(data)
     return data.value.available
   }
 

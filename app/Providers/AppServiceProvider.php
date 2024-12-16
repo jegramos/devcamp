@@ -6,7 +6,6 @@ use App\Enums\Role;
 use App\Services\AwsS3Service;
 use App\Services\CloudStorageManager;
 use App\Services\PasskeyService;
-use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Gate;
@@ -27,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
              *
              * @see https://github.com/barryvdh/laravel-ide-helper
              */
-            $this->app->register(IdeHelperServiceProvider::class);
+            $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
 
             /**
              * Register Telescope service provider for non-production environment
