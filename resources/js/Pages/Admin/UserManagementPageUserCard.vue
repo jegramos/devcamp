@@ -181,14 +181,14 @@ const confirmDeleteUser = function () {
       label: 'Cancel',
       severity: 'secondary',
       outlined: true,
-      size: 'small'
+      size: 'small',
     },
     acceptProps: {
       label: 'Continue',
       severity: 'danger',
       icon: 'pi pi-trash',
       outlined: true,
-      size: 'small'
+      size: 'small',
     },
     reject: () => {},
   })

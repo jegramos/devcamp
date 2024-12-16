@@ -1,16 +1,17 @@
 {
-  "name": "laravel/laravel",
+  "name": "jegramos/devcamp",
   "type": "project",
-  "description": "The skeleton application for the Laravel framework.",
+  "description": "A micro-cms for building portfolios.",
   "keywords": [
-    "laravel",
-    "framework"
+    "portfolio",
+    "devcamp"
   ],
   "license": "MIT",
   "require": {
     "php": "^8.2",
-    "inertiajs/inertia-laravel": "2.x-dev",
+    "inertiajs/inertia-laravel": "^2.0",
     "laravel/framework": "^11.9",
+    "laravel/horizon": "^5.30",
     "laravel/prompts": "^0.3.1",
     "laravel/sanctum": "^4.0",
     "laravel/socialite": "^5.16",

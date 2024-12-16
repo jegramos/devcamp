@@ -7,7 +7,7 @@ import Tooltip from 'primevue/tooltip'
 import ConfirmationService from 'primevue/confirmationservice'
 
 createInertiaApp({
-  title: (title) => (title ? `${title} - DevFolio` : 'DevFolio'),
+  title: (title) => (title ? `${title} - DevCamp` : 'DevCamp'),
   resolve: (name) => {
     const pages = import.meta.glob<DefineComponent>('./Pages/**/*.vue', { eager: true })
     return pages[`./Pages/${name}.vue`]

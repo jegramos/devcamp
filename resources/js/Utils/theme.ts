@@ -8,10 +8,10 @@ export const applyTheme = function (theme?: 'light' | 'dark' | 'auto') {
     const fromLocalStorage = localStorage.getItem('theme') as 'light' | 'dark' | 'auto'
 
     // Get the theme from the LocalStorage if there is no authenticated user
-    if (!page.props.auth.user) theme = fromLocalStorage || 'auto'
+    if (!page.props.auth?.user) theme = fromLocalStorage || 'auto'
 
     // Update the theme and in the LocalStorage if there is an authenticated user
-    if (page.props.auth.user && page.props.accountSettings?.theme) {
+    if (page.props.auth?.user && page.props.accountSettings?.theme) {
       theme = page.props.accountSettings.theme
       localStorage.setItem('theme', theme)
     }
