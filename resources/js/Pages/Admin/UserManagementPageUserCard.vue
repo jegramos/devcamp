@@ -60,7 +60,26 @@ const verifiedOptions = [
   { value: false, label: 'Unverified' },
 ]
 
-const updateUserForm = useForm({
+type UpdateUserItem = {
+  active: boolean
+  verified: boolean
+  given_name: string
+  family_name: string
+  username: string
+  email: string
+  roles: Array<string>
+  mobile_number: string
+  gender: string
+  birthday: string | Date | null
+  country_id: number | null
+  address_line_1: string
+  address_line_2: string
+  address_line_3: string
+  city_municipality: string
+  province_state_county: string
+  postal_code: string
+}
+const updateUserForm = useForm<UpdateUserItem>({
   active: props.user.active,
   verified: props.user.email_verified,
   given_name: props.user.given_name,
@@ -70,8 +89,8 @@ const updateUserForm = useForm({
   roles: props.user.roles.map((role) => role.name),
   mobile_number: props.user.mobile_number || '',
   gender: props.user.gender || '',
-  birthday: props.user.birthday ? new Date(props.user.birthday) : '',
-  country_id: props.user.country_id || '',
+  birthday: props.user.birthday ? new Date(props.user.birthday) : null,
+  country_id: props.user.country_id || null,
   address_line_1: props.user.address_line_1 || '',
   address_line_2: props.user.address_line_2 || '',
   address_line_3: props.user.address_line_3 || '',
@@ -133,7 +152,7 @@ const validateUpdateUserForm = useClientValidatedForm(updateUserClientValidation
 const submitUpdateUserForm = function () {
   validateUpdateUserForm
     .transform(function (data) {
-      data.birthday = data.birthday ? useDateFormat(data.birthday, 'YYYY-MM-DD').value.toString() : ''
+      data.birthday = data.birthday ? useDateFormat(data.birthday, 'YYYY-MM-DD').value.toString() : null
       return {
         ...data,
       }

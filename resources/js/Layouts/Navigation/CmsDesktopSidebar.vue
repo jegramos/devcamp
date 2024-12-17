@@ -33,7 +33,6 @@ const { navItems } = useCmsNavLinks(page)
               :href="link.uri"
               class="flex transform items-center rounded-lg px-3 py-2 transition-colors hover:cursor-pointer hover:bg-primary hover:text-primary-contrast dark:text-surface-0 hover:dark:text-surface-0"
               :class="{ 'bg-primary text-primary-contrast dark:text-surface-0': page.url.startsWith(link.uri) }"
-              prefetch
             >
               <i :class="`${link.icon} rounded-lg border p-1`"></i>
               <span class="mx-3 text-sm">{{ link.name }}</span>

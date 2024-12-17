@@ -124,17 +124,36 @@ const clearFilterForm = function () {
 }
 
 const showAddUserModal = ref(false)
-const createUserForm = useForm({
+type UserCreateItem = {
+  given_name: string
+  family_name: string
+  username: string
+  email: string
+  password: string
+  password_confirmation: string
+  roles: Array<string>
+  mobile_number: string
+  gender: string
+  birthday: string | null
+  country_id: string
+  address_line_1: string
+  address_line_2: string
+  address_line_3: string
+  city_municipality: string
+  province_state_county: string
+  postal_code: string
+}
+const createUserForm = useForm<UserCreateItem>({
   given_name: '',
   family_name: '',
   username: '',
   email: '',
   password: '',
-  password_confirmation: null,
+  password_confirmation: '',
   roles: [],
   mobile_number: '',
   gender: '',
-  birthday: '',
+  birthday: null,
   country_id: '',
   address_line_1: '',
   address_line_2: '',
@@ -196,7 +215,7 @@ const toast = useToast()
 const submitCreateUserForm = function () {
   validatedCreateUserForm
     .transform(function (data) {
-      data.birthday = data.birthday ? useDateFormat(data.birthday, 'YYYY-MM-DD').value.toString() : ''
+      data.birthday = data.birthday ? useDateFormat(data.birthday, 'YYYY-MM-DD').value.toString() : null
       return {
         ...data,
       }
@@ -210,6 +229,7 @@ const submitCreateUserForm = function () {
           life: 3000,
         })
         showAddUserModal.value = false
+        validatedCreateUserForm.reset()
       },
     })
 }
