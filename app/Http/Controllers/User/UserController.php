@@ -10,6 +10,7 @@ use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserListItemResource;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Arr;
 use Inertia\Inertia;
 use Inertia\Response;
 use Throwable;
@@ -37,7 +38,7 @@ class UserController
         return Inertia::render('Admin/UserManagementPage', [
             'users' => $users,
             'currentFilters' => (object) $request->validated(),
-            'totalFiltersActive' => count($request->validated()),
+            'totalFiltersActive' => count(Arr::except($request->validated(), ['q'])),
             'checkAvailabilityBaseUrl' => $checkAvailabilityBaseUrl,
             'storeUserUrl' => route('users.store'),
             'updateUserUrl' => $updateUserUrl,
