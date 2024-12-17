@@ -82,10 +82,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 }
 
                 $status = $response->getStatusCode();
-                \Log::debug('Error: ' . $e::class);
-                \Log::debug('Status: ' . $response->getStatusCode());
                 $message = $e->getMessage();
-                \Log::debug('Message: ' . $message);
                 return Inertia::render('ErrorPage', ['status' => $status, 'message' => $message])
                     ->toResponse($request)
                     ->setStatusCode($response->getStatusCode());
