@@ -64,6 +64,7 @@ class User extends Authenticatable implements MustVerifyEmail
             $addSoftDeleteMarkerAction = resolve(AddSoftDeleteMarkerAction::class);
             DB::transaction(function () use ($user, $addSoftDeleteMarkerAction) {
                 $user->email = $addSoftDeleteMarkerAction->execute($user->email);
+                $user->username = $addSoftDeleteMarkerAction->execute($user->username);
                 $user->saveQuietly();
 
                 // Soft-delete all the relations
