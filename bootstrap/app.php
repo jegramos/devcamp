@@ -33,7 +33,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectGuestsTo(fn () => route('auth.login.showForm'));
         $middleware->redirectUsersTo(fn () => route('builder.resume.index'));
 
-        $middleware->trustProxies(at: config('df_trustedproxies.proxies'));
+        $middleware->trustProxies(at: [
+            '172.31.16.0/20',
+            '172.31.32.0/20',
+        ]);
+
         $middleware->trustProxies(
             headers: Request::HEADER_X_FORWARDED_FOR |
             Request::HEADER_X_FORWARDED_HOST |
