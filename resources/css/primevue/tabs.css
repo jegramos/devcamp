@@ -19,7 +19,7 @@
 }
 
 .p-tablist-tab-list {
-  @apply relative flex border-b border-surface-200 bg-surface-0 dark:border-surface-700 dark:bg-surface-900;
+  @apply relative flex rounded-tl-lg rounded-tr-lg border-b border-surface-200 bg-surface-0 dark:border-surface-700 dark:bg-surface-900;
 }
 
 .p-tablist-content {
@@ -28,10 +28,10 @@
 
 .p-tablist-nav-button {
   @apply absolute top-0 z-20 flex h-full w-10 flex-shrink-0 cursor-pointer items-center
-        justify-center bg-surface-0 text-surface-500 shadow-[0px_0px_10px_50px_rgba(255,255,255,0.6)] transition-colors duration-200 hover:text-surface-700
-        focus-visible:z-10 focus-visible:outline focus-visible:outline-1
-        focus-visible:outline-offset-[-1px] focus-visible:outline-primary dark:bg-surface-900 dark:text-surface-400 dark:shadow-[0px_0px_10px_50px]
-        dark:shadow-surface-900/50 dark:hover:text-surface-0;
+    justify-center bg-surface-0 text-surface-500 shadow-[0px_0px_10px_50px_rgba(255,255,255,0.6)] transition-colors duration-200 hover:text-surface-700
+    focus-visible:z-10 focus-visible:outline focus-visible:outline-1
+    focus-visible:outline-offset-[-1px] focus-visible:outline-primary dark:bg-surface-900 dark:text-surface-400 dark:shadow-[0px_0px_10px_50px]
+    dark:shadow-surface-900/50 dark:hover:text-surface-0;
 }
 
 .p-tablist-prev-button {
@@ -44,9 +44,9 @@
 
 .p-tab {
   @apply relative -mb-px flex-shrink-0 cursor-pointer select-none whitespace-nowrap border-b
-        border-surface-200 px-[1.125rem] py-4 font-semibold
-        text-surface-500 transition-colors
-        duration-200 dark:border-surface-700 dark:text-surface-400;
+    border-surface-200 px-[1.125rem] py-4 font-semibold
+    text-surface-500 transition-colors
+    duration-200 dark:border-surface-700 dark:text-surface-400;
 }
 
 .p-tab.p-disabled {
@@ -67,7 +67,7 @@
 
 .p-tabpanels {
   @apply bg-surface-0 px-[1.125rem] pb-[1.125rem] pt-[0.875rem]
-        text-surface-700 outline-none dark:bg-surface-900 dark:text-surface-0;
+    text-surface-700 outline-none dark:bg-surface-900 dark:text-surface-0;
 }
 
 .p-tablist-active-bar {

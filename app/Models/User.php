@@ -38,6 +38,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'username',
         'password',
         'active',
+        'subdomain',
         'email_verified_at',
     ];
 
@@ -72,6 +73,7 @@ class User extends Authenticatable implements MustVerifyEmail
                 $user->externalAccount()->delete();
                 $user->passkeys()->delete();
                 $user->accountSettings()->delete();
+                $user->resume()->delete();
             });
         });
     }
@@ -138,6 +140,16 @@ class User extends Authenticatable implements MustVerifyEmail
         );
     }
 
+    /**
+     * The subdomain attribute should always be in lowercase.
+     */
+    protected function subdomain(): Attribute
+    {
+        return Attribute::set(
+            fn (?string $value) => is_null($value) ? null : strtolower($value)
+        );
+    }
+
     public function userProfile(): HasOne
     {
         return $this->hasOne(UserProfile::class);
@@ -156,6 +168,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function accountSettings(): HasOne
     {
         return $this->hasOne(AccountSettings::class);
+    }
+
+    public function resume(): HasOne
+    {
+        return $this->hasOne(Resume::class);
     }
 
     public function isFromExternalAccount(): bool
