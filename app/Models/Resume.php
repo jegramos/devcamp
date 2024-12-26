@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Services\CloudStorageManager;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,15 +17,46 @@ class Resume extends Model
         'name',
         'titles',
         'experiences',
+        'projects',
+        'tech_expertise',
         'socials',
+        'services',
         'theme_id',
+        'work_timeline',
+        'contact'
     ];
 
     protected $casts = [
         'titles' => 'array',
         'experiences' => 'array',
         'socials' => 'array',
+        'tech_expertise' => 'array',
+        'projects' => 'array',
+        'services' => 'array',
+        'contact' => 'array',
     ];
+
+    protected function workTimeline(): Attribute
+    {
+        return new Attribute(get: function ($value) {
+            if (is_null($value)) {
+                return null;
+            }
+
+            $value = json_decode($value, true);
+            if (is_null($value['downloadable'])) {
+                return $value;
+            }
+
+            $cloudStorage = resolve(CloudStorageManager::class);
+            $value['downloadable'] = $cloudStorage->generateTmpUrl(
+                $value['downloadable'],
+                60 * 60 * 24
+            );
+
+            return $value;
+        });
+    }
 
     public function user(): BelongsTo
     {

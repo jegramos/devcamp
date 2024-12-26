@@ -16,4 +16,9 @@ class ResumeTheme extends Model
     {
         return $this->hasMany(Resume::class, 'theme_id', 'id');
     }
+
+    public static function default(): static
+    {
+        return static::query()->first();
+    }
 }

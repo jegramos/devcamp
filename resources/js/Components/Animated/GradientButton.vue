@@ -10,6 +10,7 @@ interface GradientButtonProps {
   blur?: number
   class?: string
   bgColor?: string
+  disabled?: boolean
 }
 
 const props = withDefaults(defineProps<GradientButtonProps>(), {

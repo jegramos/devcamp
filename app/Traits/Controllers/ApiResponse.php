@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Traits\Controllers;
 
 use App\Enums\ErrorCode;
 use Illuminate\Http\JsonResponse;
 
-abstract class ApiController
+trait ApiResponse
 {
     /**
      * Return a success JSON success response.

@@ -47,6 +47,7 @@ class HandleInertiaRequests extends Middleware
             'pageUris' => [
                 'portfolio.resume' => route(name: 'builder.resume.index', absolute: false),
                 'misc.about' => route(name: 'aboutPage', absolute: false),
+                'misc.notifications' => route(name: 'notifications.index', absolute: false),
                 'account.profile' => route(name: 'profile.index', absolute: false),
                 'account.settings' => route(name: 'accountSettings.index', absolute: false),
                 'admin.userManagement' => route(name: 'users.index', absolute: false),
@@ -94,6 +95,7 @@ class HandleInertiaRequests extends Middleware
                 SessionFlashKey::CMS_LOGIN_SUCCESS->value => fn () => $request->session()->get(SessionFlashKey::CMS_LOGIN_SUCCESS->value),
                 SessionFlashKey::CMS_EMAIL_VERIFIED->value => fn () => $request->session()->get(SessionFlashKey::CMS_EMAIL_VERIFIED->value),
                 SessionFlashKey::CMS_EMAIL_UPDATE_CONFIRMED->value => fn () => $request->session()->get(SessionFlashKey::CMS_EMAIL_UPDATE_CONFIRMED->value),
+                SessionFlashKey::PORTFOLIO_SUCCESS->value => fn () => $request->session()->get(SessionFlashKey::PORTFOLIO_SUCCESS->value),
             ],
         ]);
     }

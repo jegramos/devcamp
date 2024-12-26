@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class AboutPageController
+class CalendarController
 {
-    public function __invoke(Request $request): Response
+    public function index(): Response
     {
         return Inertia::render('WorkInProgressPage');
     }

@@ -17,10 +17,11 @@ return new class () extends Migration {
             $table->json('titles');
             $table->json('experiences');
             $table->json('socials');
+            $table->json('tech_expertise')->nullable();
             $table->json('projects')->nullable();
             $table->json('work_timeline')->nullable();
-            $table->json('project_highlights')->nullable();
             $table->json('services')->nullable();
+            $table->json('contact')->nullable();
             $table->foreignId('theme_id')
                 ->constrained('resume_themes')
                 ->cascadeOnDelete()

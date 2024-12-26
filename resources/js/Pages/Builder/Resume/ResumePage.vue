@@ -6,7 +6,7 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { ref } from 'vue'
+import { type PropType, ref } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import { Head, usePage } from '@inertiajs/vue3'
 import Button from 'primevue/button'
@@ -20,6 +20,49 @@ import { faBookJournalWhills, faFlagCheckered, faGlobe, faShareAlt } from '@fort
 import ResumePageSubdomainPanel from '@/Pages/Builder/Resume/ResumePageSubdomainPanel.vue'
 import ResumePageContentPanel from '@/Pages/Builder/Resume/ResumePageContentPanel.vue'
 import type { SharedPage } from '@/Types/shared-page.ts'
+
+export type TechExpertise = {
+  name: string
+  description: string
+  logo: string
+  proficiency: string
+}
+
+export type Social = {
+  name: string
+  url: string
+}
+
+export type Project = {
+  title: string
+  description: string
+  cover: File | null
+  links: Array<{ name: string; url: string }>
+}
+
+export type Timeline = {
+  history: Array<{
+    title: string
+    description: string
+    period: Array<string>
+    company: string
+    logo: string | null
+    tags: Array<string>
+  }>
+  downloadable: File | string | null
+}
+
+export type Contact = {
+  show: boolean
+  availability_status: string
+}
+
+export type Service = {
+  title: string
+  description: string
+  logo: string | null
+  tags: Array<string>
+}
 
 const props = defineProps({
   baseSubdomain: {
@@ -63,7 +106,27 @@ const props = defineProps({
     required: true,
   },
   socials: {
-    type: Array<{ name: string; url: string }>,
+    type: Array<Social>,
+    required: true,
+  },
+  techExpertise: {
+    type: Array<TechExpertise>,
+    required: true,
+  },
+  projects: {
+    type: Array<Project>,
+    required: true,
+  },
+  timeline: {
+    type: Object as PropType<Timeline>,
+    required: true,
+  },
+  services: {
+    type: Array<Service>,
+    required: true,
+  },
+  contact: {
+    type: Object as PropType<Contact>,
     required: true,
   },
   themes: {
@@ -72,6 +135,14 @@ const props = defineProps({
   },
   themeId: {
     type: Number,
+    required: true,
+  },
+  previewUrl: {
+    type: String,
+    required: true,
+  },
+  canPreview: {
+    type: Boolean,
     required: true,
   },
 })
@@ -122,16 +193,16 @@ const handleSubdomainSuccess = function (success: boolean) {
     <template v-if="!showIntroduction">
       <Tabs :value="tabIndex" class="w-full">
         <TabList>
-          <Tab value="0" as="div" class="flex items-center gap-2">
+          <Tab value="0" as="div" class="flex items-center gap-2 hover:cursor-pointer">
             <FontAwesomeIcon :icon="faGlobe" class="text-xs md:text-base" />
             <span class="whitespace-nowrap text-xs font-bold md:text-base">Subdomain</span>
           </Tab>
-          <Tab value="1" as="div" class="flex items-center gap-2">
+          <Tab value="1" as="div" class="flex items-center gap-2 hover:cursor-pointer">
             <FontAwesomeIcon :icon="faBookJournalWhills" class="text-xs md:text-base" />
             <span class="whitespace-nowrap text-xs font-bold md:hidden">Content</span>
             <span class="hidden whitespace-nowrap font-bold md:inline-block">Content Management</span>
           </Tab>
-          <Tab value="2" as="div" class="flex items-center gap-2">
+          <Tab value="2" as="div" class="flex items-center gap-2 hover:cursor-pointer">
             <FontAwesomeIcon :icon="faShareAlt" class="text-xs md:text-base" />
             <span class="whitespace-nowrap text-xs font-bold md:text-base">Sharing</span>
           </Tab>
@@ -153,10 +224,17 @@ const handleSubdomainSuccess = function (success: boolean) {
               :titles="props.titles"
               :experiences="props.experiences"
               :socials="props.socials"
+              :projects="props.projects"
               :available-socials="props.availableSocials"
+              :timeline="props.timeline"
+              :services="props.services"
+              :contact="props.contact"
               :store-content-url="props.storeContentUrl"
               :themes="props.themes"
               :theme-id="props.themeId"
+              :can-preview="props.canPreview"
+              :preview-url="props.previewUrl"
+              :tech-expertise="props.techExpertise"
             />
           </TabPanel>
         </TabPanels>

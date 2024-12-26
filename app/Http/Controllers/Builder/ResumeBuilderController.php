@@ -23,7 +23,7 @@ class ResumeBuilderController
         /** @var User $user */
         $user = Auth::user()->load('resume');
 
-        return  Inertia::render('Builder/Resume/ResumePage', [
+        return Inertia::render('Builder/Resume/ResumePage', [
             'showGetStarted' => !$user->subdomain,
             'subdomain' => $user->subdomain,
             'availableSocials' => SocialNetwork::toArray(),
@@ -32,11 +32,18 @@ class ResumeBuilderController
             'titles' => $user->resume?->titles ?? [],
             'experiences' => $user->resume?->experiences ?? [],
             'socials' => $user->resume?->socials ?? [],
+            'timeline' => $user->resume?->work_timeline ?? ['history' => [], 'downloadable' => null],
+            'services' => $user->resume?->services ?? [],
+            'contact' => $user->resume?->contact ?? ['show' => true, 'availability_status' => "Currently available for full-time, part-time, or consultation work."],
             'themeId' => $user->resume?->theme_id ?? null,
+            'techExpertise' => $user->resume?->tech_expertise ?? [],
+            'projects' => $user->resume?->projects ?? [],
             'themes' => ResumeTheme::query()->get(['id', 'name']),
             'baseSubdomain' => Config::get('app.portfolio_subdomain'),
             'storeSubdomainUrl' => route('builder.resume.storeSubdomain'),
             'storeContentUrl' => route('builder.resume.storeContent'),
+            'previewUrl' => $user->subdomain ? $user->subdomain . '.' . Config::get('app.portfolio_subdomain') : null,
+            'canPreview' => $user->subdomain && $user->resume,
         ]);
     }
 

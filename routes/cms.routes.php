@@ -7,12 +7,15 @@ use App\Http\Controllers\Auth\GithubLoginController;
 use App\Http\Controllers\Auth\GoogleLoginController;
 use App\Http\Controllers\Auth\PasskeyLoginController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Builder\ResumeBuilderController;
+use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PasskeyController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\UserController;
@@ -234,4 +237,23 @@ Route::domain($cmsDomain)->group(function () {
                 Route::post('content', 'storeContent')->name('storeContent');
             });
     });
+
+    // Notification Routes
+    Route::middleware(['auth', 'verified'])
+        ->controller(NotificationController::class)
+        ->prefix('notifications')
+        ->name('notifications.')
+        ->group(function () {
+            /** @uses NotificationController::index */
+            Route::get('', 'index')->name('index');
+
+            /** @uses NotificationController::markAsRead */
+            Route::post('mark-as-read/', 'markAsRead')->name('markAsRead');
+        });
+
+    // Blogs Routes (WIP)
+    Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
+
+    // Calendar Routes (WIP)
+    Route::get('/calendar', [CalendarController::class, 'index'])->name('calendar.index');
 });

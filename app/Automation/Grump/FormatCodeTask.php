@@ -2,7 +2,7 @@
 
 namespace App\Automation\Grump;
 
-use App\Console\Commands\FormatCode;
+use App\Console\Commands\FormatCodeCommand;
 use GrumPHP\Runner\TaskResult;
 use GrumPHP\Runner\TaskResultInterface;
 use GrumPHP\Task\AbstractExternalTask;
@@ -70,7 +70,7 @@ class FormatCodeTask extends AbstractExternalTask
         }
 
         if ($exitCode !== Command::SUCCESS) {
-            $formatCodeClass = FormatCode::class;
+            $formatCodeClass = FormatCodeCommand::class;
             $errorMessage =
                 "A command threw an exception (code: $exitCode)  in $formatCodeClass. Please see the logs above";
 

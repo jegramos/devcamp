@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PortfolioController;
+use App\Http\Controllers\PortfolioInquiryController;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 
@@ -18,4 +19,8 @@ Route::domain("{account}.$portfolioSubdomainRoot")->group(function () {
         /** @uses PortfolioController::index */
         Route::get('', 'index')->name('portfolio.index');
     });
+
+    Route::post('contact', PortfolioInquiryController::class)
+        ->middleware('throttle:portfolio-inquiry')
+        ->name('portfolio.contact');
 });

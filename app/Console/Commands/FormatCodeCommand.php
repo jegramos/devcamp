@@ -8,7 +8,7 @@ use Throwable;
 use function Laravel\Prompts\error;
 use function Laravel\Prompts\info;
 
-class FormatCode extends Command
+class FormatCodeCommand extends Command
 {
     protected $signature = 'app:format-code
                            {--no-ide-helper : Run the code formatter without barryvdh/laravel-ide-helper}

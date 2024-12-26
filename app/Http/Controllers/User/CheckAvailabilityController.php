@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\ApiController;
+use App\Traits\Controllers\ApiResponse;
 use App\Models\User;
 use App\Models\UserProfile;
 use Illuminate\Http\JsonResponse;
@@ -17,8 +17,10 @@ use Symfony\Component\HttpFoundation\Response;
  * This Controller checks if a user already exists with the given type (email, username, or mobile_number)
  * and value. It optionally allows excluding a specific user ID from the check.
  */
-class CheckAvailabilityController extends ApiController
+class CheckAvailabilityController
 {
+    use ApiResponse;
+
     /**
      * @throws ValidationException
      */

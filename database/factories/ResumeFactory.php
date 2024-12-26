@@ -22,9 +22,10 @@ class ResumeFactory extends Factory
             'user_id' => UserFactory::new()->has(UserProfileFactory::new()),
             'name' => fake()->name(),
             'titles' => [],
+            'tech_expertise' => [],
             'experiences' => [],
             'socials' => [],
-            'theme_id' => ResumeTheme::query()->first()->id,
+            'theme_id' => ResumeTheme::default()->id,
         ];
     }
 }

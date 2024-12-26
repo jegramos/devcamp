@@ -19,7 +19,7 @@ use function Laravel\Prompts\form;
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\table;
 
-class CreateUser extends Command
+class CreateUserCommand extends Command
 {
     protected $signature = 'user:create
                            {--I|interactive : Run in interactive mode}

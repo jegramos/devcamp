@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enums\Traits;
+namespace App\Traits\Enums;
 
 use BackedEnum;
 use ReflectionClass;

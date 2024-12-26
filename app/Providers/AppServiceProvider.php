@@ -98,5 +98,12 @@ class AppServiceProvider extends ServiceProvider
 
             return Limit::perMinute(1)->by($key);
         });
+
+        RateLimiter::for('portfolio-inquiry', function (Request $request) {
+            $route = $request->route()->getName() ?? $request->route()->uri();
+            $key = $request->session()->getId() . '-' . $route;
+
+            return Limit::perMinute(2)->by($key);
+        });
     }
 }
