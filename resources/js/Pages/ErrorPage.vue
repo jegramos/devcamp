@@ -14,6 +14,10 @@ const props = defineProps({
     type: String || null,
     default: null,
   },
+  showActionButtons: {
+    type: Boolean,
+    default: true,
+  },
 })
 
 const title = computed(() => {
@@ -49,8 +53,8 @@ applyTheme()
   >
     <AppAnimatedFloaters />
     <h1 class="font-stylish text-[7rem] font-black text-surface-200">{{ status }}</h1>
-    <p class="text-surface-200">{{ props.message ?? description }}</p>
-    <div class="flex gap-x-4">
+    <p class="px-4 text-center text-lg text-surface-200">{{ props.message ?? description }}</p>
+    <div v-if="props.showActionButtons" class="mt-2 flex gap-x-4">
       <Button icon="pi pi-caret-left" label="PREVIOUS PAGE" class="mt-6 dark:!text-surface-0" @click="navigateBack"></Button>
       <Button icon="pi pi-home" label="BACK TO HOME" class="mt-6 dark:!text-surface-0" @click="navigateToHome"></Button>
     </div>

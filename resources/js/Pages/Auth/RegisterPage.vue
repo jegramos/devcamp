@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue'
 import { Link, useForm, usePage, Head, router } from '@inertiajs/vue3'
-import { useBroadcastChannel, useMediaQuery } from '@vueuse/core'
+import { useBroadcastChannel } from '@vueuse/core'
 import { required, helpers, minLength, email, requiredIf, sameAs } from '@vuelidate/validators'
 import Card from 'primevue/card'
 import Button from 'primevue/button'
@@ -19,7 +19,7 @@ import { ErrorCode, type SharedPage } from '@/Types/shared-page.ts'
 import { useClientValidatedForm } from '@/Composables/useClientValidatedForm'
 import { passwordRegex, passwordRule, uniqueUserIdentifierRule } from '@/Utils/vuelidate-custom-validators'
 import { ChannelName } from '@/Types/broadcast-channel.ts'
-import { applyTheme } from '@/Utils/theme.ts'
+import { applyTheme, getCurrentTheme } from '@/Utils/theme.ts'
 
 const props = defineProps({
   loginUrl: {
@@ -130,8 +130,7 @@ const submit = async function (event: Event) {
 let recaptchaTheme = 'light'
 if (props.recaptchaEnabled) {
   useRecaptcha('recaptcha-container')
-  const isPreferredDark = useMediaQuery('(prefers-color-scheme: dark)')
-  recaptchaTheme = isPreferredDark ? 'dark' : 'light'
+  recaptchaTheme = getCurrentTheme() === 'dark' ? 'dark' : 'light'
 }
 
 // Change the BG color if there are errors
@@ -153,7 +152,9 @@ applyTheme()
 
 <template>
   <Head title="Register"></Head>
-  <section :class="`relative flex h-screen w-full flex-col items-center justify-center px-2 md:px-0 ${bgColorClass}`">
+  <section
+    :class="`relative flex min-h-screen w-full flex-col items-center justify-center px-2 py-2 md:px-0 md:py-0 ${bgColorClass}`"
+  >
     <AppAnimatedFloaters />
     <Message
       v-if="!!page.props.errors[ErrorCode.EXTERNAL_ACCOUNT_EMAIL_CONFLICT]"

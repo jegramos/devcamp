@@ -5,6 +5,9 @@ import { primeVue } from './Plugins/primevue'
 import ToastService from 'primevue/toastservice'
 import Tooltip from 'primevue/tooltip'
 import ConfirmationService from 'primevue/confirmationservice'
+import { MotionPlugin } from '@vueuse/motion'
+import AOS from 'aos'
+import 'aos/dist/aos.css'
 
 createInertiaApp({
   title: (title) => (title ? `${title} - DevCamp` : 'DevCamp'),
@@ -18,9 +21,13 @@ createInertiaApp({
       .use(primeVue.options, primeVue.config)
       .use(ToastService)
       .use(ConfirmationService)
+      .use(MotionPlugin)
 
     app.directive('tooltip', Tooltip)
     app.mount(el)
+
+    // Initialize on-scroll animations
+    AOS.init()
   },
   progress: {
     color: '#f5940b',

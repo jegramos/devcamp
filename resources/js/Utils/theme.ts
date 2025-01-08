@@ -5,10 +5,7 @@ import type { SharedPage } from '@/Types/shared-page.ts'
 export const applyTheme = function (theme?: 'light' | 'dark' | 'auto') {
   if (!theme) {
     const page = usePage<SharedPage>()
-    const fromLocalStorage = localStorage.getItem('theme') as 'light' | 'dark' | 'auto'
-
-    // Get the theme from the LocalStorage if there is no authenticated user
-    if (!page.props.auth?.user) theme = fromLocalStorage || 'auto'
+    theme = getCurrentTheme()
 
     // Update the theme and in the LocalStorage if there is an authenticated user
     if (page.props.auth?.user && page.props.accountSettings?.theme) {
@@ -39,4 +36,12 @@ export const applyTheme = function (theme?: 'light' | 'dark' | 'auto') {
   }
 
   applyTheme('light')
+}
+
+export const getCurrentTheme = function () {
+  const page = usePage<SharedPage>()
+  const fromLocalStorage = localStorage.getItem('theme') as 'light' | 'dark' | 'auto'
+
+  // Get the theme from the LocalStorage if there is no authenticated user
+  if (!page.props.auth?.user) return fromLocalStorage || 'auto'
 }

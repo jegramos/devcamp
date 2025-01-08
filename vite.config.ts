@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => ({
     laravel({
       input: ['resources/js/main.ts'],
       refresh: true,
-      detectTls: 'devcamp.test',
+      detectTls: 'app.devcamp.test',
     }),
     vue({
       template: {
