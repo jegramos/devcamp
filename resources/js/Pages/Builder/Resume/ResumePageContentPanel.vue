@@ -191,7 +191,7 @@ const addTitleToList = function () {
     formWithValidation.setError('titles', 'The title or role already exists')
   }
 
-  if (formWithValidation.hasErrors) return
+  if (formWithValidation.errors.titles) return
 
   formWithValidation.titles.push(title.value)
   title.value = ''
@@ -222,7 +222,7 @@ const addExperienceToList = function () {
     formWithValidation.setError('experiences', 'The record already exists')
   }
 
-  if (formWithValidation.hasErrors) return
+  if (formWithValidation.errors.experiences) return
 
   formWithValidation.experiences.push(experience.value)
   experience.value = ''
@@ -257,7 +257,7 @@ const addSocialToList = function () {
     formWithValidation.setError('socials', "You've already added this social network profile.")
   }
 
-  if (formWithValidation.hasErrors) return
+  if (formWithValidation.errors.socials) return
 
   formWithValidation.socials.push({ name: social.value.name, url: social.value.url })
   social.value.name = ''
@@ -316,7 +316,7 @@ const addTechExpertiseToList = function () {
     formWithValidation.setError('tech_expertise', `You've already added "${techExpertiseName.value}" as a tech expertise.`)
   }
 
-  if (formWithValidation.hasErrors) return
+  if (formWithValidation.errors.tech_expertise) return
 
   formWithValidation.tech_expertise.push({
     name: techExpertiseName.value,
@@ -390,7 +390,7 @@ const addLinkToProject = function () {
     formWithValidation.setError('projects', "You can't add two links with the same name.")
   }
 
-  if (formWithValidation.hasErrors) return
+  if (formWithValidation.errors.projects) return
 
   projectHighlightLinks.value.push({
     name: projectHighlightLinkName.value,
@@ -420,7 +420,7 @@ const addProjectToList = function () {
     formWithValidation.setError('projects', 'You already have a project with the same title.')
   }
 
-  if (formWithValidation.hasErrors) return
+  if (formWithValidation.errors.projects) return
 
   formWithValidation.projects.push({
     title: projectHighlightTitle.value,
@@ -494,7 +494,7 @@ const addTimelineTagToList = function () {
     formWithValidation.setError('work_timeline', 'You already have a tag with the same name.')
   }
 
-  if (formWithValidation.hasErrors) return
+  if (formWithValidation.errors.work_timeline) return
 
   timelineTagsList.value.push(timelineTagInput.value)
   timelineTagInput.value = ''
@@ -535,7 +535,7 @@ const addTimelineToList = function () {
     formWithValidation.setError('work_timeline', 'You can only add up to 50 records.')
   }
 
-  if (formWithValidation.hasErrors) return
+  if (formWithValidation.errors.work_timeline) return
 
   // Convert period start and end date from Date instance to string ('YYYY-MM-DD') format
   const datePeriod = []
@@ -599,7 +599,7 @@ const addServiceTagToList = function () {
     formWithValidation.setError('services', 'You already have a tag with the same name.')
   }
 
-  if (formWithValidation.hasErrors) return
+  if (formWithValidation.errors.services) return
 
   servicesTagsList.value.push(servicesTagInput.value)
   servicesTagInput.value = ''
@@ -632,7 +632,7 @@ const addServiceToList = function () {
     formWithValidation.setError('services', 'Please provide a valid and secure URL.')
   }
 
-  if (formWithValidation.hasErrors) return
+  if (formWithValidation.errors.services) return
 
   formWithValidation.services.push({
     title: servicesTitleInput.value,
@@ -671,7 +671,7 @@ const submitForm = function () {
     formWithValidation.setError('contact', 'Please provide your availability status.')
   }
 
-  if (formWithValidation.hasErrors) return
+  if (formWithValidation.hasErrors) return window.scroll({ top: 0, behavior: 'smooth' })
 
   if (typeof formWithValidation.work_timeline.downloadable === 'string') {
     formWithValidation.work_timeline.downloadable = null
@@ -683,7 +683,6 @@ const submitForm = function () {
     onSuccess: function () {
       toast.add({ severity: 'success', summary: 'Resume Builder', detail: page.props.flash.CMS_SUCCESS, life: 3000 })
       displayTimelineDownloadableFileLink.value = !!props.timeline.downloadable
-      window.scroll({ top: 0, behavior: 'smooth' })
     },
     onError: function () {
       toast.add({
@@ -693,12 +692,19 @@ const submitForm = function () {
         life: 3000,
       })
     },
+    onFinish: function () {
+      window.scroll({ top: 0, behavior: 'smooth' })
+    },
   })
 }
 /** End Form Submission */
 </script>
 
 <template>
+  <Message v-if="formWithValidation.hasErrors" class="mt-4 w-full" severity="error">
+    <i class="pi pi-exclamation-triangle mr-1"></i>
+    <span>There are some errors in the form. Please correct them and submit again.</span>
+  </Message>
   <section class="mt-4 flex flex-col gap-4">
     <Message severity="info" class="w-full">
       <i class="pi pi-book mr-1"></i>

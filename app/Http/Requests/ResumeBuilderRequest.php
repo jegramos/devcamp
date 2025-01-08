@@ -57,6 +57,7 @@ class ResumeBuilderRequest extends FormRequest
             'projects.*.links' => ['array', 'max:3'],
             'projects.*.links.*.name' => ['required', 'string', 'max:150'],
             'projects.*.links.*.url' => ['required', 'string', 'url:https', 'max:255'],
+            'work_timeline' => ['nullable', 'array'],
             'work_timeline.downloadable' => ['nullable', 'file', 'mimes:pdf', 'max:2048'],
             'work_timeline.history' => ['nullable', 'array', 'max:50'],
             'work_timeline.history.*.title' => ['required', 'string', 'max:150', 'distinct'],

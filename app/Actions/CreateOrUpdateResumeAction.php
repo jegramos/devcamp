@@ -66,6 +66,10 @@ readonly class CreateOrUpdateResumeAction
      */
     private function uploadProjectCoverPhotos(User $user, array $data): array
     {
+        if (!isset($data['projects'])) {
+            return $data;
+        }
+
         foreach ($data['projects'] as $index => $project) {
             $file = $project['cover'];
 
@@ -83,6 +87,10 @@ readonly class CreateOrUpdateResumeAction
 
     private function uploadWorkTimelineDownloadable(User $user, array $data): array
     {
+        if (!isset($data['work_timeline']['downloadable'])) {
+            return $data;
+        }
+
         $path = "file/$user->id/work-timeline/downloadable/";
         $file = $data['work_timeline']['downloadable'];
 

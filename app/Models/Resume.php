@@ -39,8 +39,8 @@ class Resume extends Model
     protected function workTimeline(): Attribute
     {
         return new Attribute(get: function ($value) {
-            if (is_null($value)) {
-                return null;
+            if (empty($value)) {
+                return [];
             }
 
             $value = json_decode($value, true);
@@ -55,7 +55,7 @@ class Resume extends Model
             );
 
             return $value;
-        });
+        }, set: fn ($value) => is_null($value) ? null : json_encode($value));
     }
 
     public function user(): BelongsTo

@@ -6,7 +6,7 @@ use App\Enums\QueueName;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 
-class PortfolioContactFormNotification extends Notification
+class PortfolioInquiryNotification extends Notification
 {
     use Queueable;
 

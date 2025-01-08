@@ -1,10 +1,10 @@
 services:
-  # The Laravel API application
+  # The Laravel Application
   app:
     image: jegramos/${DOCKER_COMPOSE_PROJECT_NAME}:${DOCKER_COMPOSE_IMAGE_TAG}
     restart: unless-stopped
     environment:
-      PHP_FPM_POOL_NAME: 'app_api'
+      PHP_FPM_POOL_NAME: 'app_web'
     volumes:
       - type: bind
         source: .env

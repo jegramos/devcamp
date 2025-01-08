@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\SessionFlashKey;
 use App\Http\Requests\PortfolioInquiryRequest;
 use App\Models\User;
-use App\Notifications\PortfolioContactFormNotification;
+use App\Notifications\PortfolioInquiryNotification;
 use Illuminate\Http\RedirectResponse;
 
 class PortfolioInquiryController
@@ -21,7 +21,7 @@ class PortfolioInquiryController
         $email = $request->input('email');
         $message = $request->input('message');
 
-        $user->notify(new PortfolioContactFormNotification($name, $email, $message));
+        $user->notify(new PortfolioInquiryNotification($name, $email, $message));
         return redirect()->back()->with(SessionFlashKey::PORTFOLIO_SUCCESS->value, 'Your message has been sent.');
     }
 }
