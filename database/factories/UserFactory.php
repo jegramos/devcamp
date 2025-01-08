@@ -27,6 +27,7 @@ class UserFactory extends Factory
             'active' => true,
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'subdomain' => null
         ];
     }
 
@@ -48,6 +49,16 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'active' => false,
+        ]);
+    }
+
+    /**
+     * Specify the user's subdomain
+     */
+    public function withSubdomain(string $subdomain): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'subdomain' => $subdomain,
         ]);
     }
 }

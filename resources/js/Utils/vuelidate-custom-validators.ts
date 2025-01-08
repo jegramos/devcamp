@@ -77,3 +77,13 @@ export const mobilePhoneRule =
 
     return phone.isValid()
   }
+
+/**
+ * @description Custom validation for a valid subdomain string value
+ * Ensures that the value only contains:
+ * - Uppercase and lowercase letters
+ * - Numbers
+ * - Hyphens ('-')
+ */
+export const subdomainRegex = /^[a-zA-Z0-9-]*$/
+export const sudomainRule = () => helpers.regex(subdomainRegex)

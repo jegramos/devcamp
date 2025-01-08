@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-use App\Enums\Traits\HasToArray;
+use App\Traits\Enums\HasToArray;
 
 enum Gender: string
 {

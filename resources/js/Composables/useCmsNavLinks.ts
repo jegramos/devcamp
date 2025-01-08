@@ -39,7 +39,14 @@ export const useCmsNavLinks = function (page: Page<SharedPage>) {
     },
     {
       group: 'Misc',
-      links: [{ name: 'About', uri: page.props.pageUris['misc.about'], icon: 'pi pi-info-circle' }],
+      links: [
+        {
+          name: 'About',
+          uri: page.props.pageUris['misc.about'],
+          icon: 'pi pi-info-circle',
+        },
+        { name: 'Notifications', uri: page.props.pageUris['misc.notifications'], icon: 'pi pi-bell' },
+      ],
     },
   ])
 

@@ -8,6 +8,7 @@ export type SharedPage = {
   pageUris: {
     'portfolio.resume': string
     'misc.about': string
+    'misc.notifications': string
     'account.profile': string
     'account.settings': string
     'admin.userManagement': string
@@ -69,4 +70,5 @@ export enum SessionFlashKey {
   CMS_EMAIL_UPDATE_CONFIRMED = 'CMS_EMAIL_UPDATE_CONFIRMED',
   CMS_PASSKEY_REGISTER_OPTIONS = 'CMS_PASSKEY_REGISTER_OPTIONS',
   CMS_PASSKEY_AUTHENTICATE_OPTIONS = 'CMS_PASSKEY_AUTHENTICATE_OPTIONS',
+  PORTFOLIO_SUCCESS = 'PORTFOLIO_SUCCESS',
 }

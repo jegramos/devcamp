@@ -9,7 +9,9 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class AwsS3Service implements CloudStorageManager
 {
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public function upload(string $path, string|UploadedFile $file, ?string $fileName = null): string
     {
         // Remove "/" from the right and left side of the string if any

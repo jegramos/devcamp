@@ -122,5 +122,3 @@ onUnmounted(function () {
     </template>
   </Card>
 </template>
-
-<style scoped></style>

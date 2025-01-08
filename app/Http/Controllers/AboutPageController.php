@@ -10,6 +10,6 @@ class AboutPageController
 {
     public function __invoke(Request $request): Response
     {
-        return Inertia::render('Misc/AboutPage');
+        return Inertia::render('WorkInProgressPage');
     }
 }

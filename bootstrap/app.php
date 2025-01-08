@@ -71,6 +71,12 @@ return Application::configure(basePath: dirname(__DIR__))
                     ]);
             }
 
+            // Handle 404 status on portfolio subdomain (Ex: jegramos.works.devcamp.site)
+            $cmsDomain = parse_url(Config::get('app.url'), PHP_URL_HOST);
+            if ($request->getHost() !== $cmsDomain) {
+                return redirect()->back();
+            }
+
             /**
              * Only show Inertia modal errors during local development and testing
              * @see https://v2.inertiajs.com/error-handling
@@ -95,7 +101,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 }
 
                 $status = $response->getStatusCode();
-                $message = $e->getMessage();
+                $message = $status === 404 ? "The page you're looking for could not be found." : $e->getMessage();
                 return Inertia::render('ErrorPage', ['status' => $status, 'message' => $message])
                     ->toResponse($request)
                     ->setStatusCode($response->getStatusCode());
@@ -103,7 +109,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
             if ($response->getStatusCode() === 419) {
                 return back()->with([
-                    SessionFlashKey::CMS_ERROR->value => 'The page expired, please try again.',
+                    SessionFlashKey::CMS_ERROR->value => 'The page expired, please try again . ',
                 ]);
             }
 

@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Enums\Traits\DummyEnumClasses;
 
-use App\Enums\Traits\HasToArray;
+use App\Traits\Enums\HasToArray;
 
 class NotEnumTestClass
 {

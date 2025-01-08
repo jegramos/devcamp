@@ -22,7 +22,7 @@ COPY . /var/www/html
 WORKDIR /var/www/html
 
 # Mount the .env as a secret. See https://docs.render.com/docker-secrets
-# DOCKER_BUILDKIT=1 docker build -t jegramos/webkit-api -f app.Dockerfile --secret id=_env,source=.env .
+# DOCKER_BUILDKIT=1 docker build -t jegramos/devcamp:latest -f app.Dockerfile --secret id=_env,source=.env .
 RUN --mount=type=secret,id=_env,dst=/var/www/html/.env  \
     composer install --no-dev --optimize-autoloader
 

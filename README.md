@@ -1,66 +1,97 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## About DevCamp
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> **NOTE:**  This project is a work-in-progress and is currently running on AWS free-tier. You may experience some small
+> bugs and performance issues.
+> [See DevCamp Live](https://app.devcamp.site)
+> or [Visit a portfolio built on DevCamp](https://jegramos.works.devcamp.site)
 
-## About Laravel
+A convenient open-source destination for <i>building</i> and <i>showcasing</i> portfolios. With DevCamp you can:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Build beautiful portfolio websites with your free subdomain in just a few minutes
+- Calendar booking system with your clients (WIP)
+- Write and share your blog posts (WIP)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+⠀
+> **CONTRIBUTE:**  If you find this project interesting and worth your time, you may submit a PR.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Set up your local development environment
 
-## Learning Laravel
+#### It is recommended to use [Laravel Herd](https://herd.laravel.com/), but you may follow these steps for a manual installation
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- Minimum of PHP 8.2 installed with a database engine that supports JSON types and possibly with full text search (e.g.
+  MySQL8, MariaDB 10.5)
+- Create a **.env** and a **.env.testing** files from the **.env.example** that came with this project. For security
+  purposes, you may request some of the contents of these files from me
+- Locate your **php.ini** file and change the value **upload_max_filesize** to **10M**. See
+  this [guide](https://devanswers.co/ubuntu-php-php-ini-configuration-file/) if you're having trouble finding the
+  directory of your php.ini file
+- Make sure you have MySQL and Redis running locally (or depending on what's stated in the **.env** file)
+- Run the command `composer install`  to install all the project and dev dependencies
+- Then run `php artisan migrate --seed && php artisan app:format-code`
+- To check if everything is working as expected, run: `php artisan test`
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+#### You may also use `Docker` to build the application and databases
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```
+docker compose up --profile app --profile store up -d
+```
 
-## Laravel Sponsors
+## Tools ready for you
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Runs a [code styler](https://laravel.com/docs/11.x/pint) for consistency and
+generate [IDE helper PHP Docs](https://github.com/barryvdh/laravel-ide-helper). See the command at
+`app/Console/Commands/FormatCodeCommand.php`
 
-### Premium Partners
+```
+php artisan app:format-code
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+\
+Create a user with role. See the command at `app/Console/Commands/CreateUserCommand.php`
 
-## Contributing
+```
+php artisan user:create -I
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+\
+Running `git commit` will trigger automated tasks specified in `grumphp.yml`
 
-## Code of Conduct
+- PSR-compliant code formatting
+- Package security checks
+- Unit and feature tests
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Manually serve the app in your local environment
 
-## Security Vulnerabilities
+- Terminal 1: Run `php artisan serve`
+- Terminal 2: Run `php artisan horizon`
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Project Status
 
-## License
+- [x] Login & Registration (H)
+- [x] Login via Social Accounts (H)
+- [x] Passkey Authentication (H)
+- [x] User Management (H)
+- [x] Profile Management (H)
+- [x] CMS Dynamic Theme (L)
+- [x] Resume Builder (H)
+- [x] Custom Subdomain Routing (M)
+- [x] Integration of InertiaForm & Vuelidate (M)
+- [x] GrumPHP checks for local development (M)
+- [ ] Calendar System (M)
+- [ ] Blogs Feature (M)
+- [ ] CI/CD with Github Actions (L)
+- [ ] Add 2 more Portfolio Themes (M)
+- [ ] Revamp Landing Page (L)
+- [ ] MFA (L)
+- [ ] Set-up Reverb for realtime notifications (L)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Tech Stack & Tools
+
+- Laravel 11 (PHP 8.2)
+- VueJS 3 (TypeScript)
+- InertiaV2
+- TailwindCSS and PrimeVue
+- MySQL
+- Redis
+- Docker
+- AWS (S3, EC2, ALB, Route53, etc.)
