@@ -363,7 +363,7 @@ const showFooter = computed(function () {
         <div v-if="!hideActivelyUsedTech" data-aos="fade-right" class="flex h-full w-full flex-col">
           <h1 class="mb-4 text-left font-stylish text-sm font-black uppercase text-surface-500 lg:text-center">Actively Uses</h1>
           <div
-            :class="`grid h-full w-full grid-cols-1 flex-col gap-4 ${showOneColumnTechExpertise ? 'lg:grid-cols-3' : 'lg:grid-cols-2'}`"
+            :class="`grid h-full w-full grid-cols-1 flex-col gap-4 ${showOneColumnTechExpertise ? 'lg:grid-cols-3' : 'xl:grid-cols-2'}`"
           >
             <div
               v-for="(tech, idx) in activelyUsedTech"
@@ -394,7 +394,7 @@ const showFooter = computed(function () {
         <div v-if="!hideFamiliarlyUsedTech" data-aos="fade-left" class="mt-10 flex h-full w-full flex-col md:mt-0">
           <h1 class="mb-4 text-left font-stylish text-sm font-black uppercase text-surface-500 lg:text-center">Familiar with</h1>
           <div
-            :class="`grid h-full w-full grid-cols-1 flex-col gap-4 ${showOneColumnTechExpertise ? 'lg:grid-cols-3' : 'lg:grid-cols-2'}`"
+            :class="`grid h-full w-full grid-cols-1 flex-col gap-4 ${showOneColumnTechExpertise ? 'lg:grid-cols-3' : 'xl:grid-cols-2'}`"
           >
             <div
               v-for="(tech, idx) in familiarlyUsedTech"

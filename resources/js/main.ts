@@ -27,7 +27,7 @@ createInertiaApp({
     app.mount(el)
 
     // Initialize on-scroll animations
-    AOS.init()
+    AOS.init({ disable: 'mobile' })
   },
   progress: {
     color: '#f5940b',
