@@ -677,6 +677,10 @@ const submitForm = function () {
     formWithValidation.work_timeline.downloadable = null
   }
 
+  if (!formWithValidation.work_timeline.history) {
+    formWithValidation.work_timeline.history = []
+  }
+
   formWithValidation.post(props.storeContentUrl, {
     preserveState: true,
     preserveScroll: true,
@@ -914,7 +918,6 @@ const submitForm = function () {
                   icon="pi pi-plus-circle"
                   class="align-self-start flex-shrink-0"
                   :disabled="formWithValidation.processing || !social.name || !social.url"
-                  :loading="formWithValidation.processing"
                   @click="addSocialToList"
                 ></Button>
               </div>

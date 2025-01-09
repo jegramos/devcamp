@@ -226,22 +226,24 @@ const showFooter = computed(function () {
       <div class="grid w-full grid-cols-2 gap-x-10 md:w-[80%]">
         <!-- Start Name -->
         <div class="flex flex-col justify-center">
-          <span class="font-stylish text-lg font-bold lg:text-5xl">
-            <span class="text-orange-400">&lt;</span>
-            <span class="mx-2 font-writing text-3xl lg:text-6xl">{{ props.name }}</span>
-            <span class="text-orange-500">/&gt;</span>
-          </span>
-          <h2 class="mt-6 font-stylish text-lg lg:ml-10 lg:text-left lg:text-2xl">
-            <span class="mr-2 text-left">I'm an excellent</span>
-            <template v-if="showTitle">
-              <TextHighlight
-                class="rounded-lg bg-gradient-to-r from-pink-500 to-orange-500 px-3 py-2 font-writing"
-                :duration="500"
-              >
-                {{ currentTitle }}
-              </TextHighlight>
-            </template>
-          </h2>
+          <div class="flex w-fit flex-col text-nowrap">
+            <span class="font-stylish text-lg font-bold lg:text-5xl">
+              <span class="text-orange-400">&lt;</span>
+              <span class="mx-2 font-writing text-3xl lg:text-6xl">{{ props.name }}</span>
+              <span class="text-orange-500">/&gt;</span>
+            </span>
+            <h2 class="mt-6 font-stylish text-lg lg:text-left lg:text-2xl">
+              <span class="mr-2 text-left">I'm an excellent</span>
+              <template v-if="showTitle">
+                <TextHighlight
+                  class="rounded-lg bg-gradient-to-r from-pink-500 to-orange-500 px-3 py-2 font-writing"
+                  :duration="500"
+                >
+                  {{ currentTitle }}
+                </TextHighlight>
+              </template>
+            </h2>
+          </div>
           <div v-if="hideNavigation" class="group z-10 mt-4 flex gap-x-6 lg:ml-10">
             <button
               v-for="(social, idx) in socialList"
@@ -540,14 +542,14 @@ const showFooter = computed(function () {
     <section
       v-if="props.services.length > 0"
       ref="servicesEl"
-      class="relative flex min-h-[100vh] w-full flex-col items-center gap-y-4 px-3 pb-8 pt-8 md:w-[80%] md:px-0"
+      class="relative flex min-h-[100vh] w-full flex-col items-center gap-y-4 px-3 pb-8 pt-8 md:w-[95%] lg:w-[90%] md:px-0"
     >
       <div class="mb:4 flex w-full items-center justify-center text-3xl md:mb-4 md:text-5xl lg:mb-8">
         <span data-aos="fade-right" class="font-stylish text-orange-400">&lt;</span>
         <span data-aos="fade-up" class="mx-1 mb-2 font-writing">Services</span>
         <span data-aos="fade-left" class="font-stylish text-orange-500">/&gt;</span>
       </div>
-      <div class="mt-4 grid grid-cols-1 gap-x-4 gap-y-6 md:grid-cols-2 lg:grid-cols-3">
+      <div class="mt-4 grid grid-cols-1 gap-x-4 gap-y-6 md:grid-cols-2 lg:grid-cols-3 w-full">
         <div
           v-for="(service, idx) in props.services"
           :key="service.title + '-' + idx"

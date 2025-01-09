@@ -29,6 +29,10 @@ defineProps({
 
 const page = usePage<SharedPage>()
 
+const openGithub = function () {
+  window.open('https://github.com/jegramos/devcamp', '_blank')
+}
+
 applyTheme()
 </script>
 
@@ -51,6 +55,7 @@ applyTheme()
           icon="pi pi-github"
           size="small"
           class="!z-20 !border-none !bg-surface-950 !text-xs !text-surface-100"
+          @click="openGithub"
         ></Button>
       </div>
     </section>
@@ -132,7 +137,7 @@ applyTheme()
       <div class="flex h-full items-end px-4 pb-4 text-xs text-primary-contrast md:hidden">
         <button class="z-20 flex items-center">
           <FontAwesomeIcon :icon="faGithub" class="mr-1"></FontAwesomeIcon>
-          <span>View on Github</span>
+          <a href="https://github.com/jegramos/devcamp" target="_blank">View on Github</a>
         </button>
       </div>
       <!-- End Phone View -->

@@ -74,11 +74,12 @@ Running `git commit` will trigger automated tasks specified in `grumphp.yml`
 - [x] Profile Management (H)
 - [x] CMS Dynamic Theme (L)
 - [x] Resume Builder (H)
-- [x] Custom Subdomain Routing (M)
+- [x] Subdomain Routing (M)
 - [x] Integration of InertiaForm & Vuelidate (M)
 - [x] GrumPHP checks for local development (M)
 - [ ] Calendar System (M)
 - [ ] Blogs Feature (M)
+- [ ] Custom Domain Routing
 - [ ] CI/CD with Github Actions (L)
 - [ ] Add 2 more Portfolio Themes (M)
 - [ ] Revamp Landing Page (L)
