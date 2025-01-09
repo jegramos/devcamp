@@ -438,12 +438,14 @@ const showFooter = computed(function () {
       <div class="w-full items-center justify-center px-3 md:px-8">
         <TracingBeam class="px-0 md:px-6">
           <div v-if="timeline.downloadable" data-aos="fade-up" class="flex w-full justify-start md:justify-end">
-            <button
-              class="mb-2 rounded-lg border border-surface-500 px-2 py-1 text-sm text-surface-500 transition-all hover:scale-105 hover:border-orange-500 hover:text-orange-500"
+            <a
+              :href="timeline.downloadable as string"
+              target="_blank"
+              class="mb-2 rounded-lg border border-surface-500 px-2 py-1.5 text-sm text-surface-500 transition-all hover:scale-105 hover:border-orange-500 hover:text-orange-500"
             >
-              <i class="pi pi-cloud-download mr-1"></i>
-              Download
-            </button>
+              <i class="pi pi-file-pdf mr-0.5"></i>
+              View File
+            </a>
           </div>
           <div class="relative mx-auto w-full max-w-4xl pt-1 antialiased">
             <div
@@ -542,14 +544,14 @@ const showFooter = computed(function () {
     <section
       v-if="props.services.length > 0"
       ref="servicesEl"
-      class="relative flex min-h-[100vh] w-full flex-col items-center gap-y-4 px-3 pb-8 pt-8 md:w-[95%] lg:w-[90%] md:px-0"
+      class="relative flex min-h-[100vh] w-full flex-col items-center gap-y-4 px-3 pb-8 pt-8 md:w-[95%] md:px-0 lg:w-[90%]"
     >
       <div class="mb:4 flex w-full items-center justify-center text-3xl md:mb-4 md:text-5xl lg:mb-8">
         <span data-aos="fade-right" class="font-stylish text-orange-400">&lt;</span>
         <span data-aos="fade-up" class="mx-1 mb-2 font-writing">Services</span>
         <span data-aos="fade-left" class="font-stylish text-orange-500">/&gt;</span>
       </div>
-      <div class="mt-4 grid grid-cols-1 gap-x-4 gap-y-6 md:grid-cols-2 lg:grid-cols-3 w-full">
+      <div class="mt-4 grid w-full grid-cols-1 gap-x-4 gap-y-6 md:grid-cols-2 lg:grid-cols-3">
         <div
           v-for="(service, idx) in props.services"
           :key="service.title + '-' + idx"
