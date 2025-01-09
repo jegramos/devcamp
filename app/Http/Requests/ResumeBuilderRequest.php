@@ -60,7 +60,7 @@ class ResumeBuilderRequest extends FormRequest
             'work_timeline' => ['nullable', 'array'],
             'work_timeline.downloadable' => ['nullable', 'file', 'mimes:pdf', 'max:2048'],
             'work_timeline.history' => ['array', 'max:50'],
-            'work_timeline.history.*.title' => ['required', 'string', 'max:150', 'distinct'],
+            'work_timeline.history.*.title' => ['required', 'string', 'max:150'],
             'work_timeline.history.*.description' => ['required', 'string', 'max:5000'],
             'work_timeline.history.*.period' => ['required', 'array', 'max:2'],
             'work_timeline.history.*.period.*' => ['required', 'date_format:Y-m-d'],

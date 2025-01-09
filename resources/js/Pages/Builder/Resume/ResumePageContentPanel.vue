@@ -527,10 +527,6 @@ const addTimelineToList = function () {
     formWithValidation.setError('work_timeline', 'The URL must not exceed 255 characters.')
   }
 
-  if (formWithValidation.work_timeline.history.find((h) => h.title.toLowerCase() === timelineTitleInput.value.toLowerCase())) {
-    formWithValidation.setError('work_timeline', 'You already have a record with the same title.')
-  }
-
   if (formWithValidation.work_timeline.history.length >= 50) {
     formWithValidation.setError('work_timeline', 'You can only add up to 50 records.')
   }
