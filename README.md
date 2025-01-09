@@ -20,8 +20,8 @@ A convenient open-source destination for <i>building</i> and <i>showcasing</i> p
 
 - Minimum of PHP 8.2 installed with a database engine that supports JSON types and possibly with full text search (e.g.
   MySQL8, MariaDB 10.5)
-- Create a **.env** and a **.env.testing** files from the **.env.example** that came with this project. For security
-  purposes, you may request some of the contents of these files from me
+- Create a **.env** and a **.env.testing** files from the **.env.example** that came with this project. You may request
+  some of the contents of these files from me
 - Locate your **php.ini** file and change the value **upload_max_filesize** to **10M**. See
   this [guide](https://devanswers.co/ubuntu-php-php-ini-configuration-file/) if you're having trouble finding the
   directory of your php.ini file
@@ -60,12 +60,16 @@ Running `git commit` will trigger automated tasks specified in `grumphp.yml`
 - Package security checks
 - Unit and feature tests
 
+\
+[Laravel Horizon](https://laravel.com/docs/11.x/horizon) and [Telescope](https://laravel.com/docs/11.x/telescope) are
+installed in this project
+
 ## Manually serve the app in your local environment
 
 - Terminal 1: Run `php artisan serve`
 - Terminal 2: Run `php artisan horizon`
 
-## Project Status
+## Project / Feature Goals
 
 - [x] Login & Registration (H)
 - [x] Login via Social Accounts (H)
@@ -74,16 +78,18 @@ Running `git commit` will trigger automated tasks specified in `grumphp.yml`
 - [x] Profile Management (H)
 - [x] CMS Dynamic Theme (L)
 - [x] Resume Builder (H)
-- [x] Custom Subdomain Routing (M)
+- [x] Subdomain Routing (M)
 - [x] Integration of InertiaForm & Vuelidate (M)
 - [x] GrumPHP checks for local development (M)
 - [ ] Calendar System (M)
 - [ ] Blogs Feature (M)
+- [ ] Custom Domain Routing
 - [ ] CI/CD with Github Actions (L)
 - [ ] Add 2 more Portfolio Themes (M)
 - [ ] Revamp Landing Page (L)
 - [ ] MFA (L)
 - [ ] Set-up Reverb for realtime notifications (L)
+- [ ] UI Automation with Laravel Dusk
 
 ## Tech Stack & Tools
 

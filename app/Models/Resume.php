@@ -22,7 +22,10 @@ class Resume extends Model
         'socials',
         'services',
         'theme_id',
+
+        /** @uses Resume::workTimeline() */
         'work_timeline',
+
         'contact'
     ];
 
@@ -55,7 +58,23 @@ class Resume extends Model
             );
 
             return $value;
-        }, set: fn ($value) => is_null($value) ? null : json_encode($value));
+        }, set: function ($value) {
+
+            if (is_null($value)) {
+                return null;
+            }
+
+            // Set the defaults
+            if (is_array($value) && !isset($value['downloadable'])) {
+                $value['downloadable'] = null;
+            }
+
+            if (is_array($value) && !isset($value['history'])) {
+                $value['history'] = [];
+            }
+
+            return json_encode($value);
+        });
     }
 
     public function user(): BelongsTo
