@@ -89,7 +89,7 @@ installed in this project
 - [ ] Revamp Landing Page (L)
 - [ ] MFA (L)
 - [ ] Set-up Reverb for realtime notifications (L)
-- [ ] UI Automation with Laravel Dusk
+- [ ] UI Automation with Laravel Dusk (L)
 
 ## Tech Stack & Tools
 

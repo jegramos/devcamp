@@ -224,8 +224,18 @@ const showFooter = computed(function () {
     <section class="relative hidden h-[100vh] w-full flex-col items-center justify-center p-1 md:flex lg:p-5">
       <AppAnimatedFloaters class="opacity-30" />
       <div class="grid w-full grid-cols-2 gap-x-10 md:w-[80%]">
-        <!-- Start Name -->
         <div class="flex flex-col justify-center">
+          <div v-if="hideNavigation" class="group z-10 mb-4 flex gap-x-6 lg:justify-start">
+            <button
+              v-for="(social, idx) in socialList"
+              :key="social.name + '-' + idx"
+              class="transition-transform hover:scale-125 hover:cursor-pointer hover:text-surface-0"
+              @click="openInNewTab(social.url)"
+            >
+              <FontAwesomeIcon :icon="social.icon" class="text-lg lg:text-2xl" />
+            </button>
+          </div>
+          <!-- Start Name -->
           <div class="flex w-fit flex-col text-nowrap">
             <span class="font-stylish text-lg font-bold lg:text-5xl">
               <span class="text-orange-400">&lt;</span>
@@ -244,18 +254,8 @@ const showFooter = computed(function () {
               </template>
             </h2>
           </div>
-          <div v-if="hideNavigation" class="group z-10 mt-4 flex gap-x-6 lg:ml-10">
-            <button
-              v-for="(social, idx) in socialList"
-              :key="social.name + '-' + idx"
-              class="transition-transform hover:scale-125 hover:cursor-pointer hover:text-surface-0"
-              @click="openInNewTab(social.url)"
-            >
-              <FontAwesomeIcon :icon="social.icon" class="text-lg lg:text-2xl" />
-            </button>
-          </div>
+          <!-- End Name -->
         </div>
-        <!-- End Name -->
         <!-- Start Navigation-->
         <div v-if="!hideNavigation" class="z-20 flex h-[80vh] flex-col justify-center gap-y-10 text-right text-surface-400">
           <span
@@ -363,7 +363,7 @@ const showFooter = computed(function () {
         <div v-if="!hideActivelyUsedTech" data-aos="fade-right" class="flex h-full w-full flex-col">
           <h1 class="mb-4 text-left font-stylish text-sm font-black uppercase text-surface-500 lg:text-center">Actively Uses</h1>
           <div
-            :class="`grid h-full w-full grid-cols-1 flex-col gap-4 ${showOneColumnTechExpertise ? 'lg:grid-cols-3' : 'lg:grid-cols-2'}`"
+            :class="`grid h-full w-full grid-cols-1 flex-col gap-4 ${showOneColumnTechExpertise ? 'lg:grid-cols-3' : 'xl:grid-cols-2'}`"
           >
             <div
               v-for="(tech, idx) in activelyUsedTech"
@@ -376,7 +376,7 @@ const showFooter = computed(function () {
                 :color="['#fe7c8b', '#f83c7c', '#ff8200']"
               >
                 <template v-if="tech.logo">
-                  <img :src="tech.logo" alt="logo" class="object-fit mr-4 h-12 w-12 rounded-sm md:h-6 md:w-6" />
+                  <img :src="tech.logo" alt="logo" class="object-fit mr-4 h-6 w-6 rounded-sm md:h-6 md:w-6" />
                 </template>
                 <template v-else>
                   <FontAwesomeIcon :icon="faGear" class="mr-2 h-6 w-6 rounded-lg text-pink-500" />
@@ -394,7 +394,7 @@ const showFooter = computed(function () {
         <div v-if="!hideFamiliarlyUsedTech" data-aos="fade-left" class="mt-10 flex h-full w-full flex-col md:mt-0">
           <h1 class="mb-4 text-left font-stylish text-sm font-black uppercase text-surface-500 lg:text-center">Familiar with</h1>
           <div
-            :class="`grid h-full w-full grid-cols-1 flex-col gap-4 ${showOneColumnTechExpertise ? 'lg:grid-cols-3' : 'lg:grid-cols-2'}`"
+            :class="`grid h-full w-full grid-cols-1 flex-col gap-4 ${showOneColumnTechExpertise ? 'lg:grid-cols-3' : 'xl:grid-cols-2'}`"
           >
             <div
               v-for="(tech, idx) in familiarlyUsedTech"
