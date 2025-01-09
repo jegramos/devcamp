@@ -224,8 +224,18 @@ const showFooter = computed(function () {
     <section class="relative hidden h-[100vh] w-full flex-col items-center justify-center p-1 md:flex lg:p-5">
       <AppAnimatedFloaters class="opacity-30" />
       <div class="grid w-full grid-cols-2 gap-x-10 md:w-[80%]">
-        <!-- Start Name -->
         <div class="flex flex-col justify-center">
+          <div v-if="hideNavigation" class="group z-10 mb-4 flex gap-x-6 lg:justify-start">
+            <button
+              v-for="(social, idx) in socialList"
+              :key="social.name + '-' + idx"
+              class="transition-transform hover:scale-125 hover:cursor-pointer hover:text-surface-0"
+              @click="openInNewTab(social.url)"
+            >
+              <FontAwesomeIcon :icon="social.icon" class="text-lg lg:text-2xl" />
+            </button>
+          </div>
+          <!-- Start Name -->
           <div class="flex w-fit flex-col text-nowrap">
             <span class="font-stylish text-lg font-bold lg:text-5xl">
               <span class="text-orange-400">&lt;</span>
@@ -244,18 +254,8 @@ const showFooter = computed(function () {
               </template>
             </h2>
           </div>
-          <div v-if="hideNavigation" class="group z-10 mt-4 flex gap-x-6 lg:ml-10">
-            <button
-              v-for="(social, idx) in socialList"
-              :key="social.name + '-' + idx"
-              class="transition-transform hover:scale-125 hover:cursor-pointer hover:text-surface-0"
-              @click="openInNewTab(social.url)"
-            >
-              <FontAwesomeIcon :icon="social.icon" class="text-lg lg:text-2xl" />
-            </button>
-          </div>
+          <!-- End Name -->
         </div>
-        <!-- End Name -->
         <!-- Start Navigation-->
         <div v-if="!hideNavigation" class="z-20 flex h-[80vh] flex-col justify-center gap-y-10 text-right text-surface-400">
           <span
