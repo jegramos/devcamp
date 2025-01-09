@@ -12,6 +12,8 @@ import { useDateFormat } from '@vueuse/core'
 import DfPaginator, { type PaginatedList } from '@/Components/DfPaginator.vue'
 import { useForm } from '@inertiajs/vue3'
 import Tag from 'primevue/tag'
+import { faBellSlash } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 type Notification = {
   id: string
@@ -59,32 +61,40 @@ const submitMarkAsReadForm = function (notification: Notification) {
 
 <template>
   <section class="mt-2 flex flex-col gap-3">
-    <span class="mb-2 text-sm font-bold uppercase">Portfolio Inquiries</span>
-    <Card
-      v-for="n in props.portfolioInquiries.data"
-      :key="n.id"
-      class="w-full transition-transform hover:scale-[101%] hover:cursor-pointer"
-      @mouseover="submitMarkAsReadForm(n)"
-    >
-      <template #content>
-        <div class="relative flex flex-col">
-          <div class="mb-2 flex flex-wrap justify-between">
-            <Tag icon="pi pi-book" severity="warn" :value="n.label" class="!text-xs"></Tag>
-            <small class="text-surface-500 dark:text-surface-400">{{ useDateFormat(n.created_at, 'MMMM DD, YYYY') }}</small>
+    <template v-if="props.portfolioInquiries.data.length > 0">
+      <span class="mb-2 text-sm font-bold uppercase">Portfolio Inquiries</span>
+      <Card
+        v-for="n in props.portfolioInquiries.data"
+        :key="n.id"
+        class="w-full transition-transform hover:scale-[101%] hover:cursor-pointer"
+        @mouseover="submitMarkAsReadForm(n)"
+      >
+        <template #content>
+          <div class="relative flex flex-col">
+            <div class="mb-2 flex flex-wrap justify-between">
+              <Tag icon="pi pi-book" severity="warn" :value="n.label" class="!text-xs"></Tag>
+              <small class="text-surface-500 dark:text-surface-400">{{ useDateFormat(n.created_at, 'MMMM DD, YYYY') }}</small>
+            </div>
+            <span class="font-bold uppercase">{{ n.data.name }}</span>
+            <small class="font-bold">{{ n.data.email }}</small>
+            <p class="mt-2">"{{ n.data.message }}"</p>
+            <!-- Start Unread Indicator -->
+            <span v-if="!n.read_at" class="absolute -right-1 top-0 flex h-3 w-3">
+              <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
+              <span class="absolute inline-flex h-3 w-3 rounded-full bg-red-500"></span>
+            </span>
+            <!-- End Unread Indicator -->
           </div>
-          <span class="font-bold uppercase">{{ n.data.name }}</span>
-          <small class="font-bold">{{ n.data.email }}</small>
-          <p class="mt-2">"{{ n.data.message }}"</p>
-          <!-- Start Unread Indicator -->
-          <span v-if="!n.read_at" class="absolute -right-1 top-0 flex h-3 w-3">
-            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
-            <span class="absolute inline-flex h-3 w-3 rounded-full bg-red-500"></span>
-          </span>
-          <!-- End Unread Indicator -->
-        </div>
-      </template>
-    </Card>
-    <DfPaginator :list="props.portfolioInquiries" class="md:mt-10" />
+        </template>
+      </Card>
+      <DfPaginator :list="props.portfolioInquiries" class="md:mt-10" />
+    </template>
+    <template v-else>
+      <div class="mt-16 flex flex-col items-center justify-center">
+        <FontAwesomeIcon :icon="faBellSlash" class="text-2xl" />
+        <span class="mt-2 italic">You don't have any notifications at the moment</span>
+      </div>
+    </template>
   </section>
 </template>
 
