@@ -376,7 +376,7 @@ const showFooter = computed(function () {
                 :color="['#fe7c8b', '#f83c7c', '#ff8200']"
               >
                 <template v-if="tech.logo">
-                  <img :src="tech.logo" alt="logo" class="object-fit mr-4 h-12 w-12 rounded-sm md:h-6 md:w-6" />
+                  <img :src="tech.logo" alt="logo" class="object-fit mr-4 h-6 w-6 rounded-sm md:h-6 md:w-6" />
                 </template>
                 <template v-else>
                   <FontAwesomeIcon :icon="faGear" class="mr-2 h-6 w-6 rounded-lg text-pink-500" />
