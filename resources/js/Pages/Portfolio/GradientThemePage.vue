@@ -217,7 +217,7 @@ const showFooter = computed(function () {
 /** End Footer */
 </script>
 <template>
-  <Head title="Portfolio"></Head>
+  <Head :title="'Portfolio | ' + props.name"></Head>
   <!-- Start Header -->
   <section class="flex h-full w-full flex-col items-center justify-center bg-surface-900 text-surface-0">
     <!-- Start Before the Fold (Desktop) -->

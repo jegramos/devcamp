@@ -81,7 +81,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <Head title="Users"></Head>
+  <Head title="DevCamp - Users"></Head>
   <section>
     <!-- Start Filter and Controls Section -->
     <UserManagementPageToolbarControls

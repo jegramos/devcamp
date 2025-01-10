@@ -169,7 +169,7 @@ const handleSubdomainSuccess = function (success: boolean) {
 </script>
 
 <template>
-  <Head title="Resume Builder"></Head>
+  <Head title="DevCamp - Resume Builder"></Head>
   <section class="relative mt-4 flex h-full w-full flex-col items-center lg:mt-0">
     <!-- Start Introduction -->
     <Card v-if="showIntroduction" class="flex max-w-4xl flex-col items-center justify-center rounded-lg p-4 text-center md:mt-4">

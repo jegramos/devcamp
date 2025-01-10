@@ -68,7 +68,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <Head title="Profile"></Head>
+  <Head title="DevCamp - Profile"></Head>
   <section class="mb-4 mt-2 flex flex-col gap-2 lg:mt-0 lg:grid lg:grid-cols-2 dark:gap-3">
     <!-- Start Profile Information -->
     <div class="order-last flex flex-col lg:order-first">
