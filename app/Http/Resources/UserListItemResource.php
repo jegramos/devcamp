@@ -24,6 +24,7 @@ class UserListItemResource extends JsonResource
             'email' => $this->email,
             'email_verified' => !is_null($this->email_verified_at),
             'active' => $this->active,
+            'portfolio_url' => $this->portfolio_url,
             $this->mergeWhen($this->relationLoaded('userProfile'), [
                 'given_name' => $this->userProfile->given_name,
                 'family_name' => $this->userProfile->family_name,

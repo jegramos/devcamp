@@ -37,6 +37,7 @@ export type UserItem = {
   address_line_2: string | null
   address_line_3: string | null
   roles: Array<{ name: string; label: string }>
+  portfolio_url: string | null
 }
 
 type UsersList = PaginatedList & {
@@ -80,7 +81,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <Head title="Users"></Head>
+  <Head title="DevCamp - Users"></Head>
   <section>
     <!-- Start Filter and Controls Section -->
     <UserManagementPageToolbarControls

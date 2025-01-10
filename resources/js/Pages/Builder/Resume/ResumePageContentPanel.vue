@@ -249,8 +249,8 @@ const addSocialToList = function () {
     formWithValidation.setError('socials', 'Please provide a valid and secure URL.')
   }
 
-  if (social.value.url.length >= 255) {
-    formWithValidation.setError('socials', 'The URL must not exceed 255 characters.')
+  if (social.value.url.length >= 2048) {
+    formWithValidation.setError('socials', 'The URL must not exceed 2048 characters.')
   }
 
   if (formWithValidation.socials.find((s) => s.name.toLowerCase() === social.value.name.toLowerCase())) {
@@ -304,8 +304,8 @@ const addTechExpertiseToList = function () {
     formWithValidation.setError('tech_expertise', 'Please provide a valid and secure URL.')
   }
 
-  if (techExpertiseLogo.value && techExpertiseLogo.value.length >= 255) {
-    formWithValidation.setError('tech_expertise', 'The URL must not exceed 255 characters.')
+  if (techExpertiseLogo.value && techExpertiseLogo.value.length >= 2048) {
+    formWithValidation.setError('tech_expertise', 'The URL must not exceed 2048 characters.')
   }
 
   if (formWithValidation.tech_expertise.length >= 100) {
@@ -356,6 +356,7 @@ const reRenderProjectHighlightUploadInput = function () {
   showProjectHighlightUploadInput.value = false
   nextTick(() => (showProjectHighlightUploadInput.value = true))
 }
+
 const onProjectHighlightCoverSelect = function (event: FileUploadSelectEvent) {
   const file = event.files[0]
   projectHighlightCoverFile.value = file || null
@@ -374,8 +375,8 @@ const addLinkToProject = function () {
     formWithValidation.setError('projects', 'The link name must not exceed 150 characters.')
   }
 
-  if (projectHighlightLinkUrl.value && projectHighlightLinkUrl.value.length > 255) {
-    formWithValidation.setError('projects', 'The URL must not exceed 255 characters.')
+  if (projectHighlightLinkUrl.value && projectHighlightLinkUrl.value.length > 2048) {
+    formWithValidation.setError('projects', 'The URL must not exceed 2048 characters.')
   }
 
   if (projectHighlightLinkUrl.value && !urlIsValid(projectHighlightLinkUrl.value)) {
@@ -456,12 +457,16 @@ const timelineListEl = ref<HTMLElement | null>(null)
 useSortable(timelineListEl, formWithValidation.work_timeline.history)
 
 const timelineDownloadableFile = ref<File | null>(null)
+
+const timelineDownloadableUrl = ref(props.timeline.downloadable_url || '')
 const clearTimelineDownloadableFile = function () {
-  formWithValidation.work_timeline.downloadable = null
+  timelineDownloadableUrl.value = ''
   displayTimelineDownloadableFileLink.value = false
+  formWithValidation.work_timeline.downloadable = null
+  reRenderTimelineFileInput()
 }
 
-const displayTimelineDownloadableFileLink = ref<boolean>(!!props.timeline.downloadable)
+const displayTimelineDownloadableFileLink = ref<boolean>(!!timelineDownloadableUrl.value)
 const onTimelineDownloadableSelect = function (event: FileUploadSelectEvent) {
   const file = event.files[0]
   timelineDownloadableFile.value = file || null
@@ -523,8 +528,8 @@ const addTimelineToList = function () {
     formWithValidation.setError('work_timeline', 'Please provide a valid and secure URL.')
   }
 
-  if (timelineLogoUrlInput.value.length >= 255) {
-    formWithValidation.setError('work_timeline', 'The URL must not exceed 255 characters.')
+  if (timelineLogoUrlInput.value.length >= 2048) {
+    formWithValidation.setError('work_timeline', 'The URL must not exceed 2048 characters.')
   }
 
   if (formWithValidation.work_timeline.history.length >= 50) {
@@ -560,6 +565,13 @@ const addTimelineToList = function () {
   timelineCompanyInput.value = ''
   timelineTagsList.value = []
   timelineTagInput.value = ''
+}
+
+// Re-render PrimeVue upload component
+const showTimelineFileInput = ref(true)
+const reRenderTimelineFileInput = function () {
+  showTimelineFileInput.value = false
+  nextTick(() => (showTimelineFileInput.value = true))
 }
 /** End Timeline */
 
@@ -620,8 +632,8 @@ const addServiceToList = function () {
     formWithValidation.setError('services', 'You already have a service with the same title.')
   }
 
-  if (servicesLogoUrlInput.value && servicesLogoUrlInput.value.length > 255) {
-    formWithValidation.setError('services', 'The URL must not exceed 255 characters.')
+  if (servicesLogoUrlInput.value && servicesLogoUrlInput.value.length > 2048) {
+    formWithValidation.setError('services', 'The URL must not exceed 2048 characters.')
   }
 
   if (servicesLogoUrlInput.value && !urlIsValid(servicesLogoUrlInput.value)) {
@@ -669,33 +681,33 @@ const submitForm = function () {
 
   if (formWithValidation.hasErrors) return window.scroll({ top: 0, behavior: 'smooth' })
 
-  if (typeof formWithValidation.work_timeline.downloadable === 'string') {
-    formWithValidation.work_timeline.downloadable = null
-  }
-
-  if (!formWithValidation.work_timeline.history) {
-    formWithValidation.work_timeline.history = []
-  }
-
-  formWithValidation.post(props.storeContentUrl, {
-    preserveState: true,
-    preserveScroll: true,
-    onSuccess: function () {
-      toast.add({ severity: 'success', summary: 'Resume Builder', detail: page.props.flash.CMS_SUCCESS, life: 3000 })
-      displayTimelineDownloadableFileLink.value = !!props.timeline.downloadable
-    },
-    onError: function () {
-      toast.add({
-        severity: 'error',
-        summary: 'Resume Builder',
-        detail: "We couldn't save your changes. Try again.",
-        life: 3000,
-      })
-    },
-    onFinish: function () {
-      window.scroll({ top: 0, behavior: 'smooth' })
-    },
-  })
+  formWithValidation
+    .transform(function (data) {
+      if (!data.work_timeline.history) data.work_timeline.history = []
+      data.contact.show = data.contact.show === '1' ? true : data.contact.show
+      data.contact.show = data.contact.show === '0' ? false : data.contact.show
+      return data
+    })
+    .post(props.storeContentUrl, {
+      preserveState: true,
+      preserveScroll: true,
+      onSuccess: function () {
+        toast.add({ severity: 'success', summary: 'Resume Builder', detail: page.props.flash.CMS_SUCCESS, life: 3000 })
+        displayTimelineDownloadableFileLink.value = !!props.timeline.downloadable_url
+        timelineDownloadableUrl.value = props.timeline.downloadable_url as string
+        formWithValidation.work_timeline.downloadable = null
+        reRenderTimelineFileInput()
+      },
+      onError: function () {
+        toast.add({
+          severity: 'error',
+          summary: 'Resume Builder',
+          detail: "We couldn't save your changes. Try again.",
+          life: 3000,
+        })
+        window.scroll({ top: 0, behavior: 'smooth' })
+      },
+    })
 }
 /** End Form Submission */
 </script>
@@ -1180,6 +1192,7 @@ const submitForm = function () {
         <div class="mb-4 grid w-full grid-cols-1 gap-4 break-all md:grid-cols-2">
           <div class="flex w-full justify-start">
             <FileUpload
+              v-if="showTimelineFileInput"
               mode="basic"
               :choose-label="`${props.timeline?.downloadable ? 'Change File' : 'Upload File'}`"
               accept="application/pdf"
@@ -1188,11 +1201,11 @@ const submitForm = function () {
               @select="onTimelineDownloadableSelect"
             />
           </div>
-          <div class="flex w-full justify-start">
+          <div class="flex w-full items-start justify-start">
             <template v-if="displayTimelineDownloadableFileLink">
-              <div class="flex items-center gap-1.5 rounded-md border p-1 px-4">
+              <div class="flex items-center gap-1.5 rounded-md border p-2 px-4">
                 <FontAwesomeIcon :icon="faExternalLink"></FontAwesomeIcon>
-                <a :href="props.timeline.downloadable as string" target="_blank">View Uploaded File</a>
+                <a :href="timelineDownloadableUrl" target="_blank">View Uploaded File</a>
               </div>
               <Button severity="secondary" icon="pi pi-trash" outlined class="ml-1.5" @click="clearTimelineDownloadableFile">
               </Button>
@@ -1261,7 +1274,6 @@ const submitForm = function () {
                   icon="pi pi-plus-circle"
                   class="align-self-start flex-shrink-0"
                   :disabled="formWithValidation.processing || !timelineTagInput"
-                  :loading="formWithValidation.processing"
                   @click="addTimelineTagToList"
                 ></Button>
               </div>

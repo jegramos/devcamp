@@ -10,7 +10,7 @@ import AOS from 'aos'
 import 'aos/dist/aos.css'
 
 createInertiaApp({
-  title: (title) => (title ? `${title} - DevCamp` : 'DevCamp'),
+  title: (title) => (title ? title : 'DevCamp'),
   resolve: (name) => {
     const pages = import.meta.glob<DefineComponent>('./Pages/**/*.vue', { eager: true })
     return pages[`./Pages/${name}.vue`]

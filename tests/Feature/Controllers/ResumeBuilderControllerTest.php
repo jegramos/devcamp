@@ -285,8 +285,8 @@ it('can store work timelines', function (array $period) {
 
     expect($resume->work_timeline['history'])
         ->toEqual($payload['work_timeline']['history'])
-        ->and($resume->work_timeline['downloadable'])
-        ->toBeUrl();
+        ->and($resume->work_timeline['downloadable'])->toBeString()
+        ->and($resume->work_timeline['downloadable_url'])->toBeUrl();
 })->with([
     'with start and end date' => ['period' => [fake()->date(), fake()->date()]],
     'without end date' => ['period' => [fake()->date()]],

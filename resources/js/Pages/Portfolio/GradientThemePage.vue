@@ -217,7 +217,7 @@ const showFooter = computed(function () {
 /** End Footer */
 </script>
 <template>
-  <Head title="Portfolio"></Head>
+  <Head :title="'Portfolio | ' + props.name"></Head>
   <!-- Start Header -->
   <section class="flex h-full w-full flex-col items-center justify-center bg-surface-900 text-surface-0">
     <!-- Start Before the Fold (Desktop) -->
@@ -437,9 +437,9 @@ const showFooter = computed(function () {
       </div>
       <div class="w-full items-center justify-center px-3 md:px-8">
         <TracingBeam class="px-0 md:px-6">
-          <div v-if="timeline.downloadable" data-aos="fade-up" class="flex w-full justify-start md:justify-end">
+          <div v-if="timeline.downloadable_url" data-aos="fade-up" class="flex w-full justify-start md:justify-end">
             <a
-              :href="timeline.downloadable as string"
+              :href="timeline.downloadable_url"
               target="_blank"
               class="mb-2 rounded-lg border border-surface-500 px-2 py-1.5 text-sm text-surface-500 transition-all hover:scale-105 hover:border-orange-500 hover:text-orange-500"
             >

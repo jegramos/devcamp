@@ -212,6 +212,10 @@ const confirmDeleteUser = function () {
     reject: () => {},
   })
 }
+
+const viewPortfolio = function () {
+  window.open(props.user.portfolio_url || '', '_blank')
+}
 </script>
 
 <template>
@@ -509,17 +513,31 @@ const confirmDeleteUser = function () {
     </section>
     <!-- End Address Lines -->
     <template #footer>
-      <Button size="small" label="Delete" text severity="danger" @click="confirmDeleteUser" />
-      <Button
-        size="small"
-        label="Update"
-        outlined
-        icon="pi pi-save"
-        severity="secondary"
-        :loading="validateUpdateUserForm.processing"
-        :disabled="validateUpdateUserForm.processing"
-        @click="submitUpdateUserForm"
-      />
+      <div class="flex w-full justify-between">
+        <Button
+          v-if="props.user.portfolio_url"
+          size="small"
+          icon="pi pi-external-link"
+          text
+          severity="secondary"
+          label="Portfolio"
+          @click="viewPortfolio"
+        >
+        </Button>
+        <div class="flex gap-4" :class="{'w-full justify-end' : !props.user.portfolio_url}">
+          <Button size="small" label="Delete" outlined severity="danger" @click="confirmDeleteUser" />
+          <Button
+            size="small"
+            label="Update"
+            outlined
+            icon="pi pi-save"
+            severity="secondary"
+            :loading="validateUpdateUserForm.processing"
+            :disabled="validateUpdateUserForm.processing"
+            @click="submitUpdateUserForm"
+          />
+        </div>
+      </div>
     </template>
   </Dialog>
 </template>
