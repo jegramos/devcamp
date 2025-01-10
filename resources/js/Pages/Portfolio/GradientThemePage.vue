@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, type PropType, type Ref, ref, watch } from 'vue'
-import { useIntervalFn } from '@vueuse/core'
+import { useFavicon, useIntervalFn } from '@vueuse/core'
 import { Head, useForm, usePage } from '@inertiajs/vue3'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import AppAnimatedFloaters from '@/Components/AppAnimatedFloaters.vue'
@@ -80,6 +80,10 @@ const props = defineProps({
     required: true,
   },
 })
+
+// Use a portfolio page specific favicon
+const source = ref('p_favicon.ico')
+useFavicon(source)
 
 /** Start Before the Fold */
 // Titles
