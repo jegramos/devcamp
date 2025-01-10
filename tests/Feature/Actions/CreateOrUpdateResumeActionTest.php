@@ -125,7 +125,8 @@ it('can update a resume record for the user', function () {
         ->and($user->resume->projects[0]['description'])->toEqual($data['projects'][0]['description'])
         ->and($user->resume->projects[0]['links'])->toEqual($data['projects'][0]['links'])
         ->and($user->resume->projects[0]['cover'])->toBeString()
-        ->and($user->resume->work_timeline['downloadable'])->toBeUrl()
+        ->and($user->resume->work_timeline['downloadable'])->toBeString()
+        ->and($user->resume->work_timeline['downloadable_url'])->toBeUrl()
         ->and($user->resume->work_timeline['history'])->toEqual($data['work_timeline']['history'])
         ->and($user->resume->services)->toEqual($data['services']);
 });
