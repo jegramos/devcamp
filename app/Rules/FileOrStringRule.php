@@ -8,17 +8,17 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Translation\PotentiallyTranslatedString;
 
-class FileOrUrlRule implements ValidationRule
+class FileOrStringRule implements ValidationRule
 {
     private int $maxFileSize;
-    private int $maxUrlLength;
+    private int $maxStringSize;
     private array $mimeTypes;
 
-    public function __construct(array $mimeTypes = [], int $maxUrlLength = 2048, int $maxFileSize = 2048)
+    public function __construct(array $mimeTypes = [], int $maxStringSize = 255, int $maxFileSize = 2048)
     {
         $this->mimeTypes = $mimeTypes;
         $this->maxFileSize = $maxFileSize;
-        $this->maxUrlLength = $maxUrlLength;
+        $this->maxStringSize = $maxStringSize;
     }
 
     /**
@@ -29,20 +29,11 @@ class FileOrUrlRule implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if (!($value instanceof UploadedFile) && !is_string($value)) {
-            $validator = Validator::make(
-                [$attribute => $value],
-                [$attribute => ['url:https', 'max:' . $this->maxUrlLength]]
-            );
-
-            if ($validator->fails()) {
-                $fail($validator->errors()->first($attribute));
-            }
-
-            $fail('The :attribute must be a valid and secured URL.');
+            $fail('The :attribute must be a string or an image.');
         }
 
-        if (is_string($value) && strlen($value) > $this->maxUrlLength) {
-            $fail('The :attribute must not be longer than ' . $this->maxUrlLength . ' characters.');
+        if (is_string($value) && strlen($value) > $this->maxStringSize) {
+            $fail('The :attribute must not be longer than ' . $this->maxStringSize . ' characters.');
         }
 
         if ($value instanceof UploadedFile) {

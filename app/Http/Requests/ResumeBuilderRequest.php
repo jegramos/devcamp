@@ -4,8 +4,8 @@ namespace App\Http\Requests;
 
 use App\Enums\SocialNetwork;
 use App\Rules\DbVarcharMaxLengthRule;
-use App\Rules\FileOrUrlRule;
-use App\Rules\StringOrImageRule;
+use App\Rules\FileOrStringRule;
+use App\Rules\ImageOrStringRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
@@ -54,12 +54,12 @@ class ResumeBuilderRequest extends FormRequest
             'projects' => ['array', 'max:6'],
             'projects.*.title' => ['required', 'string', 'max:150', 'distinct'],
             'projects.*.description' => ['required', 'string', 'max:500'],
-            'projects.*.cover' => ['nullable', new StringOrImageRule()],
+            'projects.*.cover' => ['nullable', new ImageOrStringRule()],
             'projects.*.links' => ['array', 'max:3'],
             'projects.*.links.*.name' => ['required', 'string', 'max:150'],
             'projects.*.links.*.url' => ['required', 'string', 'url:https', 'max:2048'],
             'work_timeline' => ['nullable', 'array'],
-            'work_timeline.downloadable' => ['nullable', new FileOrUrlRule(['pdf'], 5000)],
+            'work_timeline.downloadable' => ['nullable', new FileOrStringRule(['pdf'])],
             'work_timeline.history' => ['array', 'max:50'],
             'work_timeline.history.*.title' => ['required', 'string', 'max:150'],
             'work_timeline.history.*.description' => ['required', 'string', 'max:5000'],

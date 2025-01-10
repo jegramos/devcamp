@@ -50,6 +50,7 @@ export type Timeline = {
     tags: Array<string>
   }>
   downloadable: File | string | null
+  downloadable_url?: string | null
 }
 
 export type Contact = {

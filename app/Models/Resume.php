@@ -52,7 +52,7 @@ class Resume extends Model
             }
 
             $cloudStorage = resolve(CloudStorageManager::class);
-            $value['downloadable'] = $cloudStorage->generateTmpUrl(
+            $value['downloadable_url'] = $cloudStorage->generateTmpUrl(
                 $value['downloadable'],
                 60 * 60 * 24
             );

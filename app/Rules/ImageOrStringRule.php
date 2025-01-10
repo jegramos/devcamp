@@ -11,7 +11,7 @@ use Illuminate\Translation\PotentiallyTranslatedString;
 /**
  * Check if the input is an Image File or a string image path (E.g. images/1/projects/cover/filename.jpg)
  */
-class StringOrImageRule implements ValidationRule
+class ImageOrStringRule implements ValidationRule
 {
     private int $maxFileSize;
     private int $maxStringSize;
