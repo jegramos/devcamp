@@ -249,8 +249,8 @@ const addSocialToList = function () {
     formWithValidation.setError('socials', 'Please provide a valid and secure URL.')
   }
 
-  if (social.value.url.length >= 255) {
-    formWithValidation.setError('socials', 'The URL must not exceed 255 characters.')
+  if (social.value.url.length >= 2048) {
+    formWithValidation.setError('socials', 'The URL must not exceed 2048 characters.')
   }
 
   if (formWithValidation.socials.find((s) => s.name.toLowerCase() === social.value.name.toLowerCase())) {
@@ -304,8 +304,8 @@ const addTechExpertiseToList = function () {
     formWithValidation.setError('tech_expertise', 'Please provide a valid and secure URL.')
   }
 
-  if (techExpertiseLogo.value && techExpertiseLogo.value.length >= 255) {
-    formWithValidation.setError('tech_expertise', 'The URL must not exceed 255 characters.')
+  if (techExpertiseLogo.value && techExpertiseLogo.value.length >= 2048) {
+    formWithValidation.setError('tech_expertise', 'The URL must not exceed 2048 characters.')
   }
 
   if (formWithValidation.tech_expertise.length >= 100) {
@@ -374,8 +374,8 @@ const addLinkToProject = function () {
     formWithValidation.setError('projects', 'The link name must not exceed 150 characters.')
   }
 
-  if (projectHighlightLinkUrl.value && projectHighlightLinkUrl.value.length > 255) {
-    formWithValidation.setError('projects', 'The URL must not exceed 255 characters.')
+  if (projectHighlightLinkUrl.value && projectHighlightLinkUrl.value.length > 2048) {
+    formWithValidation.setError('projects', 'The URL must not exceed 2048 characters.')
   }
 
   if (projectHighlightLinkUrl.value && !urlIsValid(projectHighlightLinkUrl.value)) {
@@ -523,8 +523,8 @@ const addTimelineToList = function () {
     formWithValidation.setError('work_timeline', 'Please provide a valid and secure URL.')
   }
 
-  if (timelineLogoUrlInput.value.length >= 255) {
-    formWithValidation.setError('work_timeline', 'The URL must not exceed 255 characters.')
+  if (timelineLogoUrlInput.value.length >= 2048) {
+    formWithValidation.setError('work_timeline', 'The URL must not exceed 2048 characters.')
   }
 
   if (formWithValidation.work_timeline.history.length >= 50) {
@@ -620,8 +620,8 @@ const addServiceToList = function () {
     formWithValidation.setError('services', 'You already have a service with the same title.')
   }
 
-  if (servicesLogoUrlInput.value && servicesLogoUrlInput.value.length > 255) {
-    formWithValidation.setError('services', 'The URL must not exceed 255 characters.')
+  if (servicesLogoUrlInput.value && servicesLogoUrlInput.value.length > 2048) {
+    formWithValidation.setError('services', 'The URL must not exceed 2048 characters.')
   }
 
   if (servicesLogoUrlInput.value && !urlIsValid(servicesLogoUrlInput.value)) {
@@ -669,33 +669,32 @@ const submitForm = function () {
 
   if (formWithValidation.hasErrors) return window.scroll({ top: 0, behavior: 'smooth' })
 
-  if (typeof formWithValidation.work_timeline.downloadable === 'string') {
-    formWithValidation.work_timeline.downloadable = null
-  }
-
-  if (!formWithValidation.work_timeline.history) {
-    formWithValidation.work_timeline.history = []
-  }
-
-  formWithValidation.post(props.storeContentUrl, {
-    preserveState: true,
-    preserveScroll: true,
-    onSuccess: function () {
-      toast.add({ severity: 'success', summary: 'Resume Builder', detail: page.props.flash.CMS_SUCCESS, life: 3000 })
-      displayTimelineDownloadableFileLink.value = !!props.timeline.downloadable
-    },
-    onError: function () {
-      toast.add({
-        severity: 'error',
-        summary: 'Resume Builder',
-        detail: "We couldn't save your changes. Try again.",
-        life: 3000,
-      })
-    },
-    onFinish: function () {
-      window.scroll({ top: 0, behavior: 'smooth' })
-    },
-  })
+  formWithValidation
+    .transform(function (data) {
+      if (!data.work_timeline.downloadable) data.work_timeline.history = []
+      data.contact.show = data.contact.show === '1' ? true : data.contact.show
+      data.contact.show = data.contact.show === '0' ? false : data.contact.show
+      console.log(data.contact)
+      console.log(data.work_timeline)
+      return data
+    })
+    .post(props.storeContentUrl, {
+      preserveState: true,
+      preserveScroll: true,
+      onSuccess: function () {
+        toast.add({ severity: 'success', summary: 'Resume Builder', detail: page.props.flash.CMS_SUCCESS, life: 3000 })
+        displayTimelineDownloadableFileLink.value = !!props.timeline.downloadable
+      },
+      onError: function () {
+        toast.add({
+          severity: 'error',
+          summary: 'Resume Builder',
+          detail: "We couldn't save your changes. Try again.",
+          life: 3000,
+        })
+        window.scroll({ top: 0, behavior: 'smooth' })
+      },
+    })
 }
 /** End Form Submission */
 </script>

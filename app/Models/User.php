@@ -57,6 +57,11 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
+    protected $appends = [
+        /** @uses portfolioUrl() */
+        'portfolio_url',
+    ];
+
     protected static function boot(): void
     {
         parent::boot();
@@ -147,6 +152,22 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return Attribute::set(
             fn (?string $value) => is_null($value) ? null : strtolower($value)
+        );
+    }
+
+    /*
+     * Build the Portfolio URL of the user
+     */
+    protected function portfolioUrl(): Attribute
+    {
+        return Attribute::get(
+            function () {
+                if (!$this->subdomain) {
+                    return null;
+                }
+
+                return \Illuminate\Support\Facades\Request::getScheme() . '://' . $this->subdomain . '.' . Config::get('app.portfolio_subdomain');
+            }
         );
     }
 

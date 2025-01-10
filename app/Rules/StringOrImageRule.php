@@ -16,7 +16,7 @@ class StringOrImageRule implements ValidationRule
     private int $maxFileSize;
     private int $maxStringSize;
 
-    public function __construct(int $maxStringSize = 255, int $maxFileSize = 2000)
+    public function __construct(int $maxStringSize = 255, int $maxFileSize = 2048)
     {
         $this->maxFileSize = $maxFileSize;
         $this->maxStringSize = $maxStringSize;

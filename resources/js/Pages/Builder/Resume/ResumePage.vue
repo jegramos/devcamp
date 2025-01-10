@@ -53,7 +53,7 @@ export type Timeline = {
 }
 
 export type Contact = {
-  show: boolean
+  show: boolean | string
   availability_status: string
 }
 

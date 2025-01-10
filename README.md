@@ -85,11 +85,12 @@ installed in this project
 - [ ] Blogs Feature (M)
 - [ ] Custom Domain Routing
 - [ ] CI/CD with Github Actions (L)
-- [ ] Add 2 more Portfolio Themes (M)
+- [ ] Add more Portfolio Themes (M)
 - [ ] Revamp Landing Page (L)
 - [ ] MFA (L)
 - [ ] Set-up Reverb for realtime notifications (L)
 - [ ] UI Automation with Laravel Dusk (L)
+- [ ] Explore the possibility of users uploading or linking their custom made portfolio page (L)
 
 ## Tech Stack & Tools
 

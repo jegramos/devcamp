@@ -37,6 +37,7 @@ export type UserItem = {
   address_line_2: string | null
   address_line_3: string | null
   roles: Array<{ name: string; label: string }>
+  portfolio_url: string | null
 }
 
 type UsersList = PaginatedList & {
