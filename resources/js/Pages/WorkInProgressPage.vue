@@ -10,7 +10,7 @@ export default {
   <div class="mx-auto flex h-[100%] items-center justify-center">
     <div class="flex flex-col items-center">
       <div class="loader"></div>
-      <h1 class="mt-4 text-lg font-stylish dark:text-surface-100">Nothing to see here. It's a work in progress.</h1>
+      <h1 class="mt-4 font-stylish text-lg dark:text-surface-100">Nothing to see here. It's a work in progress.</h1>
     </div>
   </div>
 </template>

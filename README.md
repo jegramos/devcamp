@@ -10,6 +10,7 @@ A convenient open-source destination for <i>building</i> and <i>showcasing</i> p
 - Build beautiful portfolio websites with your free subdomain in just a few minutes
 - Calendar booking system with your clients (WIP)
 - Write and share your blog posts (WIP)
+- Easy and secure login experience with [Passkeys](https://www.passkeys.com/what-are-passkeys)
 
 ⠀
 > **CONTRIBUTE:**  If you find this project interesting and worth your time, you may submit a PR.
@@ -54,6 +55,12 @@ php artisan user:create -I
 ```
 
 \
+Create a new resume theme record in the database. Currently you will still need to generate the Vue file manually in `resources/js/Pages/Portfolio/`
+```
+php artisan resume:create-theme --name=ExampleName --page=ExampleVuePage
+```
+
+\
 Running `git commit` will trigger automated tasks specified in `grumphp.yml`
 
 - PSR-compliant code formatting
@@ -81,11 +88,14 @@ installed in this project
 - [x] Subdomain Routing (M)
 - [x] Integration of InertiaForm & Vuelidate (M)
 - [x] GrumPHP checks for local development (M)
+- [x] Dockerized the app (H)
+- [x] Pilot Deployment on AWS (H)
 - [ ] Calendar System (M)
 - [ ] Blogs Feature (M)
-- [ ] Custom Domain Routing
+- [ ] Custom Domain Routing (M)
 - [ ] CI/CD with Github Actions (L)
 - [ ] Add more Portfolio Themes (M)
+- [ ] Make adding themes easier during development (M)
 - [ ] Revamp Landing Page (L)
 - [ ] MFA (L)
 - [ ] Set-up Reverb for realtime notifications (L)
@@ -97,6 +107,7 @@ installed in this project
 - Laravel 11 (PHP 8.2)
 - VueJS 3 (TypeScript)
 - InertiaV2
+- Pest
 - TailwindCSS and PrimeVue
 - MySQL
 - Redis
