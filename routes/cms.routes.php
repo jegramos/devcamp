@@ -1,7 +1,7 @@
 <?php
 
 use App\Enums\Permission;
-use App\Http\Controllers\AboutPageController;
+use App\Http\Controllers\ShowAboutPageController;
 use App\Http\Controllers\AccountSettingsController;
 use App\Http\Controllers\Auth\GithubLoginController;
 use App\Http\Controllers\Auth\GoogleLoginController;
@@ -10,7 +10,7 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Builder\ResumeBuilderController;
 use App\Http\Controllers\CalendarController;
-use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\ShowLandingPageController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
@@ -28,11 +28,11 @@ use Illuminate\Support\Facades\Route;
  */
 $cmsDomain = parse_url(Config::get('app.url'), PHP_URL_HOST);
 Route::domain($cmsDomain)->group(function () {
-    Route::get('', LandingPageController::class)
+    Route::get('', ShowLandingPageController::class)
         ->middleware('guest')
         ->name('landingPage');
 
-    Route::get('/about', AboutPageController::class)
+    Route::get('/about', ShowAboutPageController::class)
         ->middleware(['auth', 'verified'])
         ->name('aboutPage');
 

@@ -14,8 +14,8 @@ class PortfolioController
     {
         $user = User::query()->with('resume')->where('subdomain', $account)->first();
 
-        if (!$user) {
-            $message = "The account you're looking for doesn't exist.";
+        if (!$user || !$user->active) {
+            $message = "The account you are looking for does not exist.";
             return Inertia::render('ErrorPage', ['status' => 404, 'message' => $message, 'showActionButtons' => false]);
         }
 

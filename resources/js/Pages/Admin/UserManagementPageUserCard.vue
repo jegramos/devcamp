@@ -524,7 +524,7 @@ const viewPortfolio = function () {
           @click="viewPortfolio"
         >
         </Button>
-        <div class="flex gap-4" :class="{'w-full justify-end' : !props.user.portfolio_url}">
+        <div class="flex gap-4" :class="{ 'w-full justify-end': !props.user.portfolio_url }">
           <Button size="small" label="Delete" outlined severity="danger" @click="confirmDeleteUser" />
           <Button
             size="small"
