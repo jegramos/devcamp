@@ -100,7 +100,7 @@ installed in this project
 - [ ] MFA (L)
 - [ ] Set-up Reverb for realtime notifications (L)
 - [ ] UI Automation with Laravel Dusk (L)
-- [ ] Explore the possibility of users uploading or linking their custom made portfolio page (L)
+- [ ] Explore the possibility of users uploading or linking their custom-made portfolio page (L)
 
 ## Tech Stack & Tools
 

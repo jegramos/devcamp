@@ -34,7 +34,7 @@ class ResumeBuilderController
             'socials' => $user->resume?->socials ?? [],
             'timeline' => $user->resume?->work_timeline ?? ['history' => [], 'downloadable' => null],
             'services' => $user->resume?->services ?? [],
-            'contact' => $user->resume?->contact ?? ['show' => true, 'availability_status' => "Currently available for full-time, part-time, or consultation work."],
+            'contact' => $user->resume?->contact ?? ['show' => true, 'availability_status' => 'Available for employment.'],
             'themeId' => $user->resume?->theme_id ?? null,
             'techExpertise' => $user->resume?->tech_expertise ?? [],
             'projects' => $user->resume?->projects ?? [],
