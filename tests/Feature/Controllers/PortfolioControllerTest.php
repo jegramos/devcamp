@@ -39,3 +39,21 @@ it('it show an existing accounts portfolio', function () {
                 ->component('ErrorPage')
         );
 });
+
+it('it does not show the portfolio if the account is deactivated', function () {
+    $user = UserFactory::new()
+        ->inactive()
+        ->state(['subdomain' => 'test-domain'])
+        ->has(UserProfileFactory::new())
+        ->has(AccountSettingsFactory::new())
+        ->has(ResumeFactory::new())
+        ->create();
+
+    $url = 'https://' . $user->subdomain . '.' . Config::get('app.portfolio_subdomain');
+    followingRedirects()
+        ->get($url)
+        ->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('ErrorPage')
+        );
+});
