@@ -3,6 +3,7 @@
 use App\Actions\CreateApiErrorResponseAction;
 use App\Enums\ErrorCode;
 use App\Enums\SessionFlashKey;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -71,10 +72,32 @@ return Application::configure(basePath: dirname(__DIR__))
                     ]);
             }
 
+            // An InvalidStateException from Socialite is likely an unauthorized request
+            if ($e instanceof InvalidStateException) {
+                Log::warning('Socialite: ' . $e::class, [
+                    'request_url' => $request->url(),
+                    'user_agent' => $request->userAgent(),
+                ]);
+
+                $response->setStatusCode(Response::HTTP_FORBIDDEN);
+            }
+
             // Handle 404 status on portfolio subdomain (Ex: jegramos.works.devcamp.site)
             $cmsDomain = parse_url(Config::get('app.url'), PHP_URL_HOST);
             if ($request->getHost() !== $cmsDomain) {
                 return redirect()->back();
+            }
+
+            // Handle auth expiration
+            if ($e instanceof AuthenticationException) {
+                return redirect(route('auth.login.showForm'));
+            }
+
+            // Handle page expiration or CSRF token error
+            if ($response->getStatusCode() === 419) {
+                return back()->with([
+                    SessionFlashKey::CMS_ERROR->value => 'The page expired, please try again . ',
+                ]);
             }
 
             /**
@@ -82,16 +105,6 @@ return Application::configure(basePath: dirname(__DIR__))
              * @see https://v2.inertiajs.com/error-handling
              */
             if (!app()->environment(['local', 'testing'])) {
-                // An InvalidStateException from Socialite is likely an unauthorized request
-                if ($e instanceof InvalidStateException) {
-                    Log::warning('Socialite: ' . $e::class, [
-                        'request_url' => $request->url(),
-                        'user_agent' => $request->userAgent(),
-                    ]);
-
-                    $response->setStatusCode(Response::HTTP_FORBIDDEN);
-                }
-
                 // Log Server Errors
                 if ($response->getStatusCode() >= Response::HTTP_INTERNAL_SERVER_ERROR) {
                     Log::error('Server Error: ' . $e::class, [
@@ -105,12 +118,6 @@ return Application::configure(basePath: dirname(__DIR__))
                 return Inertia::render('ErrorPage', ['status' => $status, 'message' => $message])
                     ->toResponse($request)
                     ->setStatusCode($response->getStatusCode());
-            }
-
-            if ($response->getStatusCode() === 419) {
-                return back()->with([
-                    SessionFlashKey::CMS_ERROR->value => 'The page expired, please try again . ',
-                ]);
             }
 
             return $response;
