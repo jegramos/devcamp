@@ -272,7 +272,7 @@ const authenticateViaPasskey = async function () {
             icon="pi pi-sign-in"
             label="Sign in"
             class="w-full"
-            :disabled="form.processing || loginViaPasskeyForm.processing"
+            :disabled="form.processing || loginViaPasskeyForm.processing || !form.email || !form.password"
             :loading="form.processing"
             @click="submit"
           ></Button>
